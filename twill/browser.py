@@ -358,9 +358,14 @@ class TwillBrowser(object):
         # since Requests does a much better job at setting the proper one.
         headers = {'Referer': self.url}
 
-        payload = form.form_values()
+        form_values = form.form_values()
         if ctl is not None and ctl.get('name') is not None:
-            payload.append((ctl.get('name'), ctl.value))
+            form_values.append((ctl.get('name'), ctl.value))
+        # Specialcase radio values, which are always checked in lxml
+        # and therefore not treated correctly in lxml's FormElement.form_values()
+        radio = {k: form.inputs[k].value for k in form.fields.keys() if isinstance(form.inputs[k], html.RadioGroup)}
+        payload = [(k, v) for k, v in form_values if k not in radio]
+        payload.extend(list(radio.items()))
         payload = self._encode_payload(payload)
 
         # now actually GO
