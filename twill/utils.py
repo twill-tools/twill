@@ -49,7 +49,7 @@ class ResultWrapper(object):
     def __init__(self, response):
         self.response = response
         self.encoding = response.encoding
-        self.tree = html.fromstring(self.text)
+        self.tree = html.fromstring(self.text.encode())
         self.xpath = self.tree.xpath
         self._fix_forms()
 
