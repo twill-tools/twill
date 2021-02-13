@@ -219,9 +219,9 @@ class TwillTest(Directory):
    <h3>ARINC Direct Login</h3>
    <br/>
    <strong>User ID</strong><br/>
-   <input name="username" id="username" type="text" style="width:80%;"><br/>
+   <input name="username" id="username" type="text" style="width:80%"><br/>
    <strong>Password</strong><br/>
-   <input name="password" type="password" style="width:80%;"><br/>
+   <input name="password" type="password" style="width:80%"><br/>
    <div id="buttonbar">
    <input value="Login" name="login" class="button" type="submit">
    </div>

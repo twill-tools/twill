@@ -58,6 +58,7 @@ def main():
     average_number = options.number // options.processes
     last_number = average_number + options.number % options.processes
     child_pids = []
+    repeat = 0
     is_parent = True
 
     # start a bunch of child processes and record their pids in the parent

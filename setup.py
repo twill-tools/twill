@@ -64,7 +64,7 @@ def main():
         },
 
         classifiers=[
-            'Development Status :: 4 - Beta',
+            'Development Status :: 6 - Mature',
             'Environment :: Console',
             'Intended Audience :: Developers',
             'Intended Audience :: System Administrators',

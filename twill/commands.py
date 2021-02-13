@@ -26,7 +26,7 @@ __all__ = [
     'find', 'follow',
     'formaction', 'fa', 'formclear', 'formfile', 'formvalue', 'fv',
     'getinput', 'getpassword',
-    'go', 'info', 'load_cookies', 'notfind',
+    'go', 'info', 'load_cookies', 'notfind', 'options',
     'redirect_error', 'redirect_output',
     'reload', 'reset_browser', 'reset_error', 'reset_output',
     'run', 'runfile', 'rf',
@@ -627,7 +627,7 @@ def debug(what, level):
 def run(cmd):
     """>> run <command>
 
-    <command> can be any valid python command; 'exec' is used to run it.
+    <command> can be any valid Python command; 'exec' is used to run it.
     """
     # @CTB: use pyparsing to grok the command?  make sure that quoting works...
 

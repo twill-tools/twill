@@ -182,14 +182,14 @@ def print_form(form, n):
         for n, field in enumerate(form.inputs, 1):
             value = field.value
             if hasattr(field, 'value_options'):
-                items = ', '.join("'%s'" % (
-                    opt.name if hasattr(opt, 'name') else opt,)
+                items = ', '.join(
+                    "'%s'" % (getattr(opt, 'name', opt),)
                     for opt in field.value_options)
                 value_displayed = '%s of %s' % (value, items)
             else:
                 value_displayed = '%s' % (value,)
             field_name = field.name
-            field_type = field.type if hasattr(field, 'type') else 'select'
+            field_type = getattr(field, 'type', 'select')
             field_id = field.get('id')
             strings = (
                 '%-2s' % (n,),

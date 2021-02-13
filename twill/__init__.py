@@ -27,7 +27,7 @@ __download_url__ = 'https://pypi.org/project/twill/'
 
 __all__ = [
     'browser', 'execute_file', 'execute_string',
-    'set_loglevel', 'set_output', 'set_errout',
+    'log', 'set_loglevel', 'set_output', 'set_errout',
     'twill_ext', 'TwillCommandLoop']
 
 
@@ -55,7 +55,7 @@ handler = None
 def set_loglevel(level=None):
     """Set the logging level.
 
-    If no level is passed, use INFO as loging level.
+    If no level is passed, use INFO as logging level.
     """
     if level is None:
         level = logging.INFO

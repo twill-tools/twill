@@ -7,7 +7,7 @@ ChangeLog
 2.0.2 (released 2021-02-13)
 ---------------------------
 
-* Also support Python 3.9
+* This version now also supports Python 3.9.
 * 'tidy_should_exist' has been renamed ot 'require_tidy'.
 * Support for setting options to be used with HTML Tidy.
 * Cleanup scripts are now also read as UTF-8 in Python 3.
