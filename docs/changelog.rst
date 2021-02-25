@@ -4,6 +4,11 @@
 ChangeLog
 =========
 
+2.0.3 (released 2021-02-25)
+---------------------------
+
+* Backported minor fixes from the new main (version 3) branch.
+
 2.0.2 (released 2021-02-13)
 ---------------------------
 
@@ -11,7 +16,6 @@ ChangeLog
 * 'tidy_should_exist' has been renamed ot 'require_tidy'.
 * Support for setting options to be used with HTML Tidy.
 * Cleanup scripts are now also read as UTF-8 in Python 3.
-
 
 2.0.1 (released 2020-07-12)
 ---------------------------
