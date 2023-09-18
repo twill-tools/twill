@@ -129,7 +129,7 @@ class ResultWrapper:
                 return link
         return None
     
-    def find_links(self, pattern: str) -> Optional[List[Link]]:
+    def find_links(self, pattern: str) -> List[Link]:
         """Find all links with a given pattern on the result page."""
         regex = re.compile(pattern)
         links = [link for link in self.links if regex.search(link.text) or regex.search(link.url)]
