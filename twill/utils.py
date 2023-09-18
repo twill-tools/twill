@@ -132,13 +132,8 @@ class ResultWrapper:
     def find_links(self, pattern: str) -> Optional[List[Link]]:
         """Find all links with a given pattern on the result page."""
         regex = re.compile(pattern)
-        links = []
-        for link in self.links:
-            if regex.search(link.text) or regex.search(link.url):
-                links.append(link)
-        if len(links) > 0:
-            return links
-        return None
+        links = [link for link in self.links if regex.search(link.text) or regex.search(link.url)]
+        return links
 
     def form(self, name_or_num: Union[str, int] = 1) -> Optional[FormElement]:
         """Get the form with the given name or number on the result page.
