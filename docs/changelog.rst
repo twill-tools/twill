@@ -4,6 +4,11 @@
 ChangeLog
 =========
 
+3.2.1 (released 2023-11-23)
+---------------------------
+* Increased the default request timeout of the twill browser to 10 seconds
+  (from 5 seconds in 3.2) and added a command to change the timeout (#18).
+
 3.2 (released 2023-11-02)
 -------------------------
 * The supported Python versions are now 3.8 to 3.12.
