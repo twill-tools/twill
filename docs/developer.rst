@@ -16,7 +16,7 @@ To run an individual test, you can use the command
 ``pytest tests/test_something.py``.
 
 .. _pytest: https://pytest.org/
-.. _Quixote: http://quixote.ca/
+.. _Quixote: https://github.com/nascheme/quixote
 
 Licensing
 ~~~~~~~~~
