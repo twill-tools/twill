@@ -4,6 +4,11 @@
 ChangeLog
 =========
 
+3.2.2 (released 2024-01-28)
+---------------------------
+* Fixes the broken interactive shell.
+* Fixes 'run_file' when specifying files in a subdirectory without extension.
+
 3.2.1 (released 2023-11-23)
 ---------------------------
 * Increased the default request timeout of the twill browser to 10 seconds
@@ -42,24 +47,20 @@ ChangeLog
 
 3.0.3 (released 2022-10-12)
 ---------------------------
-
 * Form numbers are now printed correctly with 'showforms' (#12).
 
 3.0.2 (released 2022-04-10)
 ---------------------------
-
 * Save HTML file with browser encoding or as UTF-8 (#9).
 * Do not modify root logger any more (#10).
 
 3.0.1 (released 2021-12-04)
 ---------------------------
-
 * This version now also supports Python 3.10.
 * The twill language now allows 8-bit letters to appear in strings unquoted.
 
 3.0 (released 2021-02-25)
 -------------------------
-
 * In this version we require Python 3.6 to 3.9.
   If you still need support for Python 2 or Python 3.5,
   then please use the latest version from the 2.x branch.
@@ -68,12 +69,10 @@ ChangeLog
 
 2.0.3 (released 2021-02-25)
 ---------------------------
-
 * Backported the fixes in version 3.0.
 
 2.0.2 (released 2021-02-13)
 ---------------------------
-
 * This version now also supports Python 3.9.
 * 'tidy_should_exist' has been renamed ot 'require_tidy'.
 * Support for setting options to be used with HTML Tidy.
@@ -81,12 +80,10 @@ ChangeLog
 
 2.0.1 (released 2020-07-12)
 ---------------------------
-
 * Fixes an issue with encoding declarations (#5).
 
 2.0 (released 2020-04-04)
 -------------------------
-
 This version is based on twill 1.8, which was a refactoring
 of version 0.9 that used requests_ and lxml_ instead of mechanize_,
 done by Ben Taylor in April 2014. It also integrates ideas and
