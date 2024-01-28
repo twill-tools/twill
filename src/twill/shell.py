@@ -317,9 +317,9 @@ twill_args: List[str] = []  # contains sys.argv *after* last '--'
 interactive = False  # 'True' if interacting with user
 
 
-def main(
+def main(  # noqa: C901, PLR0912, PLR0915
     argv: Optional[List[str]] = None,
-) -> None:  # noqa: C901, PLR0912, PLR0915
+) -> None:
     """Run as shell script."""
     global interactive  # noqa: PLW0603
 

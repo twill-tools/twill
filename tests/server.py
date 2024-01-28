@@ -69,7 +69,7 @@ class UnauthorizedError(AccessError):
         self.realm = realm
         AccessError.__init__(self, public_msg, private_msg)
 
-    def format(self) -> str:  # noqa: A003
+    def format(self) -> str:
         """Format the error."""
         request = get_request()
         request.response.set_header(
@@ -169,7 +169,7 @@ class TwillTest(Directory):
         self.restricted = Restricted()
         self.http_auth = HttpAuthRestricted()
 
-    def exit(self) -> None:  # noqa: A003
+    def exit(self) -> None:
         """Exit the application."""
         raise SystemExit
 
