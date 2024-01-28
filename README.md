@@ -9,7 +9,7 @@ Take a look at the [changelog](https://twill-tools.github.io/twill/changelog.htm
 
 The full [documentation](https://twill-tools.github.io/twill/) is included in the distribution and provided online via [GitHub](https://twill-tools.github.io/twill/) and [ReadTheDocs](https://twill.readthedocs.io/en/latest/).
 
-Copyright (c) 2005-2023 by C. Titus Brown, Ben R. Taylor, Christoph Zwerschke et al.
+Copyright (c) 2005-2024 by C. Titus Brown, Ben R. Taylor, Christoph Zwerschke et al.
 
 Newer versions have been created and are maintained by [Christoph Zwerschke](https://github.com/Cito).
  
