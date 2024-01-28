@@ -317,12 +317,15 @@ twill_args: List[str] = []  # contains sys.argv *after* last '--'
 interactive = False  # 'True' if interacting with user
 
 
-def main() -> None:  # noqa: C901, PLR0912, PLR0915
+def main(
+    argv: Optional[List[str]] = None,
+) -> None:  # noqa: C901, PLR0912, PLR0915
     """Run as shell script."""
     global interactive  # noqa: PLW0603
 
     # show the shorthand name for usage
-    argv = sys.argv
+    if argv is None:
+        argv = sys.argv
     if argv[0].endswith("-script.py"):
         argv[0] = argv[0].rsplit("-", 1)[0]
 
@@ -454,6 +457,8 @@ def main() -> None:  # noqa: C901, PLR0912, PLR0915
             output = open(out_file, "w")  # noqa: SIM115
         except OSError as error:
             sys.exit(f"Invalid output file '{out_file}': {error}")
+    else:
+        output = None
 
     set_output(output)
 
