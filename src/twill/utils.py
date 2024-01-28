@@ -461,7 +461,9 @@ def get_equiv_refresh_interval() -> Optional[int]:
 
 def is_hidden_filename(filename: str) -> bool:
     """Check if this is a hidden file (starting with a dot)."""
-    return filename not in (".", "..") and Path(filename).name.startswith(".")
+    return filename not in (os.curdir, os.pardir) and Path(
+        filename
+    ).name.startswith(".")
 
 
 def is_twill_filename(filename: str) -> bool:
@@ -471,14 +473,13 @@ def is_twill_filename(filename: str) -> bool:
 
 def make_twill_filename(name: str) -> str:
     """Add the twill extension to the name of a script if necessary."""
-    if name not in (".", ".."):
+    if name not in (os.curdir, os.pardir):
         path = Path(name)
-        twill_name = path.stem
-        ext = path.suffix
-        if not ext:
-            twill_name += twill_ext
-            if Path(twill_name).exists():
-                name = twill_name
+        if not (path.suffix or (path.exists() and not path.is_dir())):
+            twill_path = path.with_suffix(twill_ext)
+            if twill_path.exists() and not twill_path.is_dir():
+                path = twill_path
+        name = str(path)
     return name
 
 

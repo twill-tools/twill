@@ -10,7 +10,7 @@ def test_gather_dir():
 
     os.chdir(test_dir)
     try:
-        files = gather_filenames((".",))
+        files = gather_filenames((os.curdir,))
         if os.sep != "/":
             files = [f.replace(os.sep, "/") for f in files]
         assert sorted(files) == sorted(
