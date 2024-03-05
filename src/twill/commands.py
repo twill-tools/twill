@@ -86,6 +86,7 @@ __all__ = [
     "sleep",
     "submit",
     "tidy_ok",
+    "timeout",
     "title",
     "url",
 ]
