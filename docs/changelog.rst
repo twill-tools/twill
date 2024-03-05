@@ -4,6 +4,10 @@
 ChangeLog
 =========
 
+3.2.3 (released 2024-03-05)
+---------------------------
+* Adds 'timeout' to the list of exported commends (#22).
+
 3.2.2 (released 2024-01-28)
 ---------------------------
 * Fixes the broken interactive shell.
