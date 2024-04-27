@@ -26,6 +26,7 @@ from httpx import (
     Headers,
     InvalidURL,
     Timeout,
+    WSGITransport,
 )
 
 from . import __version__, log
@@ -152,11 +153,11 @@ class TwillBrowser:
 
         # Client stores cookies
         self._client = Client(
-            app=app,
             base_url=base_url,
             follow_redirects=follow_redirects,
             verify=verify,
             timeout=timeout,
+            transport=WSGITransport(app=app) if app else None,
         )
 
         # A lxml FormElement, None until a form is selected
