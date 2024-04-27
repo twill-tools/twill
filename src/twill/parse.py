@@ -264,7 +264,7 @@ def _execute_script(inp: TextIO, **kw) -> None:
                 error_type = error.__class__.__name__ or "Error"
                 error_context = (
                     f"{error_type} raised on line {line_no}"
-                    f"of '{source_info}'"
+                    f" of '{source_info}'"
                 )
                 if line:
                     error_context += f" while executing\n>> {line}"
