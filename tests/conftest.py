@@ -23,7 +23,7 @@ def url() -> Generator[str, None, None]:
     try:
         go(url)
         find("These are the twill tests")
-    except Exception as error:  # noqa: BLE001
+    except Exception as error:
         raise RuntimeError(
             """
 ***

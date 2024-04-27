@@ -303,7 +303,7 @@ def make_int(value: Any) -> int:
     """Convert the input value into an int."""
     try:
         ival = int(value)
-    except Exception as error:  # noqa: BLE001
+    except Exception as error:
         raise TwillException(
             f"unable to convert '{value}' into an int"
         ) from error
