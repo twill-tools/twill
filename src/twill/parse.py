@@ -194,7 +194,7 @@ def parse_command(
     return None, None  # e.g. a comment
 
 
-def execute_string(buf: str, **kw) -> None:
+def execute_string(buf: str, **kw: Any) -> None:
     """Execute commands from a string buffer."""
     fp = StringIO(buf)
 
@@ -205,7 +205,7 @@ def execute_string(buf: str, **kw) -> None:
     _execute_script(fp, **kw)
 
 
-def execute_file(filename: str, **kw) -> None:
+def execute_file(filename: str, **kw: Any) -> None:
     """Execute commands from a file."""
     with (
         nullcontext(sys.stdin)  # type: ignore[attr-defined]
@@ -218,7 +218,7 @@ def execute_file(filename: str, **kw) -> None:
         _execute_script(inp, **kw)
 
 
-def _execute_script(inp: TextIO, **kw) -> None:
+def _execute_script(inp: TextIO, **kw: Any) -> None:
     """Execute lines taken from a file-like iterator."""
     # initialize new local dictionary and get global and current local
     namespaces.new_local_dict()
