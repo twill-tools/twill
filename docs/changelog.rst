@@ -4,6 +4,10 @@
 ChangeLog
 =========
 
+3.2.4 (released 2024-04-27)
+---------------------------
+* Support latest version of httpx.
+
 3.2.3 (released 2024-03-05)
 ---------------------------
 * Adds 'timeout' to the list of exported commends (#22).
