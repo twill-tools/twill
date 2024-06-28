@@ -260,7 +260,7 @@ def _execute_script(inp: TextIO, **kw: Any) -> None:
             except SystemExit:
                 # abort script execution if a SystemExit is raised
                 return
-            except Exception as error:  # noqa: BLE001
+            except Exception as error:
                 error_type = error.__class__.__name__ or "Error"
                 error_context = (
                     f"{error_type} raised on line {line_no}"
@@ -283,8 +283,10 @@ def _execute_script(inp: TextIO, **kw: Any) -> None:
             for filename in reversed(cleanups):
                 log.info("\n>> Running twill cleanup file %s", filename)
                 try:
-                    with open(filename, encoding="utf-8") as inp:
-                        _execute_script(inp, source=filename, no_reset=True)
+                    with open(filename, encoding="utf-8") as cleanup:
+                        _execute_script(
+                            cleanup, source=filename, no_reset=True
+                        )
                 except Exception as error:  # noqa: BLE001
                     log.error(
                         ">> Cannot run cleanup file %s: %s", filename, error

@@ -248,7 +248,7 @@ def print_form(form: FormElement, n: int) -> None:
             " __Type___ __ID________ __Value__________________"
         )
 
-        for n, field in enumerate(form.inputs, 1):
+        for i, field in enumerate(form.inputs, 1):
             value = field.value
             value_options = getattr(field, "value_options", None)
             if value_options:
@@ -262,7 +262,7 @@ def print_form(form: FormElement, n: int) -> None:
             field_type = getattr(field, "type", "select")
             field_id = field.get("id")
             strings = (
-                f"{n:2}",
+                f"{i:2}",
                 f"{trunc(field_name, 24):24}",
                 f"{trunc(field_type, 9):9}",
                 f"{trunc(field_id, 12):12}",

@@ -264,7 +264,7 @@ class TwillCommandLoop(Singleton, Cmd):
             )
         except SystemExit:
             raise
-        except Exception as error:  # noqa: BLE001
+        except Exception as error:
             log.error("\nERROR: %s\n", error)
             if self.fail_on_unknown:
                 raise
@@ -481,7 +481,7 @@ def main(  # noqa: C901, PLR0912, PLR0915
                     never_fail=options.never_fail,
                 )
                 success.append(filename)
-            except Exception as error:  # noqa: BLE001
+            except Exception as error:
                 if dump_file:
                     dump = browser.dump
                 if options.fail:
