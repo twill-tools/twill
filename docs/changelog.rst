@@ -4,6 +4,10 @@
 ChangeLog
 =========
 
+3.2.5 (released 2024-06-28)
+---------------------------
+* Uses lxml 5 instead of lxml 4.
+
 3.2.4 (released 2024-04-27)
 ---------------------------
 * Support latest version of httpx.
