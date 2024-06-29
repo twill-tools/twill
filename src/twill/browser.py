@@ -728,7 +728,7 @@ class TwillBrowser:
                 interval, url = self._get_meta_refresh(result)
                 if not url:
                     break
-                if interval >= refresh_interval:
+                if interval and interval >= refresh_interval:
                     (log.info if self.show_refresh else log.debug)(
                         "Meta refresh interval too long: %d", interval
                     )

@@ -450,9 +450,9 @@ def run_tidy(html: str) -> Tuple[Optional[str], Optional[str]]:
 
 
 def get_equiv_refresh_interval() -> Optional[int]:
-    """Get the smallest interval for which the browser should follow redirects.
+    """Get the longest interval for which the browser should follow redirects.
 
-    Redirection happens if the given interval is smaller than this.
+    Redirection happens if the given interval is shorter than this.
     """
     from .commands import options
 
