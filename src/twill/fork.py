@@ -3,10 +3,10 @@
 import os
 import sys
 import time
-from optparse import OptionParser
+from argparse import ArgumentParser
 from pickle import dump, load
 
-from . import execute_file, set_log_level
+from twill import execute_file, set_log_level
 
 
 def main() -> None:
@@ -18,12 +18,11 @@ def main() -> None:
     except AttributeError:
         sys.exit("Error: Must use Unix to be able to fork processes.")
 
-    parser = OptionParser()
-    add = parser.add_option
+    parser = ArgumentParser()
+    add = parser.add_argument
     add(
         "-u",
         "--url",
-        nargs=1,
         action="store",
         dest="url",
         help="start at the given URL before each script",
@@ -31,41 +30,42 @@ def main() -> None:
     add(
         "-n",
         "--number",
-        nargs=1,
         action="store",
         dest="number",
         default=1,
-        type="int",
+        type=int,
         help="number of times to run the given script(s)",
     )
     add(
         "-p",
         "--processes",
-        nargs=1,
         action="store",
         dest="processes",
         default=1,
-        type="int",
+        type=int,
         help="number of processes to execute in parallel",
     )
+    add(
+        "scripts",
+        metavar="SCRIPT",
+        nargs="+",
+        help="one or more twill scripts to execute",
+    )
 
-    options, args = parser.parse_args()
-
-    if not args:
-        sys.exit("Error: Must specify one or more scripts to execute.")
+    args = parser.parse_args()
 
     # make sure that the current working directory is in the path
     if "" not in sys.path:
         sys.path.append("")
 
-    average_number = options.number // options.processes
-    last_number = average_number + options.number % options.processes
+    average_number = args.number // args.processes
+    last_number = average_number + args.number % args.processes
     child_pids = []
     is_parent = True
     repeat = 0
 
     # start a bunch of child processes and record their pids in the parent
-    for i in range(options.processes):
+    for i in range(args.processes):
         pid = fork()
         if pid:
             child_pids.append(pid)
@@ -97,7 +97,7 @@ def main() -> None:
                 )
                 failed = True
             else:  # record statistics, otherwise
-                filename = ".status.%d" % (child_pid,)
+                filename = f".status.{child_pid}"
                 with open(filename, "rb") as fp:
                     this_time, n_executed = load(fp)  # noqa: S301
                 os.unlink(filename)  # noqa: PTH108
@@ -106,7 +106,7 @@ def main() -> None:
 
         # summarize
         print("\n----\n")
-        print(f"number of processes: {options.processes}")
+        print(f"number of processes: {args.processes}")
         print(f"total executed: {total_exec}")
         print(f"total time to execute: {total_time:.2f} s")
         if total_exec:
@@ -124,8 +124,8 @@ def main() -> None:
 
         set_log_level("warning")
         for _i in range(repeat):
-            for filename in args:
-                execute_file(filename, initial_url=options.url)
+            for filename in args.scripts:
+                execute_file(filename, initial_url=args.url)
 
         end_time = time.time()
         this_time = end_time - start_time

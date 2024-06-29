@@ -10,6 +10,8 @@ ChangeLog
   incorporates the the domains and paths of the cookies.
 * Twill now uses Flask_ instead of Quixote_ as test server for running its own
   test suite.
+* Twill now uses 'argparse' instead of the deprecated 'optparse' to parse
+  options and arguments passed on the command line.
 
 3.2.5 (released 2024-06-28)
 ---------------------------

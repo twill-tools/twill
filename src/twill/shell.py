@@ -7,10 +7,10 @@ This is an implementation of a command-line interpreter based on the
 import os
 import sys
 import traceback
+from argparse import ArgumentParser
 from cmd import Cmd
 from contextlib import suppress
 from io import TextIOWrapper
-from optparse import OptionParser
 from pathlib import Path
 from typing import Any, Callable, List, Optional
 
@@ -152,7 +152,7 @@ class TwillCommandLoop(Singleton, Cmd):
 
         self.names: List[str] = []
 
-        global_dict, local_dict = namespaces.get_twill_glocals()
+        global_dict, _local_dict = namespaces.get_twill_glocals()
 
         # add all of the commands from twill
         for command in parse.command_list:
@@ -185,13 +185,14 @@ class TwillCommandLoop(Singleton, Cmd):
 
         form_value <form_name> <field_name> <value>
         """
-        cmd, args = parse.parse_command(line + ".", {}, {})
-        place = len(args)
-        if place == 1:
-            return self.provide_form_name(text)
-        if place == 2:  # noqa: PLR2004
-            form_name = args[0]
-            return self.provide_field_name(form_name, text)
+        _cmd, args = parse.parse_command(line + ".", {}, {})
+        if args:
+            place = len(args) if args else 0
+            if place == 1:
+                return self.provide_form_name(text)
+            if place == 2:  # noqa: PLR2004
+                form_name = args[0]
+                return self.provide_field_name(form_name, text)
         return []
 
     complete_fv = complete_form_value  # alias
@@ -259,7 +260,7 @@ class TwillCommandLoop(Singleton, Cmd):
 
         try:
             parse.execute_command(
-                cmd, args, global_dict, local_dict, "<shell>"
+                cmd, args or (), global_dict, local_dict, "<shell>"
             )
         except SystemExit:
             raise
@@ -332,8 +333,8 @@ def main(  # noqa: C901, PLR0912, PLR0915
     if "" not in sys.path:
         sys.path.append("")
 
-    parser = OptionParser()
-    add = parser.add_option
+    parser = ArgumentParser()
+    add = parser.add_argument
 
     add(
         "-d",
@@ -359,7 +360,6 @@ def main(  # noqa: C901, PLR0912, PLR0915
     add(
         "-l",
         "--loglevel",
-        nargs=1,
         action="store",
         dest="loglevel",
         help="set the logging level",
@@ -374,7 +374,6 @@ def main(  # noqa: C901, PLR0912, PLR0915
     add(
         "-o",
         "--output",
-        nargs=1,
         action="store",
         dest="outfile",
         help="print log to output file",
@@ -389,7 +388,6 @@ def main(  # noqa: C901, PLR0912, PLR0915
     add(
         "-u",
         "--url",
-        nargs=1,
         action="store",
         dest="url",
         help="start at the given URL before each script",
@@ -408,28 +406,35 @@ def main(  # noqa: C901, PLR0912, PLR0915
         dest="show_browser",
         help="show dumped HTML in a web browser ",
     )
+    add(
+        "scripts",
+        metavar="SCRIPT",
+        nargs="*",
+        help="the twill script to execute",
+    )
 
     # parse arguments
-    args = argv[1:]
-    if "--" in args:
-        for last in range(len(args) - 1, -1, -1):
-            if args[last] == "--":
-                twill_args[:] = args[last + 1 :]
-                args = args[:last]
+    raw_args = argv[1:]
+    if "--" in raw_args:
+        for last in reversed(range(len(raw_args))):
+            if raw_args[last] == "--":
+                twill_args[:] = raw_args[last + 1 :]
+                raw_args = raw_args[:last]
                 break
 
-    options, args = parser.parse_args(args)
+    args = parser.parse_args(raw_args)
 
-    if options.show_version:
+    if args.show_version:
         log.info(version_info)
         sys.exit(0)
 
-    quiet = options.quiet
-    show_browser = options.show_browser
-    dump_file = options.dumpfile
-    out_file = options.outfile
-    log_level = options.loglevel
-    interactive = options.interactive or not args
+    quiet = args.quiet
+    show_browser = args.show_browser
+    dump_file = args.dumpfile
+    out_file = args.outfile
+    log_level = args.loglevel
+    scripts = args.scripts
+    interactive = args.interactive or not scripts
 
     if out_file:
         out_file = out_file.lstrip("=").lstrip() or None
@@ -439,12 +444,12 @@ def main(  # noqa: C901, PLR0912, PLR0915
     if interactive and (quiet or out_file or dump_file or show_browser):
         sys.exit("Interactive mode is incompatible with -q, -o, -d and -w")
 
-    if options.show_browser and (not dump_file or dump_file == "-"):
+    if show_browser and (not dump_file or dump_file == "-"):
         sys.exit("Please also specify a dump file with -d")
 
     if log_level:
         log_level = log_level.lstrip("=").lstrip() or None
-        if log_level.upper() not in log_levels:
+        if log_level and log_level.upper() not in log_levels:
             log_level_names = ", ".join(sorted(log_levels))
             sys.exit(f"Valid log levels are: {log_level_names}")
         set_log_level(log_level)
@@ -464,11 +469,11 @@ def main(  # noqa: C901, PLR0912, PLR0915
     # first find and run any scripts put on the command line
 
     failed = False
-    if args:
+    if scripts:
         success = []
         failure = []
 
-        filenames = gather_filenames(args)
+        filenames = gather_filenames(scripts)
         dump = None
 
         for filename in filenames:
@@ -476,14 +481,14 @@ def main(  # noqa: C901, PLR0912, PLR0915
                 interactive = False
                 execute_file(
                     filename,
-                    initial_url=options.url,
-                    never_fail=options.never_fail,
+                    initial_url=args.url,
+                    never_fail=args.never_fail,
                 )
                 success.append(filename)
             except Exception as error:
                 if dump_file:
                     dump = browser.dump
-                if options.fail:
+                if args.fail:
                     raise
                 if browser.first_error:
                     log.error("\nFirst error: %s", browser.first_error)
@@ -511,7 +516,7 @@ def main(  # noqa: C901, PLR0912, PLR0915
             len(success),
             len(success) + len(failure),
         )
-        if len(failure):
+        if failure:
             log.error("Failed:\n\t%s", "\n\t".join(failure))
             failed = True
 
@@ -525,9 +530,9 @@ def main(  # noqa: C901, PLR0912, PLR0915
     # if no scripts to run or -i is set, drop into an interactive shell
 
     if interactive:
-        welcome_msg = "" if args else "\n -= Welcome to twill =-\n"
+        welcome_msg = "" if scripts else "\n -= Welcome to twill =-\n"
 
-        shell = TwillCommandLoop(initial_url=options.url)
+        shell = TwillCommandLoop(initial_url=args.url)
 
         while True:
             try:
@@ -535,8 +540,6 @@ def main(  # noqa: C901, PLR0912, PLR0915
             except KeyboardInterrupt:
                 sys.stdout.write("\n")
                 break
-            except SystemExit:
-                raise
 
             welcome_msg = ""
 

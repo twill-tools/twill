@@ -17,7 +17,7 @@ def get_args(require: int = 0) -> None:
     Load the command line arguments after the last '--' into $arg1...$argN,
     optionally requiring at least 'require' such arguments.
     """
-    global_dict, local_dict = namespaces.get_twill_glocals()
+    global_dict, _local_dict = namespaces.get_twill_glocals()
 
     require = int(require)
 
