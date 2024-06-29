@@ -28,12 +28,14 @@ class TestInfo:
         self,
         script: str,
         server_fn: Callable[[], None],
+        host: str = HOST,
         port: int = PORT,
         sleep: float = SLEEP,
     ) -> None:
         """Initialize the test info container."""
         self.script = script
         self.server_fn = server_fn
+        self.host = host
         self.port = port
         self.stdout: Optional[TextIO] = None
         self.stderr: Optional[TextIO] = None
@@ -63,8 +65,7 @@ class TestInfo:
     @property
     def url(self) -> str:
         """Get the test server URL."""
-        # noinspection HttpUrlsUsage
-        return f"http://{HOST}:{self.port}/"
+        return f"http://{self.host}:{self.port}/"
 
 
 def run_test(test_info: TestInfo) -> None:

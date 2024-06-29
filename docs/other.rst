@@ -76,7 +76,6 @@ WebTst_ also looks interesting.
 .. _PBP: http://pbp.berlios.de/
 .. _pyparsing: http://pyparsing.sourceforge.net/
 .. _PyXPCOM: https://developer.mozilla.org/en-US/docs/Mozilla/Tech/XPCOM/Language_bindings/PyXPCOM
-.. _Quixote: http://www.mems-exchange.org/software/quixote/
 .. _httpx: https://www.python-httpx.org/
 .. _Selenium: http://www.seleniumhq.org/
 .. _twill in Javascript: http://blog.ianbicking.org/twill-in-javascript.html
@@ -88,4 +87,3 @@ WebTst_ also looks interesting.
 .. _`WWW::Mechanize`: http://search.cpan.org/perldoc?WWW::Mechanize::Shell
 .. _`WWW::Mechanize::Shell`: http://search.cpan.org/perldoc?WWW::Mechanize::Shell
 .. _zope.testbrowser: https://pypi.python.org/pypi/zope.testbrowser
-

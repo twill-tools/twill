@@ -43,7 +43,6 @@ def require(what: str) -> None:
                       extension module)
     """
     # install the post-load hook function.
-    # noinspection PyProtectedMember
     hooks = browser._post_load_hooks  # noqa: SLF001
     if _require_post_load_hook not in hooks:
         log.debug("INSTALLING POST-LOAD HOOK")
@@ -60,7 +59,6 @@ def no_require() -> None:
 
     Remove all post-load requirements.
     """
-    # noinspection PyProtectedMember
     hooks = browser._post_load_hooks  # noqa: SLF001
     hooks = [fn for fn in hooks if fn != _require_post_load_hook]
     browser._post_load_hooks = hooks  # noqa: SLF001

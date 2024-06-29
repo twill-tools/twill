@@ -2,7 +2,6 @@
 
 from typing import Dict
 
-# noinspection HttpUrlsUsage
 agents: Dict[str, str] = {
     # Desktop
     "chrome_40": "Mozilla/5.0 (Windows NT 10.0) AppleWebKit/537.36"

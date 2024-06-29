@@ -9,7 +9,6 @@ from io import StringIO
 from pathlib import Path
 from typing import Optional, TextIO
 
-import httpx
 import twill
 
 test_dir = Path(__file__).parent  # test directory
@@ -19,10 +18,11 @@ HOST = "127.0.0.1"  # interface to run the server on
 PORT = 8080  # default port to run the server on
 SLEEP = 0.5  # time to wait for the server to start
 
-START = True  # whether to automatically start the quixote server
+START = True  # whether to automatically start the test server
 LOG = None  # name of the server log file or None
 
 _url = None  # current server url
+__popen__ = None  # server process
 
 
 def get_url() -> str:
@@ -109,22 +109,23 @@ def execute_shell(
 def start_server(port: Optional[int] = None) -> None:
     """Start a simple test web server.
 
-    Run a Quixote simple_server on HOST:PORT with subprocess.
+    Run a Flask development server on HOST:PORT with subprocess.
     All output is captured and thrown away.
 
     The parent process returns the URL on which the server is running.
     """
-    global _url  # noqa: PLW0603
+    global _url, __popen__
 
     if port is None:
         port = int(os.environ.get("TWILL_TEST_PORT", PORT))
 
     if START:
-        out = open(LOG or os.devnull, "w", buffering=1)  # noqa: SIM115
+        log = LOG or os.devnull
+        out = open(log, "w", buffering=1, encoding="utf-8")  # noqa: SIM115
         print(  # noqa: T201
             "Starting:", sys.executable, "tests/server.py", Path.cwd()
         )
-        subprocess.Popen(  # noqa: S603
+        __popen__ = subprocess.Popen(  # noqa: S603
             [sys.executable, "-u", "server.py"],
             stderr=subprocess.STDOUT,
             stdout=out,
@@ -132,19 +133,20 @@ def start_server(port: Optional[int] = None) -> None:
         time.sleep(SLEEP)  # wait until the server is up and running
         print("The server has been started.")  # noqa: T201
 
-    # noinspection HttpUrlsUsage
     _url = f"http://{HOST}:{port}/"
 
 
 def stop_server() -> None:
     """Stop a previously started test web server."""
-    global _url  # noqa: PLW0603
+    global _url, __popen__
 
-    if _url:
+    if __popen__:
         if START:
             try:
-                httpx.get(f"{_url}exit", timeout=10)
+                __popen__.terminate()
             except Exception as error:  # noqa: BLE001
                 print("ERROR:", error)  # noqa: T201
                 print("Could not stop the server.")  # noqa: T201
-        _url = None
+            else:
+                print("The server has been stopped.")  # noqa: T201
+        _url = __popen__ = None

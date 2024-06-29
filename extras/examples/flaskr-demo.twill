@@ -1,0 +1,94 @@
+# Twill tests against the Flaskr demo application
+
+# You need to start the Flaskr demo first on your local host as explained
+# here: https://github.com/pallets/flask/tree/main/examples/tutorial
+
+go http://127.0.0.1:5000/
+
+find Flaskr
+find Posts
+
+follow Flaskr
+code 200
+
+find Flaskr
+find Posts
+
+notfind "Testing Flaskr"
+notfind "John"
+
+follow Register
+fv 1 username John
+fv 1 password Dummy
+submit 
+
+follow "Log In"
+fv 1 username John
+fv 1 password Muddy
+submit
+
+find "Incorrect password"
+notfind New
+
+fv 1 username John
+fv 1 password Dummy
+submit
+
+code 200
+
+find New
+follow New
+
+find "New Post"
+find "Save"
+
+fv 1 title "Testing Flaskr with Twill"
+fv 1 body "I can imagine this is a very interesting post."
+submit
+
+code 200
+
+find Posts
+find "Testing Flaskr with Twill"
+find "by John"
+find "this is a very interesting post"
+
+follow Edit
+
+find 'Edit "Testing Flaskr with Twill"'
+find Save
+
+fv 1 body "I found that this really works very well."
+submit
+
+find Posts
+find "Testing Flaskr with Twill"
+find "by John"
+notfind "a very interesting post"
+find "this really works very well"
+
+follow Edit
+find 'Edit "Testing Flaskr with Twill"'
+
+find Delete
+showforms
+
+# first button on second form is "delete"
+submit 1 2
+
+code 200
+
+find Posts
+
+notfind "Testing Flaskr"
+notfind "by John"
+notfind "works very well"
+
+find John
+follow "Log Out"
+
+notfind John
+find Register
+find "Log In"
+
+echo SUCCESS!

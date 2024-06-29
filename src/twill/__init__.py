@@ -83,7 +83,7 @@ def set_output(stream: Optional[TextIO] = None) -> None:
 
     If no stream is passed, use standard output.
     """
-    global handler  # noqa: PLW0603
+    global handler
     if stream is None:
         stream = stdout
     if handler:

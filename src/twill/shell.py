@@ -14,7 +14,6 @@ from optparse import OptionParser
 from pathlib import Path
 from typing import Any, Callable, List, Optional
 
-# noinspection PyCompatibility
 from . import (
     __url__,
     __version__,
@@ -321,7 +320,7 @@ def main(  # noqa: C901, PLR0912, PLR0915
     argv: Optional[List[str]] = None,
 ) -> None:
     """Run as shell script."""
-    global interactive  # noqa: PLW0603
+    global interactive
 
     # show the shorthand name for usage
     if argv is None:

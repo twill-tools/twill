@@ -17,7 +17,6 @@ from .browser import browser
 from .errors import TwillAssertionError, TwillException
 from .namespaces import get_twill_glocals
 
-# noinspection SpellCheckingInspection
 __all__ = [
     "add_auth",
     "add_cleanup",
@@ -102,7 +101,6 @@ def reset_browser(base_url: str = "") -> None:
     options.update(default_options)
 
 
-# noinspection PyShadowingBuiltins
 def exit(code: str = "0") -> None:
     """>> exit [<code>]
 
@@ -273,7 +271,6 @@ def not_find(what: str, flags: str = "") -> None:
         raise TwillAssertionError(f"match to '{what}'")
 
 
-# noinspection SpellCheckingInspection
 notfind = not_find  # backward compatibility and convenience
 
 
@@ -316,7 +313,6 @@ def show_html() -> None:
     log.info("")
 
 
-# noinspection SpellCheckingInspection
 showhtml = show_html  # backward compatibility and consistency
 
 
@@ -414,7 +410,6 @@ def show_forms() -> None:
     browser.show_forms()
 
 
-# noinspection SpellCheckingInspection
 showforms = show_forms  # backward compatibility and convenience
 
 
@@ -428,7 +423,6 @@ def show_links() -> None:
     browser.show_links()
 
 
-# noinspection SpellCheckingInspection
 showlinks = show_links  # backward compatibility and convenience
 
 
@@ -442,7 +436,6 @@ def show_history() -> None:
     browser.show_history()
 
 
-# noinspection SpellCheckingInspection
 showhistory = show_history  # backward compatibility and convenience
 
 
@@ -464,7 +457,6 @@ def form_clear(form_name: str) -> None:
     browser.last_submit_button = None
 
 
-# noinspection SpellCheckingInspection
 formclear = form_clear  # backward compatibility and convenience
 
 
@@ -519,7 +511,6 @@ def form_value(form_name: str, field_name: str, value: str) -> None:
     utils.set_form_control_value(control, value)
 
 
-# noinspection SpellCheckingInspection
 fv = formvalue = form_value  # backward compatibility and convenience
 
 
@@ -537,7 +528,6 @@ def form_action(form_name: str, action_url: str) -> None:
     form.action = action_url
 
 
-# noinspection SpellCheckingInspection
 fa = formaction = form_action  # backward compatibility and convenience
 
 
@@ -571,7 +561,6 @@ def form_file(
     )
 
 
-# noinspection SpellCheckingInspection
 formfile = form_file  # backward compatibility and convenience
 
 
@@ -627,7 +616,6 @@ def get_input(prompt: str) -> str:
     return inp
 
 
-# noinspection SpellCheckingInspection
 getinput = get_input  # backward compatibility and convenience
 
 
@@ -646,7 +634,6 @@ def get_password(prompt: str) -> str:
     return inp
 
 
-# noinspection SpellCheckingInspection
 getpassword = get_password  # backward compatibility and convenience
 
 
@@ -684,7 +671,6 @@ def show_cookies() -> None:
     browser.show_cookies()
 
 
-# noinspection SpellCheckingInspection
 showcookies = show_cookies  # backward compatibility and convenience
 
 
@@ -765,7 +751,6 @@ def run_file(*args: str) -> None:
         parse.execute_file(filename, no_reset=True)
 
 
-# noinspection SpellCheckingInspection
 rf = runfile = run_file  # backward compatibility and convenience
 
 
@@ -790,7 +775,6 @@ def set_global(name: str, value: str) -> None:
     global_dict[name] = value
 
 
-# noinspection SpellCheckingInspection
 setglobal = set_global  # backward compatibility and convenience
 
 
@@ -803,7 +787,6 @@ def set_local(name: str, value: str) -> None:
     local_dict[name] = value
 
 
-# noinspection SpellCheckingInspection
 setlocal = set_local  # backward compatibility and convenience
 
 

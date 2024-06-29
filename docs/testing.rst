@@ -73,35 +73,39 @@ As an example, here's the code from twill's own unit test, testing the
 unit-test support code::
 
     import os
-    import twill
-    from quixote.server.simple_server import run as quixote_run
+
+    from .server import app  # a Flask app used as test server
+    from .utils import test_dir  # directory with test scripts
 
     PORT=8090  # port to run the server on
 
     def run_server():
         """Function to run the server"""
-        quixote_run(twill.tests.server.create_publisher, port=PORT)
+        app.run(host=HOST, port=PORT)
 
     def test():
-        """The unit test"""
-        test_dir = twill.tests.utils.testdir
+        """The test function"""
+        test_dir = twill.tests.utils.test_dir
         script = os.path.join(test_dir, 'test_unit_support.twill')
 
-        # create test_info object
+        # create a TestInfo object
         test_info = twill.unit.TestInfo(script, run_server, PORT)
 
-        # run tests!
+        # run the tests!
         twill.unit.run_test(test_info)
 
-Here, I'm unit testing the Quixote application ``twill.tests.server``, which
-is run by ``quixote_run`` (a.k.a. ``quixote.server.simple_server.run``) on
-port ``PORT``, using the twill script ``test_unit_support.twill``. That
-script contains this code::
+Here, I'm unit testing the Flask_ application ``.server`` in the ``tests``
+directory, which is run on the specified ``PORT``, using the twill script
+``test_unit_support.twill``. That script contains this code::
 
-   # starting URL is provided to it by the unit test support framework.
+    # starting URL is provided to it by the unit test support framework.
 
-   go ./multisubmitform
-   code 200
+    go ./multisubmitform
+    code 200
+
+    fv 1 sub_a click
+    submit
+    find "used_sub_a"
 
 A few things to note:
 

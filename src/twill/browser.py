@@ -199,7 +199,6 @@ class TwillBrowser:
             # if this is an absolute URL, it may be just missing the 'http://'
             # at the beginning, try fixing that (mimic browser behavior)
             if not url.startswith((".", "/", "?")):
-                # noinspection HttpUrlsUsage
                 try_urls.append(f"http://{url}")
                 try_urls.append(f"https://{url}")
         for try_url in try_urls:

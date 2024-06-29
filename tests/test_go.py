@@ -13,7 +13,7 @@ _log_commands = None
 
 
 def setup_module():
-    global _log_commands  # noqa: PLW0603
+    global _log_commands
     _log_commands = twill.parse.log_commands(True)  # noqa: FBT003
 
 

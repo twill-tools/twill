@@ -4,6 +4,13 @@
 ChangeLog
 =========
 
+3.3 (released ...)
+------------------
+* Saving and loading of cookies has been made more robust, and it now also
+  incorporates the the domains and paths of the cookies.
+* Twill now uses Flask_ instead of Quixote_ as test server for running its own
+  test suite.
+
 3.2.5 (released 2024-06-28)
 ---------------------------
 * Uses lxml 5 instead of lxml 4.
@@ -164,3 +171,5 @@ The following improvements and changes were made in this version:
 .. _pytest: https://pytest.org/
 .. _nose: https://nose.readthedocs.io/
 .. _tox: https://tox.readthedocs.io/
+.. _Quixote: https://github.com/nascheme/quixote
+.. _Flask: https://flask.palletsprojects.com/

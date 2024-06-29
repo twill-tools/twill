@@ -67,7 +67,6 @@ def check_links(pattern: str = "") -> None:
         url = link.url
         url = url.split("#", 1)[0]  # get rid of subpage pointers
 
-        # noinspection HttpUrlsUsage
         if not url.startswith(("http://", "https://")):
             debug("url '%s' is not an HTTP link; ignoring", url)
             continue

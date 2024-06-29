@@ -21,7 +21,6 @@ from pyparsing import (
     rest_of_line,
 )
 
-# noinspection PyCompatibility
 from . import commands, log, namespaces
 from .browser import browser
 from .errors import TwillNameError
@@ -298,7 +297,7 @@ def _execute_script(inp: TextIO, **kw: Any) -> None:
 
 def log_commands(flag: bool) -> bool:  # noqa: FBT001
     """Turn printing of commands as they are executed on or off."""
-    global _log_commands  # noqa: PLW0603
+    global _log_commands
     old_flag = _log_commands is log.info
     _log_commands = log.info if flag else log.debug
     return old_flag

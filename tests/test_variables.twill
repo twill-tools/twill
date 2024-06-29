@@ -16,7 +16,7 @@ go ./login
 fv 1 username $value
 submit 'submit me'
 code 200
-find 'You are logged in as "Wilhelm"'
+find 'You are logged in as Wilhelm'
 echo $value
 
 run 'value = 123456'
@@ -24,5 +24,5 @@ go ./login
 fv 1 username $value
 submit 'submit me'
 code 200
-find 'You are logged in as "123456"'
+find 'You are logged in as 123456'
 echo $value

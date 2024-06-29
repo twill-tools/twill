@@ -29,16 +29,16 @@ showlinks
 
 # intro page.
 
-find "Your session ID is None"
+find "Your session ID is undefined"
 find "this is visit #0"
-find 'You are logged in as "None"'
+find 'You are logged in as guest'
 notfind 'this is visit #1'
 
 ## reload and assign a session ID
 
 reload
 code 200
-notfind "Your session ID is None"
+notfind "Your session ID is undefined"
 
 # increment visit number.
 follow increment
@@ -57,9 +57,9 @@ clear_cookies
 # return to main page; did clear work?
 
 go ./
-find "Your session ID is None"
+find "Your session ID is undefined"
 find "this is visit #0"
-find 'You are logged in as "None"'
+find 'You are logged in as guest'
 notfind 'this is visit #2'
 
 # yep!  all right. load cookies, check that.
@@ -72,14 +72,14 @@ back
 
 go ./
 code 200
-notfind "Your session ID is None"
+notfind "Your session ID is undefined"
 find "this is visit #2"
 
 # ok, cookies check out. now check login/access restricted.
 
 showhistory
 
-go ./restricted/
+go ./restricted
 code 403
 back
 
@@ -95,8 +95,8 @@ reload
 
 echo 'URL4 is' __url__
 
-#code 200
-#find 'this is visit #2'
+code 200
+find 'this is visit #2'
 
 go ./login
 
@@ -117,7 +117,7 @@ submit
 
 code 200
 show
-find 'You are logged in as "test"'
+find 'You are logged in as test'
 find 'this is visit #2'
 
 save_cookies 'test_basic.cookies'
@@ -126,20 +126,20 @@ clear_cookies
 # ok, clear username?
 go ./
 code 200
-find 'You are logged in as "None"'
+find 'You are logged in as guest'
 
 # yep, reload & visit restricted.
 load_cookies 'test_basic.cookies'
 go ./
 code 200
-find 'You are logged in as "test"'
+find 'You are logged in as test'
 
-go ./restricted/
+go ./restricted
 code 200
 
 # success!  log out, and try again.
 go ../logout
-go ./restricted/
+go ./restricted
 code 403
 
 ### test input/password
@@ -195,7 +195,7 @@ go ./ ##### this is a test
 
 # submit-button-less form
 go ./simpleform
-find 'method=POST'
+find 'method="POST"'
 fv 1 n testa
 fv 1 n2 testb
 submit
@@ -204,7 +204,7 @@ url /simpleform$
 
 # submit with get method
 go ./getform
-find 'method=GET'
+find 'method="GET"'
 url /getform$
 submit
 url /getform\?n=v$

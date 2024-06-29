@@ -13,7 +13,6 @@ def init_global_dict() -> None:
     This must be done after all the other modules are loaded, so that all
     the commands are already defined.
     """
-    # noinspection PyCompatibility
     from . import commands, parse
 
     cmd_list = commands.__all__

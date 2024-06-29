@@ -1,6 +1,6 @@
 # http basic auth
 
-go /http_auth/
+go /http_auth
 
 setlocal auth __url__
 code 401

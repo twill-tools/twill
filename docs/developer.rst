@@ -11,12 +11,12 @@ Package tests
 ~~~~~~~~~~~~~
 
 twill comes with several unit tests. They depend on `pytest`_ and
-`Quixote`_. To run them, type 'pytest' in the top level directory.
+`Flask`_. To run them, type 'pytest' in the top level directory.
 To run an individual test, you can use the command
 ``pytest tests/test_something.py``.
 
 .. _pytest: https://pytest.org/
-.. _Quixote: https://github.com/nascheme/quixote
+.. _Flask: https://flask.palletsprojects.com/
 
 Licensing
 ~~~~~~~~~

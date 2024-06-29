@@ -4,7 +4,7 @@ code 200
 find session
 echo found __match__
 
-find "session ID is None"
+find "session ID is undefined"
 echo found __match__
 
 find //html/body/p x

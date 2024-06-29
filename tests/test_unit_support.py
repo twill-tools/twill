@@ -1,35 +1,47 @@
 """Test the unit-test support framework using (naturally) a unit test."""
 
+import os
+import time
 from pathlib import Path
 
 import twill.unit
-from quixote.server.simple_server import (  # type: ignore[import-untyped]
-    run as quixote_run,
-)
 
-from .server import create_publisher
+from .server import app
 from .utils import test_dir
 
-PORT = 8081  # default port to run the server on
-SLEEP = 0.5  # time to wait for the server to start
+HOST = "127.0.0.1"
+PORT = 8080
+SLEEP = 0.25
+DEBUG = False
+RELOAD = False
 
 
-def run_server(port: int = PORT) -> None:
+def run_server() -> None:
     """Function to run the server"""
-    quixote_run(create_publisher, port=port)
+    port = int(os.environ.get("TWILL_TEST_PORT", PORT))
+    app.run(host=HOST, port=port, debug=DEBUG, use_reloader=RELOAD)
 
 
-def test():
-    """The unit test"""
+def just_wait() -> None:
+    """Just wait instead of starting the server."""
+    while True:
+        time.sleep(SLEEP or 1)
+
+
+def test(url: str) -> None:
+    """Test wrapper for unit support."""
     # abspath to the script
     script = str(Path(test_dir, "test_unit_support.twill"))
 
-    # create test_info object
-    test_info = twill.unit.TestInfo(script, run_server, PORT, SLEEP)
+    # the port that shall be used for running the server
+    port = int(os.environ.get("TWILL_TEST_PORT", PORT))
 
-    # run tests!
+    # create a TestInfo object
+    test_info = twill.unit.TestInfo(script, run_server, HOST, port, SLEEP)
+
+    if test_info.url == url:
+        # server already running, run a dummy server function that just waits
+        test_info = twill.unit.TestInfo(script, just_wait, HOST, port, SLEEP)
+
+    # run the tests!
     twill.unit.run_test(test_info)
-
-
-if __name__ == "__main__":
-    test()

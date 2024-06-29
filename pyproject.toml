@@ -56,7 +56,7 @@ tests = [
   "tox >=4, <5",
   "pytest >=8, <9",
   "pytidylib >=0.3, <0.4",
-  "quixote >=3.6, <4",
+  "flask >=3.0, <4",
 ]
 
 [project.scripts]
@@ -160,6 +160,7 @@ ignore = [
   "D213",  # multi-line docstrings should not start at second line
   "EM101", "EM102",  # allows exceptions with literal and f-strings
   "ISC001",  # allow string literal concatenation for auto-formatting
+  "PLW0603",   # allow global statements
   "PTH123",  # allow builtin-open
   "TRY003",  # allow specific messages outside the exception class
   "TRY301",  # allow raise
