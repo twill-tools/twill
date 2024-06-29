@@ -7,27 +7,22 @@ https://www.sphinx-doc.org/en/master/usage/configuration.html
 
 # -- Path setup --------------------------------------------------------------
 
-import os
 import sys
+from pathlib import Path
 
-sys.path.append(
-    os.path.join(
-        os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "src"
-    )
-)
+sys.path.append(str(Path(__file__).resolve().parent.parent / "src"))
 
 # -- Project information -----------------------------------------------------
 
 
-def project_version():
+def project_version() -> str:
     """Fetch version from pyproject.toml file."""
     # this also works when the package is not installed
-    with open("../pyproject.toml") as toml_file:
+    with open("../pyproject.toml", encoding="utf-8") as toml_file:
         for line in toml_file:
             if line.startswith("version ="):
-                version = line.split("=")[1].strip().strip('"')
-                return version
-    raise Exception("Cannot determine project version")
+                return line.split("=")[1].strip().strip('"')
+    raise RuntimeError("Cannot determine project version")
 
 
 project = "twill"
