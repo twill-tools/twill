@@ -576,13 +576,21 @@ class TwillBrowser:
 
     def save_cookies(self, filename: str) -> None:
         """Save cookies into the given file."""
+        saved_cookies = [
+            (cookie.name, cookie.value, cookie.domain, cookie.path)
+            for cookie in self._client.cookies.jar
+        ]
         with open(filename, "wb") as f:
-            pickle.dump(dict(self._client.cookies), f)
+            pickle.dump(saved_cookies, f)
 
     def load_cookies(self, filename: str) -> None:
         """Load cookies from the given file."""
+        cookies = Cookies()
         with open(filename, "rb") as f:
-            self._client.cookies = pickle.load(f)  # noqa: S301
+            loaded_cookies = pickle.load(f)  # noqa: S301
+        for name, value, domain, path in loaded_cookies:
+            cookies.set(name, value, domain=domain, path=path)
+        self._client.cookies = cookies
 
     def clear_cookies(self) -> None:
         """Delete all the cookies."""
@@ -599,7 +607,7 @@ class TwillBrowser:
                 info("\t%d. %s", n, cookie)
             info("")
         else:
-            log.info("\nThere are no cookies in the cookie jar.\n", n)
+            log.info("\nThere are no cookies in the cookie jar.\n")
 
     def decode(self, value: Union[bytes, str]) -> str:
         """Decode a value using the current encoding."""
@@ -734,9 +742,11 @@ class TwillBrowser:
                 result = self._client.get(url)
                 visited.add(url)
 
-        if func_name in ("follow_link", "open") and (
+        if (
+            func_name in ("follow_link", "open")
             # if we're really reloading and just didn't say so, don't store
-            self.result is not None and self.result.url != result.url
+            and self.result is not None
+            and self.result.url != result.url
         ):
             self._history.append(self.result)
 
