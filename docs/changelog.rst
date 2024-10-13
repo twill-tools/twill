@@ -4,10 +4,11 @@
 ChangeLog
 =========
 
-3.3 (released ...)
-------------------
+3.3 (released 2024-10-13)
+-------------------------
+* The supported Python versions are now 3.8 to 3.13.
 * Saving and loading of cookies has been made more robust, and it now also
-  incorporates the the domains and paths of the cookies.
+  incorporates the domains and paths of the cookies.
 * Twill now uses Flask_ instead of Quixote_ as test server for running its own
   test suite.
 * Twill now uses 'argparse' instead of the deprecated 'optparse' to parse

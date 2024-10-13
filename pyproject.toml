@@ -1,6 +1,6 @@
 [project]
 name = "twill"
-version = "3.3b1"
+version = "3.3"
 
 description = "A web browsing and testing language"
 keywords = ["web", "testing",  "browsing", "automation"]
