@@ -12,6 +12,7 @@ from cmd import Cmd
 from contextlib import suppress
 from io import TextIOWrapper
 from pathlib import Path
+from textwrap import dedent
 from typing import Any, Callable, List, Optional
 
 from . import (
@@ -91,6 +92,13 @@ def make_help_cmd(cmd: str, docstring: str) -> Callable[[str], None]:
 
     def help_cmd(message: str = docstring, cmd: str = cmd) -> None:
         message = message.strip()
+        try:
+            title, details = message.split("\n", 1)
+        except ValueError:
+            pass
+        else:  # dedent the details (for Python < 3.13)
+            details = dedent(details)
+            message = "\n".join((title, details))
         max_width = max(
             7 + len(cmd),
             *(len(line.rstrip()) for line in message.splitlines()),

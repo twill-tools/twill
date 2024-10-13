@@ -24,7 +24,7 @@ def test_shell_specific(url: str):
         "What do YOU think the command 'help' does?!?",
         "Help for command exit:",
         ">> exit [<code>]",
-        '    Exit twill with given exit code (default 0, "no error").',
+        'Exit twill with given exit code (default 0, "no error").',
         "Print version information.",
         "Imported extension module 'shell_test'.",
         "testing extension",
