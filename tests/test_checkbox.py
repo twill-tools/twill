@@ -1,4 +1,5 @@
 import pytest
+
 import twill
 from twill import browser, commands, namespaces
 from twill.errors import TwillException

@@ -5,6 +5,7 @@ that the function runs without error...
 """
 
 import pytest
+
 from twill import utils
 from twill.commands import config
 from twill.errors import TwillException

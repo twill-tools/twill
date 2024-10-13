@@ -75,7 +75,7 @@ def setmatch(what: str) -> None:
 
 def _eval(match: str, exp: str) -> Any:
     """Evaluate an expression."""
-    return eval(exp, globals(), {"m": match})  # noqa: PGH001, S307
+    return eval(exp, globals(), {"m": match})  # noqa: S307
 
 
 def popmatch(which: str) -> None:

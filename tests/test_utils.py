@@ -1,6 +1,7 @@
 from pathlib import Path
 
 import pytest
+
 from twill import utils
 from twill.errors import TwillException
 

@@ -40,7 +40,7 @@ and clear your proxy settings too!
     utils.pop_test_dir()
 
 
-@pytest.fixture()
+@pytest.fixture
 def output() -> Generator[StringIO, None, None]:
     """Get output from the test."""
     from twill import set_output

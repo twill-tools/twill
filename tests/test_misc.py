@@ -4,6 +4,7 @@ import sys
 from io import StringIO
 
 import pytest
+
 from twill import browser, commands
 from twill.errors import TwillException
 

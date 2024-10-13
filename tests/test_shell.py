@@ -4,6 +4,7 @@ import sys
 from pathlib import Path
 
 import pytest
+
 from twill import __url__ as twill_url
 from twill import __version__ as twill_version
 from twill.errors import TwillNameError

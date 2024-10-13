@@ -3,6 +3,7 @@ from io import StringIO
 from pathlib import Path
 
 import pytest
+
 import twill.parse
 from twill import commands, namespaces
 from twill.errors import TwillAssertionError, TwillNameError
