@@ -46,8 +46,8 @@ dependencies = [
 
 [project.optional-dependencies]
 docs = [
-  "sphinx >=7.3, <8",
-  "sphinx_rtd_theme >=2, <3"
+  "sphinx >=8.1, <9",
+  "sphinx_rtd_theme >=3, <4"
 ]
 tidy = [
   "pytidylib >=0.3, <0.4"
