@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+
+<html lang="en" data-content_root="./">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Installing twill &#8212; twill 3.3.1 documentation</title>
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=5ecbeea2" />
+    <link rel="stylesheet" type="text/css" href="_static/basic.css?v=b08954a9" />
+    <link rel="stylesheet" type="text/css" href="_static/alabaster.css?v=27fed22d" />
+    <script src="_static/documentation_options.js?v=9ac01507"></script>
+    <script src="_static/doctools.js?v=9bcbadda"></script>
+    <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="ChangeLog" href="changelog.html" />
+    <link rel="prev" title="twill Overview" href="overview.html" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+
+  
+  
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <section id="installing-twill">
+<span id="install"></span><h1>Installing twill<a class="headerlink" href="#installing-twill" title="Link to this heading">¶</a></h1>
+<p>The recommended way to install twill is to use <a class="reference external" href="https://docs.python.org/3/installing/index.html">pip</a>:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">pip</span> <span class="n">install</span> <span class="n">twill</span>
+</pre></div>
+</div>
+<p>You can also install it directly from the distribution tar.gz file
+by unpacking the .tar.gz file and running:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">python</span> <span class="n">setup</span><span class="o">.</span><span class="n">py</span> <span class="n">install</span>
+</pre></div>
+</div>
+<section id="troubleshooting-your-installation">
+<h2>Troubleshooting your installation<a class="headerlink" href="#troubleshooting-your-installation" title="Link to this heading">¶</a></h2>
+<p>The first and only thing you should do before creating an <a class="reference external" href="https://github.com/twill-tools/twill/issues">issue</a> on the
+<a class="reference external" href="https://github.com/twill-tools/twill">GitHub project page</a> is to see if you have the twill package installed
+correctly:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ python
+&gt;&gt;&gt; import twill.shell
+&gt;&gt;&gt; twill.shell.main()
+</pre></div>
+</div>
+<p>(This should drop you into the twill shell irrespective of whether ‘twill’
+is on your path.)  <strong>If this works</strong>, twill is installed correctly and you
+just need to adjust your path (see above for examples). If you still
+need help, or the above code doesn’t work, please copy and paste the results
+of entering the above code into your e-mail to the list – thanks!</p>
+</section>
+<section id="upgrading-twill">
+<h2>Upgrading twill<a class="headerlink" href="#upgrading-twill" title="Link to this heading">¶</a></h2>
+<p>If you don’t want to download a new tar.gz file, you can use
+pip to upgrade twill. To get the latest release, use:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">pip</span> <span class="n">install</span> <span class="o">-</span><span class="n">U</span> <span class="n">twill</span>
+</pre></div>
+</div>
+<p>To download the latest development release (which is usually pretty
+stable) use:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">pip</span> <span class="n">install</span> <span class="o">-</span><span class="n">U</span> <span class="n">https</span><span class="p">:</span><span class="o">//</span><span class="n">github</span><span class="o">.</span><span class="n">com</span><span class="o">/</span><span class="n">twill</span><span class="o">-</span><span class="n">tools</span><span class="o">/</span><span class="n">twill</span><span class="o">/</span><span class="n">archive</span><span class="o">/</span><span class="n">master</span><span class="o">.</span><span class="n">zip</span>
+</pre></div>
+</div>
+</section>
+</section>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="Main">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="index.html">twill</a></h1>
+
+
+
+
+
+
+
+
+
+<search id="searchbox" style="display: none" role="search">
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" placeholder="Search"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</search>
+<script>document.getElementById('searchbox').style.display = "block"</script><h3>Navigation</h3>
+<p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="overview.html">twill Overview</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Installing twill</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#troubleshooting-your-installation">Troubleshooting your installation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#upgrading-twill">Upgrading twill</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="changelog.html">ChangeLog</a></li>
+<li class="toctree-l1"><a class="reference internal" href="examples.html">twill Examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="browsing.html">Web browsing with twill</a></li>
+<li class="toctree-l1"><a class="reference internal" href="commands.html">twill language reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="testing.html">Testing Web sites with twill</a></li>
+<li class="toctree-l1"><a class="reference internal" href="extensions.html">twill Extension Modules</a></li>
+<li class="toctree-l1"><a class="reference internal" href="python-api.html">twill’s Python API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="developer.html">Developing twill</a></li>
+<li class="toctree-l1"><a class="reference internal" href="other.html">Propaganda, tools and packages</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="index.html">Documentation overview</a><ul>
+      <li>Previous: <a href="overview.html" title="previous chapter">twill Overview</a></li>
+      <li>Next: <a href="changelog.html" title="next chapter">ChangeLog</a></li>
+  </ul></li>
+</ul>
+</div>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &#169;2025, C. Titus Brown, Ben R. Taylor, Christoph Zwerschke et al.
+      
+      |
+      Powered by <a href="https://www.sphinx-doc.org/">Sphinx 8.2.3</a>
+      &amp; <a href="https://alabaster.readthedocs.io">Alabaster 1.0.0</a>
+      
+      |
+      <a href="_sources/install.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

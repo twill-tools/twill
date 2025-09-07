@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+
+<html lang="en" data-content_root="./">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>ChangeLog &#8212; twill 3.3.1 documentation</title>
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=5ecbeea2" />
+    <link rel="stylesheet" type="text/css" href="_static/basic.css?v=b08954a9" />
+    <link rel="stylesheet" type="text/css" href="_static/alabaster.css?v=27fed22d" />
+    <script src="_static/documentation_options.js?v=9ac01507"></script>
+    <script src="_static/doctools.js?v=9bcbadda"></script>
+    <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="twill Examples" href="examples.html" />
+    <link rel="prev" title="Installing twill" href="install.html" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+
+  
+  
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <section id="changelog">
+<span id="id1"></span><h1>ChangeLog<a class="headerlink" href="#changelog" title="Link to this heading">¶</a></h1>
+<section id="released-2025-09-07">
+<h2>3.3.1 (released 2025-09-07)<a class="headerlink" href="#released-2025-09-07" title="Link to this heading">¶</a></h2>
+<ul class="simple">
+<li><p>The supported Python versions are now 3.8 to 3.14.</p></li>
+</ul>
+</section>
+<section id="released-2024-10-13">
+<h2>3.3 (released 2024-10-13)<a class="headerlink" href="#released-2024-10-13" title="Link to this heading">¶</a></h2>
+<ul class="simple">
+<li><p>The supported Python versions are now 3.8 to 3.13.</p></li>
+<li><p>Saving and loading of cookies has been made more robust, and it now also
+incorporates the domains and paths of the cookies.</p></li>
+<li><p>Twill now uses <a class="reference external" href="https://flask.palletsprojects.com/">Flask</a> instead of <a class="reference external" href="https://github.com/nascheme/quixote">Quixote</a> as test server for running its own
+test suite.</p></li>
+<li><p>Twill now uses ‘argparse’ instead of the deprecated ‘optparse’ to parse
+options and arguments passed on the command line.</p></li>
+</ul>
+</section>
+<section id="released-2024-06-28">
+<h2>3.2.5 (released 2024-06-28)<a class="headerlink" href="#released-2024-06-28" title="Link to this heading">¶</a></h2>
+<ul class="simple">
+<li><p>Uses lxml 5 instead of lxml 4.</p></li>
+</ul>
+</section>
+<section id="released-2024-04-27">
+<h2>3.2.4 (released 2024-04-27)<a class="headerlink" href="#released-2024-04-27" title="Link to this heading">¶</a></h2>
+<ul class="simple">
+<li><p>Support latest version of httpx.</p></li>
+</ul>
+</section>
+<section id="released-2024-03-05">
+<h2>3.2.3 (released 2024-03-05)<a class="headerlink" href="#released-2024-03-05" title="Link to this heading">¶</a></h2>
+<ul class="simple">
+<li><p>Adds ‘timeout’ to the list of exported commends (#22).</p></li>
+</ul>
+</section>
+<section id="released-2024-01-28">
+<h2>3.2.2 (released 2024-01-28)<a class="headerlink" href="#released-2024-01-28" title="Link to this heading">¶</a></h2>
+<ul class="simple">
+<li><p>Fixes the broken interactive shell.</p></li>
+<li><p>Fixes ‘run_file’ when specifying files in a subdirectory without extension.</p></li>
+</ul>
+</section>
+<section id="released-2023-11-23">
+<h2>3.2.1 (released 2023-11-23)<a class="headerlink" href="#released-2023-11-23" title="Link to this heading">¶</a></h2>
+<ul class="simple">
+<li><p>Increased the default request timeout of the twill browser to 10 seconds
+(from 5 seconds in 3.2) and added a command to change the timeout (#18).</p></li>
+</ul>
+</section>
+<section id="released-2023-11-02">
+<h2>3.2 (released 2023-11-02)<a class="headerlink" href="#released-2023-11-02" title="Link to this heading">¶</a></h2>
+<ul class="simple">
+<li><p>The supported Python versions are now 3.8 to 3.12.</p></li>
+<li><p>A new method ‘find_links’ was added to the twill browser (#17).</p></li>
+<li><p>Twill now uses <a class="reference external" href="https://www.python-httpx.org/">httpx</a> instead of <a class="reference external" href="https://requests.readthedocs.io/">requests</a>.</p></li>
+<li><p>WSGI apps are now supported via httpx, wsgi_intercept is not needed anymore.</p></li>
+<li><p>We now use ‘pyproject.toml’ instead of ‘setup.py’.</p></li>
+<li><p>Type hints and code style have been improved and are checked with ruff.</p></li>
+<li><p>Internal code was reformatted using ruff format (compatible with black).</p></li>
+</ul>
+</section>
+<section id="released-2022-10-30">
+<h2>3.1 (released 2022-10-30)<a class="headerlink" href="#released-2022-10-30" title="Link to this heading">¶</a></h2>
+<ul class="simple">
+<li><p>The submit command now takes an additional parameter to specify a form
+that can be used in rare cases when there are no form fields (#7).</p></li>
+<li><p>Most commands do not return values any more, they are just commands.
+If you are using twill from Python, you should check browser properties
+like ‘forms’ or ‘url’ instead of using the return values of commands
+like ‘show_forms’ or ‘back’ (see #13, #14).</p></li>
+<li><p>Two-word commands now consistently have underscores in their names,
+(e.g. ‘form_action’, ‘get_input’, ‘show_links’). However, for convenience
+and backward compatibility, you can still use the names without underscores
+(e.g. ‘formaction’, ‘getinput’, ‘showlinks’), and the old two-letter
+abbreviations (e.g. ‘fa’ for ‘form_action’) (#13, #14).</p></li>
+<li><p>Instead of ‘showforms’ or ‘show_forms’ you can now also write ‘show forms’,
+and similarly for ‘cookies’, ‘links’, ‘history’ and ‘html’. The command
+‘show html’ does the same as ‘show’ without any arguments.</p></li>
+<li><p>Renamed shortcuts for user agent strings, and added some more existing ones.</p></li>
+<li><p>Added type hints (#15).</p></li>
+<li><p>Support Python 3.11.</p></li>
+<li><p>Many minor fixes and improvements.</p></li>
+</ul>
+</section>
+<section id="released-2022-10-12">
+<h2>3.0.3 (released 2022-10-12)<a class="headerlink" href="#released-2022-10-12" title="Link to this heading">¶</a></h2>
+<ul class="simple">
+<li><p>Form numbers are now printed correctly with ‘showforms’ (#12).</p></li>
+</ul>
+</section>
+<section id="released-2022-04-10">
+<h2>3.0.2 (released 2022-04-10)<a class="headerlink" href="#released-2022-04-10" title="Link to this heading">¶</a></h2>
+<ul class="simple">
+<li><p>Save HTML file with browser encoding or as UTF-8 (#9).</p></li>
+<li><p>Do not modify root logger any more (#10).</p></li>
+</ul>
+</section>
+<section id="released-2021-12-04">
+<h2>3.0.1 (released 2021-12-04)<a class="headerlink" href="#released-2021-12-04" title="Link to this heading">¶</a></h2>
+<ul class="simple">
+<li><p>This version now also supports Python 3.10.</p></li>
+<li><p>The twill language now allows 8-bit letters to appear in strings unquoted.</p></li>
+</ul>
+</section>
+<section id="released-2021-02-25">
+<h2>3.0 (released 2021-02-25)<a class="headerlink" href="#released-2021-02-25" title="Link to this heading">¶</a></h2>
+<ul class="simple">
+<li><p>In this version we require Python 3.6 to 3.9.
+If you still need support for Python 2 or Python 3.5,
+then please use the latest version from the 2.x branch.</p></li>
+<li><p>The code has been optimized for Python 3 now.</p></li>
+<li><p>Some minor fixes.</p></li>
+</ul>
+</section>
+<section id="id2">
+<h2>2.0.3 (released 2021-02-25)<a class="headerlink" href="#id2" title="Link to this heading">¶</a></h2>
+<ul class="simple">
+<li><p>Backported the fixes in version 3.0.</p></li>
+</ul>
+</section>
+<section id="released-2021-02-13">
+<h2>2.0.2 (released 2021-02-13)<a class="headerlink" href="#released-2021-02-13" title="Link to this heading">¶</a></h2>
+<ul class="simple">
+<li><p>This version now also supports Python 3.9.</p></li>
+<li><p>‘tidy_should_exist’ has been renamed ot ‘require_tidy’.</p></li>
+<li><p>Support for setting options to be used with HTML Tidy.</p></li>
+<li><p>Cleanup scripts are now also read as UTF-8 in Python 3.</p></li>
+</ul>
+</section>
+<section id="released-2020-07-12">
+<h2>2.0.1 (released 2020-07-12)<a class="headerlink" href="#released-2020-07-12" title="Link to this heading">¶</a></h2>
+<ul class="simple">
+<li><p>Fixes an issue with encoding declarations (#5).</p></li>
+</ul>
+</section>
+<section id="released-2020-04-04">
+<h2>2.0 (released 2020-04-04)<a class="headerlink" href="#released-2020-04-04" title="Link to this heading">¶</a></h2>
+<p>This version is based on twill 1.8, which was a refactoring
+of version 0.9 that used <a class="reference external" href="https://requests.readthedocs.io/">requests</a> and <a class="reference external" href="https://lxml.de/">lxml</a> instead of <a class="reference external" href="https://mechanize.readthedocs.io/">mechanize</a>,
+done by Ben Taylor in April 2014. It also integrates ideas and
+code from <a class="reference external" href="https://www.coactivate.org/projects/flunc/project-home">Flunc</a> which was created by Luke Tucker and Robert Marianski
+in 2006-2007, and from <a class="reference external" href="https://bitbucket.org/brandizzi/retwill/">ReTwill</a> which was created in April 2012
+as a fork from twill 0.9 by Adam Victor Brandizzi.
+The following improvements and changes were made in this version:</p>
+<ul class="simple">
+<li><p>Larger refactoring, clean-up and modernization efforts to support
+Python 2.7, 3.5 and higher.</p></li>
+<li><p>The console script has been renamed from ‘twill-sh’ to just ‘twill’.</p></li>
+<li><p>We assume the default file extension ‘.twill’ for twill scripts now.</p></li>
+<li><p>Uses <a class="reference external" href="https://lxml.de/">lxml</a> and <a class="reference external" href="https://requests.readthedocs.io/">requests</a> instead of <a class="reference external" href="https://mechanize.readthedocs.io/">mechanize</a> (like in version 1.8),
+but doesn’t need <a class="reference external" href="https://github.com/scrapy/cssselect">cssselect</a> and <a class="reference external" href="https://www.crummy.com/software/BeautifulSoup/">Beautiful Soup</a> any more (unlike 1.8).</p></li>
+<li><p>Removed bundled packages which have become unnecessary (mechanize)
+or are available in newer versions on PyPI (pyparsing, wsgi_intercept)
+or in the standard library (subprocess).</p></li>
+<li><p>Removed parsing options (use_tidy, use_BeautifulSoup, allow_parse_errors)
+which have become insignificant due to the use of lxml.html.</p></li>
+<li><p>We use <a class="reference external" href="https://pytest.org/">pytest</a> instead of <a class="reference external" href="https://nose.readthedocs.io/">nose</a> for testing twill now.</p></li>
+<li><p>A <a class="reference external" href="https://tox.readthedocs.io/">tox</a> configuration file for running tests with different Python versions
+has been added.</p></li>
+<li><p>Optimized the order of the URLs that are tried out by the twill browser.</p></li>
+<li><p>Added an option ‘-d’ to dump the last HTML to a file or standard output
+and an option ‘-w’ to show the HTML directly in the web browser (this
+feature was taken over from Flunc).</p></li>
+<li><p>Added alias ‘rf’ for ‘runfiles’ and made runfiles run directories of
+scripts as well. This helps writing test suites for twill scripts.</p></li>
+<li><p>Added command ‘add_cleanup’ to unconditionally run cleanup scripts after
+the current script finished. This allows resetting the state of the
+tested server, so that tests will always re-run on a clean state.
+Together with a small init.twill script, this creates a test fixture.
+(This idea was taken from Flunc, which supports cleanup scripts for
+test suites, although in a somewhat different way.)</p></li>
+<li><p>Non string values are now accepted in variable substitution (this feature
+has been backported from ReTwill).</p></li>
+<li><p>XPath expressions are now supported in find/notfind commands (this feature
+has been backported from ReTwill).</p></li>
+<li><p>Made output better controllable by using log levels (this feature has
+been backported from ReTwill). See options ‘-l’ and ‘-o’.</p></li>
+<li><p>Updated the map of predefined user agent strings.</p></li>
+<li><p>Basic authentication with realm is now supported again
+(the ‘with_default_realm’ option, which was broken in version 1.8,
+has been switched off).</p></li>
+<li><p>Server certificates are not verified by default any more, since they are
+usually not valid on test and staging servers.</p></li>
+<li><p>Improved handling of meta refresh. Circular redirects are detected and
+‘debug equiv-refresh’ is functional again. A limit for the refresh time
+interval can be set with the ‘equiv_refresh_interval’ option. By default
+this is set to 2, so refresh intervals of 2 or more seconds are ignored.</p></li>
+<li><p>Moved the examples and additional stuff into an ‘extras’ directory.</p></li>
+<li><p>The documentation in the ‘docs’ directory has been updated and is now
+created with <a class="reference external" href="https://www.sphinx-doc.org/">Sphinx</a>.</p></li>
+<li><p>Made sure everything (except twill-forks) also works on Windows.</p></li>
+<li><p>Fixed a lot of smaller and larger bugs and problems.</p></li>
+</ul>
+</section>
+</section>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="Main">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="index.html">twill</a></h1>
+
+
+
+
+
+
+
+
+
+<search id="searchbox" style="display: none" role="search">
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" placeholder="Search"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</search>
+<script>document.getElementById('searchbox').style.display = "block"</script><h3>Navigation</h3>
+<p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="overview.html">twill Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="install.html">Installing twill</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">ChangeLog</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#released-2025-09-07">3.3.1 (released 2025-09-07)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#released-2024-10-13">3.3 (released 2024-10-13)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#released-2024-06-28">3.2.5 (released 2024-06-28)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#released-2024-04-27">3.2.4 (released 2024-04-27)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#released-2024-03-05">3.2.3 (released 2024-03-05)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#released-2024-01-28">3.2.2 (released 2024-01-28)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#released-2023-11-23">3.2.1 (released 2023-11-23)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#released-2023-11-02">3.2 (released 2023-11-02)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#released-2022-10-30">3.1 (released 2022-10-30)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#released-2022-10-12">3.0.3 (released 2022-10-12)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#released-2022-04-10">3.0.2 (released 2022-04-10)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#released-2021-12-04">3.0.1 (released 2021-12-04)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#released-2021-02-25">3.0 (released 2021-02-25)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#id2">2.0.3 (released 2021-02-25)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#released-2021-02-13">2.0.2 (released 2021-02-13)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#released-2020-07-12">2.0.1 (released 2020-07-12)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#released-2020-04-04">2.0 (released 2020-04-04)</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="examples.html">twill Examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="browsing.html">Web browsing with twill</a></li>
+<li class="toctree-l1"><a class="reference internal" href="commands.html">twill language reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="testing.html">Testing Web sites with twill</a></li>
+<li class="toctree-l1"><a class="reference internal" href="extensions.html">twill Extension Modules</a></li>
+<li class="toctree-l1"><a class="reference internal" href="python-api.html">twill’s Python API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="developer.html">Developing twill</a></li>
+<li class="toctree-l1"><a class="reference internal" href="other.html">Propaganda, tools and packages</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="index.html">Documentation overview</a><ul>
+      <li>Previous: <a href="install.html" title="previous chapter">Installing twill</a></li>
+      <li>Next: <a href="examples.html" title="next chapter">twill Examples</a></li>
+  </ul></li>
+</ul>
+</div>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &#169;2025, C. Titus Brown, Ben R. Taylor, Christoph Zwerschke et al.
+      
+      |
+      Powered by <a href="https://www.sphinx-doc.org/">Sphinx 8.2.3</a>
+      &amp; <a href="https://alabaster.readthedocs.io">Alabaster 1.0.0</a>
+      
+      |
+      <a href="_sources/changelog.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>
