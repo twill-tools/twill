@@ -13,7 +13,7 @@ def init_global_dict() -> None:
     This must be done after all the other modules are loaded, so that all
     the commands are already defined.
     """
-    from . import commands, parse
+    from . import commands, parse  # noqa: PLC0415
 
     cmd_list = commands.__all__
     global_dict.update((cmd, getattr(commands, cmd)) for cmd in cmd_list)

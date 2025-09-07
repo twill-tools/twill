@@ -21,7 +21,7 @@ from typing import Dict, List, Set
 from twill import browser, commands, log, utils
 from twill.errors import TwillAssertionError
 
-__all__ = ["check_links", "report_bad_links", "good_urls", "bad_urls"]
+__all__ = ["bad_urls", "check_links", "good_urls", "report_bad_links"]
 
 # first, set up config options & persistent 'bad links' memory...
 if commands.options.get("check_links.only_collection_bad_links") is None:

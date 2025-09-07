@@ -2,7 +2,7 @@
 
 from twill.errors import TwillAssertionError
 
-__all__ = ["set_flag", "unset_flag", "assert_flag_set", "assert_flag_unset"]
+__all__ = ["assert_flag_set", "assert_flag_unset", "set_flag", "unset_flag"]
 
 
 class Flag:

@@ -3,7 +3,7 @@
 # twill is an extensible scriptlet language for testing Web apps,
 # available at https://github.com/twill-tools/twill.
 #
-# Copyright (c) 2005-2024
+# Copyright (c) 2005-2025
 # by C. Titus Brown, Ben R. Taylor, Christoph Zwerschke et al.
 #
 # This program and all associated source code files are released under the
@@ -29,17 +29,17 @@ __version__: str = metadata["Version"]
 __url__: str = metadata["Project-URL"].rsplit(None, 1)[-1]
 
 __all__ = [
+    "TwillCommandLoop",
+    "__url__",
+    "__version__",
     "browser",
     "execute_file",
     "execute_string",
     "log",
+    "set_err_out",
     "set_log_level",
     "set_output",
-    "set_err_out",
     "twill_ext",
-    "TwillCommandLoop",
-    "__url__",
-    "__version__",
 ]
 
 this_dir = Path(__file__).parent

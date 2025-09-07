@@ -4,6 +4,10 @@
 ChangeLog
 =========
 
+3.3.1 (released 2025-09-07)
+---------------------------
+* The supported Python versions are now 3.8 to 3.14.
+
 3.3 (released 2024-10-13)
 -------------------------
 * The supported Python versions are now 3.8 to 3.13.
@@ -156,7 +160,7 @@ The following improvements and changes were made in this version:
   'debug equiv-refresh' is functional again. A limit for the refresh time
   interval can be set with the 'equiv_refresh_interval' option. By default
   this is set to 2, so refresh intervals of 2 or more seconds are ignored.
-* Moved the  examples and additional stuff into an 'extras' directory.
+* Moved the examples and additional stuff into an 'extras' directory.
 * The documentation in the 'docs' directory has been updated and is now
   created with Sphinx_.
 * Made sure everything (except twill-forks) also works on Windows.

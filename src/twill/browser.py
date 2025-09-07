@@ -54,7 +54,7 @@ __all__ = ["browser"]
 
 def _set_http_connection_debuglevel(level: int) -> None:
     """Set the debug level for the connection pool."""
-    from http.client import HTTPConnection
+    from http.client import HTTPConnection  # noqa: PLC0415
 
     HTTPConnection.debuglevel = level
 
@@ -69,7 +69,7 @@ class TwillBrowser:
         base_url: str = "",
         app: Optional[Callable[..., Any]] = None,
         follow_redirects: bool = True,  # noqa: FBT001, FBT002
-        verify: Union[bool, str] = False,  # noqa: FBT002
+        verify: Union[bool, str] = False,  # noqa: FBT001, FBT002
         timeout: Union[None, float, Timeout] = 10,
     ) -> None:
         """Initialize the twill browser.
@@ -126,7 +126,7 @@ class TwillBrowser:
         base_url: str = "",
         app: Optional[Callable[..., Any]] = None,
         follow_redirects: bool = True,  # noqa: FBT001, FBT002
-        verify: Union[bool, str] = False,  # noqa: FBT002
+        verify: Union[bool, str] = False,  # noqa: FBT001,FBT002
         timeout: Union[None, float, Timeout] = 10,
     ) -> None:
         """Reset the browser.
@@ -319,7 +319,7 @@ class TwillBrowser:
     @timeout.setter
     def timeout(self, timeout: Union[None, float, Timeout]) -> None:
         """Set the request timeout in seconds."""
-        self._client.timeout = timeout  # type: ignore[assignment]
+        self._client.timeout = timeout
 
     def show_forms(self) -> None:
         """Pretty-print all forms on the page.
@@ -406,12 +406,14 @@ class TwillBrowser:
                         for c in match_name
                     ):
                         return CheckboxGroup(
-                            cast(List[InputElement], match_name)
+                            cast("List[InputElement]", match_name)
                         )
                     if all(
                         getattr(c, "type", None) == "radio" for c in match_name
                     ):
-                        return RadioGroup(cast(List[InputElement], match_name))
+                        return RadioGroup(
+                            cast("List[InputElement]", match_name)
+                        )
             else:
                 match_name = None
 
@@ -471,7 +473,7 @@ class TwillBrowser:
             self.last_submit_button = None
         # record the last submit button clicked.
         if getattr(control, "type", None) in ("submit", "image"):
-            self.last_submit_button = cast(InputElement, control)
+            self.last_submit_button = cast("InputElement", control)
 
     def submit(
         self,
@@ -509,12 +511,12 @@ class TwillBrowser:
                     if getattr(c, "type", None) in ("submit", "image")
                 ]
                 if submits:
-                    ctl = cast(InputElement, submits[0])
+                    ctl = cast("InputElement", submits[0])
             else:
                 ctl = self.last_submit_button
         else:
             # field name given; find it
-            ctl = cast(InputElement, self.form_field(form, field_name))
+            ctl = cast("InputElement", self.form_field(form, field_name))
 
         # now set up the submission by building the request object that
         # will be sent in the form submission.
@@ -522,8 +524,7 @@ class TwillBrowser:
             log.debug("Note: submit without using a submit button")
         else:
             log.info(
-                "Note: submit is using submit button:"
-                " name='%s', value='%s'",
+                "Note: submit is using submit button: name='%s', value='%s'",
                 ctl.get("name"),
                 ctl.value,
             )

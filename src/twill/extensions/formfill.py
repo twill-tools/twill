@@ -20,7 +20,7 @@ import re
 
 from twill import browser, commands, log, utils
 
-__all__ = ["fv_match", "fv_multi_match", "fv_multi", "fv_multi_sub"]
+__all__ = ["fv_match", "fv_multi", "fv_multi_match", "fv_multi_sub"]
 
 
 def fv_match(form_name: str, field_pattern: str, value: str) -> None:

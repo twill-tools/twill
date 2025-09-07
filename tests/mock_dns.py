@@ -36,7 +36,7 @@ def activate() -> None:
     """Activate the mock dns module."""
     package = sys.modules[__name__]
     sys.modules["dns"] = package
-    for module in "ipv4 name rdatatype resolver".split():
+    for module in ["ipv4", "name", "rdatatype", "resolver"]:
         sys.modules[f"dns.{module}"] = package
         setattr(package, module, package)
 

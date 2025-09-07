@@ -16,8 +16,8 @@ def url() -> Generator[str, None, None]:
 
     url = utils.get_url()
 
-    from twill import set_output
-    from twill.commands import find, go
+    from twill import set_output  # noqa: PLC0415
+    from twill.commands import find, go  # noqa: PLC0415
 
     set_output()
     try:
@@ -43,7 +43,7 @@ and clear your proxy settings too!
 @pytest.fixture
 def output() -> Generator[StringIO, None, None]:
     """Get output from the test."""
-    from twill import set_output
+    from twill import set_output  # noqa: PLC0415
 
     with StringIO() as output:
         set_output(output)

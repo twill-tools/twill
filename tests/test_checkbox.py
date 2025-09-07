@@ -46,7 +46,7 @@ def test_select_single(url: str):
     commands.reset_browser()
     browser = twill.browser
     with pytest.raises(TwillException):
-        browser.title  # noqa: B018s
+        browser.title  # noqa: B018
 
     commands.go(url)
     commands.go("/test_checkboxes")

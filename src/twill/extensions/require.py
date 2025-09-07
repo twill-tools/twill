@@ -15,7 +15,7 @@ Commands:
 
 from twill import browser, commands, log
 
-__all__ = ["require", "skip_require", "flush_visited", "no_require"]
+__all__ = ["flush_visited", "no_require", "require", "skip_require"]
 
 _requirements = []  # what requirements to satisfy
 
@@ -71,7 +71,7 @@ def flush_visited() -> None:
 
     Flush the list of pages successfully visited already.
     """
-    from .check_links import good_urls
+    from .check_links import good_urls  # noqa: PLC0415
 
     good_urls.clear()
 
@@ -94,7 +94,7 @@ def _require_post_load_hook(action: str, *_args, **_kwargs) -> None:
             commands.code(200)
 
         elif what == "links_ok":
-            from .check_links import check_links, good_urls
+            from .check_links import check_links, good_urls  # noqa: PLC0415
 
             Ignore.always = True
             log.debug("REQUIRING functioning links")

@@ -252,9 +252,9 @@ def view_http_auth() -> str:
         auth_type, auth_string = ha.split(None, 1)
         if auth_type.lower() == "basic":
             auth_string = decodebytes(auth_string.encode("utf-8"))
-            login, passwd = auth_string.split(b":", 1)
-            login = login.decode("utf-8")
-            passwd = passwd.decode("utf-8")
+            login_bytes, passwd_bytes = auth_string.split(b":", 1)
+            login = login_bytes.decode("utf-8")
+            passwd = passwd_bytes.decode("utf-8")
             if (login, passwd) != ("test", "password"):
                 passwd = None
 

@@ -27,6 +27,8 @@ def test_fixing_forms(url: str):
     commands.go("/broken_form_5")
     assert len(browser.forms) == 1, "can fix form 5"
 
-    assert set(browser.form().inputs.keys()) == set(
-        "username password login".split()
-    ), "should get proper fields"
+    assert set(browser.form().inputs.keys()) == {
+        "username",
+        "password",
+        "login",
+    }, "should get proper fields"

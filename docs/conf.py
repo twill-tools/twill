@@ -27,7 +27,7 @@ def project_version() -> str:
 
 project = "twill"
 author = "C. Titus Brown, Ben R. Taylor, Christoph Zwerschke et al"
-copyright = "2024, " + author
+copyright = "2025, " + author
 
 # The full version, including alpha/beta/rc tags
 version = release = project_version()

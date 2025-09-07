@@ -22,7 +22,7 @@ def get_args(require: int = 0) -> None:
     require = int(require)
 
     if len(shell.twill_args) < require:
-        from twill.errors import TwillAssertionError
+        from twill.errors import TwillAssertionError  # noqa: PLC0415
 
         given = len(shell.twill_args)
         raise TwillAssertionError(

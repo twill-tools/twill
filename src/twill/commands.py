@@ -32,21 +32,21 @@ __all__ = [
     "echo",
     "exit",
     "extend_with",
+    "fa",
     "find",
     "follow",
     "form_action",
-    "formaction",
-    "fa",
     "form_clear",
-    "formclear",
     "form_file",
-    "formfile",
     "form_value",
+    "formaction",
+    "formclear",
+    "formfile",
     "formvalue",
     "fv",
     "get_input",
-    "getinput",
     "get_password",
+    "getinput",
     "getpassword",
     "go",
     "info",
@@ -60,28 +60,28 @@ __all__ = [
     "reset_browser",
     "reset_error",
     "reset_output",
+    "rf",
     "run",
     "run_file",
     "runfile",
-    "rf",
     "save_cookies",
     "save_html",
-    "setglobal",
     "set_global",
-    "setlocal",
     "set_local",
+    "setglobal",
+    "setlocal",
     "show",
-    "showcookies",
     "show_cookies",
     "show_extra_headers",
-    "showforms",
     "show_forms",
-    "showhistory",
     "show_history",
-    "showhtml",
     "show_html",
-    "showlinks",
     "show_links",
+    "showcookies",
+    "showforms",
+    "showhistory",
+    "showhtml",
+    "showlinks",
     "sleep",
     "submit",
     "tidy_ok",
@@ -184,8 +184,7 @@ def url(should_be: str) -> str:
 
     if not m:
         raise TwillAssertionError(
-            f"current url is '{current_url}';\n"
-            f"does not match '{should_be}'\n"
+            f"current url is '{current_url}';\ndoes not match '{should_be}'\n"
         )
 
     match_str = m.group(1 if m.groups() else 0)
@@ -578,7 +577,7 @@ def extend_with(module_name: str) -> None:
 
     mod = sys.modules[module_name]
 
-    from . import parse, shell
+    from . import parse, shell  # noqa: PLC0415
 
     fn_list = getattr(mod, "__all__", None)
     if fn_list is None:
@@ -701,7 +700,7 @@ def debug(what: str, level: str) -> None:
        * commands (any level >= 1), to display the commands being executed.
        * equiv-refresh (any level >= 1) to display HTTP-EQUIV refresh handling.
     """
-    from . import parse
+    from . import parse  # noqa: PLC0415
 
     try:
         num_level = int(level)
@@ -744,7 +743,7 @@ def run_file(*args: str) -> None:
 
     'run_file' is available as 'rf' as well.
     """
-    from . import parse
+    from . import parse  # noqa: PLC0415
 
     filenames = utils.gather_filenames(args)
     for filename in filenames:

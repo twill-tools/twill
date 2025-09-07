@@ -207,7 +207,7 @@ def execute_string(buf: str, **kw: Any) -> None:
 def execute_file(filename: str, **kw: Any) -> None:
     """Execute commands from a file."""
     with (
-        nullcontext(sys.stdin)  # type: ignore[attr-defined]
+        nullcontext(sys.stdin)
         if filename == "-"
         else open(filename, encoding="utf-8")
     ) as inp:
@@ -262,8 +262,7 @@ def _execute_script(inp: TextIO, **kw: Any) -> None:
             except Exception as error:
                 error_type = error.__class__.__name__ or "Error"
                 error_context = (
-                    f"{error_type} raised on line {line_no}"
-                    f" of '{source_info}'"
+                    f"{error_type} raised on line {line_no} of '{source_info}'"
                 )
                 if line:
                     error_context += f" while executing\n>> {line}"

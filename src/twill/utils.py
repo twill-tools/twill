@@ -35,19 +35,6 @@ from . import log, twill_ext
 from .errors import TwillException
 
 __all__ = [
-    "gather_filenames",
-    "get_equiv_refresh_interval",
-    "html_to_tree",
-    "is_hidden_filename",
-    "is_twill_filename",
-    "print_form",
-    "make_boolean",
-    "make_int",
-    "make_twill_filename",
-    "run_tidy",
-    "tree_to_html",
-    "trunc",
-    "unique_match",
     "CheckboxGroup",
     "FieldElement",
     "FormElement",
@@ -55,12 +42,25 @@ __all__ = [
     "InputElement",
     "Link",
     "RadioGroup",
+    "Response",
     "ResultWrapper",
     "SelectElement",
     "Singleton",
     "TextareaElement",
     "UrlWithRealm",
-    "Response",
+    "gather_filenames",
+    "get_equiv_refresh_interval",
+    "html_to_tree",
+    "is_hidden_filename",
+    "is_twill_filename",
+    "make_boolean",
+    "make_int",
+    "make_twill_filename",
+    "print_form",
+    "run_tidy",
+    "tree_to_html",
+    "trunc",
+    "unique_match",
 ]
 
 
@@ -429,7 +429,7 @@ def run_tidy(html: str) -> Tuple[Optional[str], Optional[str]]:
     Return a 2-tuple (output, errors).  (None, None) will be returned if
     PyTidyLib (or the required shared library for tidy) isn't installed.
     """
-    from .commands import options
+    from .commands import options  # noqa: PLC0415
 
     require_tidy = options.get("require_tidy")
 
@@ -454,7 +454,7 @@ def get_equiv_refresh_interval() -> Optional[int]:
 
     Redirection happens if the given interval is shorter than this.
     """
-    from .commands import options
+    from .commands import options  # noqa: PLC0415
 
     return options.get("equiv_refresh_interval")
 

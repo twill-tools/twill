@@ -10,10 +10,9 @@ import traceback
 from argparse import ArgumentParser
 from cmd import Cmd
 from contextlib import suppress
-from io import TextIOWrapper
 from pathlib import Path
 from textwrap import dedent
-from typing import Any, Callable, List, Optional
+from typing import IO, Any, Callable, List, Optional
 
 from . import (
     __url__,
@@ -132,7 +131,7 @@ class TwillCommandLoop(Singleton, Cmd):
 
     def __init__(
         self,
-        stdin: Optional[TextIOWrapper] = None,
+        stdin: Optional[IO[str]] = None,
         initial_url: Optional[str] = None,
         *,
         fail_on_unknown: bool = False,
@@ -529,7 +528,7 @@ def main(  # noqa: C901, PLR0912, PLR0915
             failed = True
 
         if dump and show_browser:
-            import webbrowser
+            import webbrowser  # noqa: PLC0415
 
             url = Path(dump_file).absolute().as_uri()
             log.debug("Running web browser on %s", url)
