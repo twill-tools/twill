@@ -36,7 +36,7 @@ def dns_a(host: str, ipaddress: str, server: Optional[str] = None) -> None:
         )
 
     for answer in _resolve(host, RdataType.A, server):
-        if answer.address == ipaddress:  # type: ignore[attr-defined]
+        if answer.address == ipaddress:
             return
 
     raise TwillAssertionError
@@ -56,7 +56,7 @@ def dns_cname(host: str, cname: str, server: Optional[str] = None) -> None:
     cname_name = from_text(cname)
 
     for answer in _resolve(host, RdataType.CNAME, server):
-        if answer.target == cname_name:  # type: ignore[attr-defined]
+        if answer.target == cname_name:
             return
 
     raise TwillAssertionError
@@ -75,7 +75,7 @@ def dns_resolves(
         ipaddress = _resolve_name(ipaddress, server)
 
     for answer in _resolve(host, RdataType.A, server):
-        if answer.address == ipaddress:  # type: ignore[attr-defined]
+        if answer.address == ipaddress:
             return
 
     raise TwillAssertionError
@@ -89,7 +89,7 @@ def dns_mx(host: str, mailserver: str, server: Optional[str] = None) -> None:
     mailserver_name = from_text(mailserver)
 
     for rdata in _resolve(host, RdataType.MX, server):
-        if rdata.exchange == mailserver_name:  # type: ignore[attr-defined]
+        if rdata.exchange == mailserver_name:
             return
 
     raise TwillAssertionError
@@ -103,7 +103,7 @@ def dns_ns(host: str, query_ns: str, server: Optional[str] = None) -> None:
     query_ns_name = from_text(query_ns)
 
     for answer in _resolve(host, RdataType.NS, server):
-        if answer.target == query_ns_name:  # type: ignore[attr-defined]
+        if answer.target == query_ns_name:
             return
 
     raise TwillAssertionError
