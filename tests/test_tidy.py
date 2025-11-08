@@ -53,12 +53,15 @@ def test_no_tidylib_but_not_required():
 def test_tidy_options():
     good_content = "<h1>Hello, World!</h1>"
     output, errors = utils.run_tidy(good_content)
+    assert output
     assert errors
     config("tidy_show_body_only", 1)
     output, errors = utils.run_tidy(good_content)
+    assert output
     assert not errors
     config("tidy_show_body_only", 0)
     output, errors = utils.run_tidy(good_content)
+    assert output
     assert errors
 
 

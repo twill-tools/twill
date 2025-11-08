@@ -29,7 +29,7 @@ def split(what: str) -> None:
 
     m = re.split(what, page)
 
-    global_dict, local_dict = get_twill_glocals()
+    local_dict = get_twill_glocals()[1]
     local_dict["__matchlist__"] = m
 
 
@@ -43,7 +43,7 @@ def findall(what: str) -> None:
     regex = re.compile(what, re.DOTALL)
     m = regex.findall(page)
 
-    global_dict, local_dict = get_twill_glocals()
+    local_dict = get_twill_glocals()[1]
     local_dict["__matchlist__"] = m
 
 
@@ -52,7 +52,7 @@ def getmatch(where: str, what: str) -> None:
 
     Evaluates an expression against __match__ and puts it into 'into_var'.
     """
-    global_dict, local_dict = get_twill_glocals()
+    local_dict = get_twill_glocals()[1]
     match = local_dict["__match__"]
     local_dict[where] = _eval(match, what)
 
@@ -63,7 +63,7 @@ def setmatch(what: str) -> None:
     Sets each element __matchlist__ to eval(expression); 'm' is set
     to each element of __matchlist__ prior to processing.
     """
-    global_dict, local_dict = get_twill_glocals()
+    local_dict = get_twill_glocals()[1]
 
     match = local_dict["__matchlist__"]
     if isinstance(match, str):
@@ -83,7 +83,7 @@ def popmatch(which: str) -> None:
 
     Pops __matchlist__[i] into __match__.
     """
-    global_dict, local_dict = get_twill_glocals()
+    local_dict = get_twill_glocals()[1]
 
     matchlist = local_dict["__matchlist__"]
     match = matchlist.pop(int(which))

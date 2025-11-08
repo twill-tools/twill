@@ -18,7 +18,7 @@ def csv_iterate(file_name: str, script_name: str) -> None:
     For each line in <csv_file>, read in a list of comma-separated values,
     put them in $col1...$colN, and execute <script>.
     """
-    global_dict, local_dict = namespaces.get_twill_glocals()
+    global_dict = namespaces.get_twill_glocals()[0]
 
     with open(file_name, encoding="utf-8") as csv_file:
         reader = csv.reader(csv_file)

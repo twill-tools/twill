@@ -188,7 +188,7 @@ def url(should_be: str) -> str:
         )
 
     match_str = m.group(1 if m.groups() else 0)
-    global_dict, local_dict = get_twill_glocals()
+    local_dict = get_twill_glocals()[1]
     local_dict["__match__"] = match_str
     return match_str
 
@@ -568,7 +568,7 @@ def extend_with(module_name: str) -> None:
 
     Import contents of given module.
     """
-    global_dict, local_dict = get_twill_glocals()
+    global_dict = get_twill_glocals()[0]
 
     exec(f"from {module_name} import *", global_dict)
 
@@ -770,7 +770,7 @@ def set_global(name: str, value: str) -> None:
 
     Sets the variable <name> to the value <value> in the global namespace.
     """
-    global_dict, local_dict = get_twill_glocals()
+    global_dict = get_twill_glocals()[0]
     global_dict[name] = value
 
 
@@ -782,7 +782,7 @@ def set_local(name: str, value: str) -> None:
 
     Sets the variable <name> to the value <value> in the local namespace.
     """
-    global_dict, local_dict = get_twill_glocals()
+    local_dict = get_twill_glocals()[1]
     local_dict[name] = value
 
 
@@ -808,7 +808,7 @@ def title(what: str) -> str:
 
     match_str = m.group(1 if m.groups() else 0)
 
-    global_dict, local_dict = get_twill_glocals()
+    local_dict = get_twill_glocals()[1]
     local_dict["__match__"] = match_str
     return match_str
 
