@@ -287,7 +287,7 @@ class TwillBrowser:
         """Reset the request headers currently used by the browser."""
         self.headers.clear()
         self.headers.update(
-            {"Accept": "text/html; */*", "User-Agent": self.user_agent}
+            {"Accept": "text/html, */*", "User-Agent": self.user_agent}
         )
 
     @property
