@@ -70,7 +70,7 @@ class TwillBrowser:
         app: Optional[Callable[..., Any]] = None,
         follow_redirects: bool = True,  # noqa: FBT001, FBT002
         verify: Union[bool, str] = False,  # noqa: FBT001, FBT002
-        timeout: Union[None, float, Timeout] = 10,
+        timeout: Union[float, Timeout, None] = 10,
     ) -> None:
         """Initialize the twill browser.
 
@@ -127,7 +127,7 @@ class TwillBrowser:
         app: Optional[Callable[..., Any]] = None,
         follow_redirects: bool = True,  # noqa: FBT001, FBT002
         verify: Union[bool, str] = False,  # noqa: FBT001,FBT002
-        timeout: Union[None, float, Timeout] = 10,
+        timeout: Union[float, Timeout, None] = 10,
     ) -> None:
         """Reset the browser.
 
@@ -309,7 +309,7 @@ class TwillBrowser:
         self.headers["User-Agent"] = agent
 
     @property
-    def timeout(self) -> Union[None, float, Timeout]:
+    def timeout(self) -> Union[float, Timeout, None]:
         """Get the request timeout in seconds."""
         timeout = self._client.timeout
         if timeout.connect == timeout.read == timeout.write == timeout.pool:
@@ -317,7 +317,7 @@ class TwillBrowser:
         return timeout
 
     @timeout.setter
-    def timeout(self, timeout: Union[None, float, Timeout]) -> None:
+    def timeout(self, timeout: Union[float, Timeout, None]) -> None:
         """Set the request timeout in seconds."""
         self._client.timeout = timeout
 

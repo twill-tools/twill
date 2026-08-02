@@ -125,7 +125,7 @@ def start_server(port: Optional[int] = None) -> None:
         print(  # noqa: T201
             "Starting:", sys.executable, "tests/server.py", Path.cwd()
         )
-        __popen__ = subprocess.Popen(  # noqa: S603
+        __popen__ = subprocess.Popen(
             [sys.executable, "-u", "server.py"],
             stderr=subprocess.STDOUT,
             stdout=out,

@@ -8,7 +8,17 @@ import os
 import re
 from contextlib import suppress
 from pathlib import Path
-from typing import Any, List, NamedTuple, Optional, Sequence, Tuple, Union
+from typing import (
+    Any,
+    List,
+    NamedTuple,
+    Optional,
+    Sequence,
+    Tuple,
+    Type,
+    TypeVar,
+    Union,
+)
 
 from httpx import Headers, Response
 from lxml.html import (
@@ -80,10 +90,15 @@ class Link(NamedTuple):
 UrlWithRealm = Union[str, Tuple[str, str]]
 
 
+# Stand-in for typing.Self, which needs Python 3.11.
+# With Python >= 3.11, annotate Singleton.__new__ with "-> Self" instead.
+SingletonType = TypeVar("SingletonType", bound="Singleton")
+
+
 class Singleton:
     """A mixin class to create singleton objects."""
 
-    def __new__(cls, *_args, **_kw) -> "Singleton":
+    def __new__(cls: Type[SingletonType], *_args, **_kw) -> SingletonType:
         """Create a new instance."""
         it = cls.__dict__.get("__it__")
         if it is not None:
