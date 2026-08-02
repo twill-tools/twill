@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+
+<html lang="en" data-content_root="./">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>twill Examples &#8212; twill 3.3.1 documentation</title>
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=5ecbeea2" />
+    <link rel="stylesheet" type="text/css" href="_static/basic.css?v=b08954a9" />
+    <link rel="stylesheet" type="text/css" href="_static/alabaster.css?v=27fed22d" />
+    <script src="_static/documentation_options.js?v=9ac01507"></script>
+    <script src="_static/doctools.js?v=9bcbadda"></script>
+    <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Web browsing with twill" href="browsing.html" />
+    <link rel="prev" title="ChangeLog" href="changelog.html" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+
+  
+  
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <section id="twill-examples">
+<span id="examples"></span><h1>twill Examples<a class="headerlink" href="#twill-examples" title="Link to this heading">¶</a></h1>
+<section id="example-logging-into-slashdot">
+<h2>Example: logging into slashdot<a class="headerlink" href="#example-logging-into-slashdot" title="Link to this heading">¶</a></h2>
+<p>This script logs you into slashdot (assuming you have an account!):</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>setlocal username &lt;your username&gt;
+setlocal password &lt;your password&gt;
+
+go http://www.slashdot.org/
+formvalue 1 unickname $username
+formvalue 1 upasswd $password
+submit
+
+code 200     # make sure form submission is correct!
+</pre></div>
+</div>
+</section>
+<section id="example-searching-google-and-going-to-the-first-hit">
+<h2>Example: searching Google and going to the first hit<a class="headerlink" href="#example-searching-google-and-going-to-the-first-hit" title="Link to this heading">¶</a></h2>
+<p><em>Please be aware that automated searching of Google violates their
+Terms of Service. This is for example purposes only!</em>:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>setlocal query &quot;twill Python&quot;
+
+go https://www.google.com/
+
+fv 1 q $query
+submit btnI     # use the &quot;I&#39;m feeling lucky&quot; button
+
+show
+</pre></div>
+</div>
+</section>
+</section>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="Main">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="index.html">twill</a></h1>
+
+
+
+
+
+
+
+
+
+<search id="searchbox" style="display: none" role="search">
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" placeholder="Search"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</search>
+<script>document.getElementById('searchbox').style.display = "block"</script><h3>Navigation</h3>
+<p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="overview.html">twill Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="install.html">Installing twill</a></li>
+<li class="toctree-l1"><a class="reference internal" href="changelog.html">ChangeLog</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">twill Examples</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#example-logging-into-slashdot">Example: logging into slashdot</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#example-searching-google-and-going-to-the-first-hit">Example: searching Google and going to the first hit</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="browsing.html">Web browsing with twill</a></li>
+<li class="toctree-l1"><a class="reference internal" href="commands.html">twill language reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="testing.html">Testing Web sites with twill</a></li>
+<li class="toctree-l1"><a class="reference internal" href="extensions.html">twill Extension Modules</a></li>
+<li class="toctree-l1"><a class="reference internal" href="python-api.html">twill’s Python API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="developer.html">Developing twill</a></li>
+<li class="toctree-l1"><a class="reference internal" href="other.html">Propaganda, tools and packages</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="index.html">Documentation overview</a><ul>
+      <li>Previous: <a href="changelog.html" title="previous chapter">ChangeLog</a></li>
+      <li>Next: <a href="browsing.html" title="next chapter">Web browsing with twill</a></li>
+  </ul></li>
+</ul>
+</div>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &#169;2025, C. Titus Brown, Ben R. Taylor, Christoph Zwerschke et al.
+      
+      |
+      Powered by <a href="https://www.sphinx-doc.org/">Sphinx 8.2.3</a>
+      &amp; <a href="https://alabaster.readthedocs.io">Alabaster 1.0.0</a>
+      
+      |
+      <a href="_sources/examples.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

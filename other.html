@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+
+<html lang="en" data-content_root="./">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Propaganda, tools and packages &#8212; twill 3.3.1 documentation</title>
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=5ecbeea2" />
+    <link rel="stylesheet" type="text/css" href="_static/basic.css?v=b08954a9" />
+    <link rel="stylesheet" type="text/css" href="_static/alabaster.css?v=27fed22d" />
+    <script src="_static/documentation_options.js?v=9ac01507"></script>
+    <script src="_static/doctools.js?v=9bcbadda"></script>
+    <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="prev" title="Developing twill" href="developer.html" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+
+  
+  
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <section id="propaganda-tools-and-packages">
+<span id="other"></span><h1>Propaganda, tools and packages<a class="headerlink" href="#propaganda-tools-and-packages" title="Link to this heading">¶</a></h1>
+<section id="other-opinions">
+<h2>Other opinions<a class="headerlink" href="#other-opinions" title="Link to this heading">¶</a></h2>
+<p>Grig Gheorgiu has written a blog entry on <a class="reference external" href="http://agiletesting.blogspot.com/2005/09/web-app-testing-with-python-part-3.html">Web app testing using twill</a>.
+Michele Simionato wrote a nice long article on <a class="reference external" href="http://www.onlamp.com/pub/a/python/2005/11/03/twill.html">Testing Web Apps</a>, and
+Nitesh Djanjani <a class="reference external" href="http://archive.oreilly.com/pub/wlg/8201">tried it out</a> as well.</p>
+</section>
+<section id="offshoots-from-the-twill-project">
+<h2>Offshoots from the twill project<a class="headerlink" href="#offshoots-from-the-twill-project" title="Link to this heading">¶</a></h2>
+<p>C. Titus Brown wrote a simple <a class="reference external" href="https://pypi.python.org/pypi/wsgi_intercept">wsgi_intercept</a> standalone package based
+on the WSGI interception stuff for in-process testing of WSGI apps by twill.
+This is for people who want to talk directly to their Web apps without going
+through a network connection.</p>
+<p>Note that since twill 3.2, WSGI apps are supported directly via https,
+so this pacakge is not needed any more for twill itself.</p>
+</section>
+<section id="other-python-based-web-testing-and-browsing-tools">
+<h2>Other Python-based Web testing and browsing tools<a class="headerlink" href="#other-python-based-web-testing-and-browsing-tools" title="Link to this heading">¶</a></h2>
+<p>For those who want to use Python-based toolkits to test their Web
+apps, there are many great options. Here are some of them:</p>
+<p><a class="reference external" href="http://pbp.berlios.de/">PBP</a> was very similar to twill – twill was initially based on it –
+but the project seems to be defunct now.
+Like PBP, twill was based on <a class="reference external" href="http://wwwsearch.sf.net/">mechanize</a> in the past,
+unfortunately development of that project also stalled.
+The current version is based on <a class="reference external" href="https://www.python-httpx.org/">httpx</a> and <a class="reference external" href="http://lxml.de/">lxml</a> instead.</p>
+<p><a class="reference external" href="http://funkload.nuxeo.org/">funkload</a> is a nifty looking tool that does functional load testing.
+It is built on <a class="reference external" href="http://mechanicalcat.net/tech/webunit/">webunit</a>.</p>
+<p><a class="reference external" href="https://pypi.python.org/pypi/WebTest">webtest</a> is an extension to <code class="docutils literal notranslate"><span class="pre">unittest</span></code> for testing <a class="reference external" href="http://www.python.org/peps/pep-0333.html">WSGI applications</a>,
+without starting up an HTTP server.</p>
+<p><a class="reference external" href="https://pypi.python.org/pypi/zope.testbrowser">zope.testbrowser</a> provides an easy-to-use programmable web browser with
+special focus on testing.</p>
+<p><a class="reference external" href="https://pypi.python.org/pypi/mechanoid">mechanoid</a> is a fork of <a class="reference external" href="http://wwwsearch.sf.net/">mechanize</a> that claims many bug fixes and a
+different programming style. It’s primarily used for scripting Web
+sites, not for testing, but it can easily be used for testing.</p>
+<p><a class="reference external" href="http://sourceforge.net/projects/pamie/files/">PAMIE</a> and <a class="reference external" href="https://developer.mozilla.org/en-US/docs/Mozilla/Tech/XPCOM/Language_bindings/PyXPCOM">PyXPCOM</a> provide a Python interface for interacting with IE
+and Mozilla-based browsers, respectively.</p>
+<p>Finally, <a class="reference external" href="http://www.seleniumhq.org/">Selenium</a> is an in-browser testing system that several people
+have given rave reviews. Note that it’s not written in Python…</p>
+<p>You might also consider checking out Ian Bicking’s proto-implementation
+of <a class="reference external" href="http://blog.ianbicking.org/twill-in-javascript.html">twill in Javascript</a>.</p>
+<p>As twill was based upon mechanize, so is Perl’s <a class="reference external" href="http://search.cpan.org/perldoc?WWW::Mechanize::Shell">WWW::Mechanize::Shell</a>
+based upon <a class="reference external" href="http://search.cpan.org/perldoc?WWW::Mechanize::Shell">WWW::Mechanize</a>. There’s even an <a class="reference external" href="http://www.perl.com/pub/a/2004/06/04/recorder.html">HTTP::Recorder</a>.
+<a class="reference external" href="http://webtst.sourceforge.net/">WebTst</a> also looks interesting.</p>
+</section>
+</section>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="Main">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="index.html">twill</a></h1>
+
+
+
+
+
+
+
+
+
+<search id="searchbox" style="display: none" role="search">
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" placeholder="Search"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</search>
+<script>document.getElementById('searchbox').style.display = "block"</script><h3>Navigation</h3>
+<p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="overview.html">twill Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="install.html">Installing twill</a></li>
+<li class="toctree-l1"><a class="reference internal" href="changelog.html">ChangeLog</a></li>
+<li class="toctree-l1"><a class="reference internal" href="examples.html">twill Examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="browsing.html">Web browsing with twill</a></li>
+<li class="toctree-l1"><a class="reference internal" href="commands.html">twill language reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="testing.html">Testing Web sites with twill</a></li>
+<li class="toctree-l1"><a class="reference internal" href="extensions.html">twill Extension Modules</a></li>
+<li class="toctree-l1"><a class="reference internal" href="python-api.html">twill’s Python API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="developer.html">Developing twill</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Propaganda, tools and packages</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#other-opinions">Other opinions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#offshoots-from-the-twill-project">Offshoots from the twill project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#other-python-based-web-testing-and-browsing-tools">Other Python-based Web testing and browsing tools</a></li>
+</ul>
+</li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="index.html">Documentation overview</a><ul>
+      <li>Previous: <a href="developer.html" title="previous chapter">Developing twill</a></li>
+  </ul></li>
+</ul>
+</div>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &#169;2025, C. Titus Brown, Ben R. Taylor, Christoph Zwerschke et al.
+      
+      |
+      Powered by <a href="https://www.sphinx-doc.org/">Sphinx 8.2.3</a>
+      &amp; <a href="https://alabaster.readthedocs.io">Alabaster 1.0.0</a>
+      
+      |
+      <a href="_sources/other.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>
