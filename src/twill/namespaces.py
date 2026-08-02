@@ -1,6 +1,6 @@
 """Global and local dictionaries, and initialization/utility functions."""
 
-from typing import Any, Dict, Tuple
+from typing import Any, Dict, List, Tuple
 
 from . import errors
 
@@ -20,7 +20,7 @@ def init_global_dict() -> None:
     parse.command_list.extend(cmd_list)
 
 
-_local_dict_stack = []  # local dictionaries
+_local_dict_stack: List[Dict[str, Any]] = []  # local dictionaries
 
 
 def new_local_dict() -> Dict[str, Any]:

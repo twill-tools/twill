@@ -7,12 +7,13 @@ Commands:
 """
 
 import os
+from typing import List
 
 from twill import commands, log
 
 __all__ = ["chdir", "popd"]
 
-_dir_stack = []
+_dir_stack: List[str] = []
 
 
 def chdir(where: str) -> None:

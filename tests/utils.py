@@ -60,7 +60,7 @@ def execute_script(
     if inp:
         # use inp as the stdin for the actual script commands
         stdin, sys.stdin = sys.stdin, StringIO(inp)
-        real_getpass, getpass.getpass = (getpass.getpass, mock_getpass)  # type: ignore[assignment]
+        real_getpass, getpass.getpass = (getpass.getpass, mock_getpass)
     try:
         twill.execute_file(filename, initial_url=initial_url)
     finally:
@@ -89,7 +89,7 @@ def execute_shell(
     if inp:
         # use inp as the std input for the actual script commands
         stdin, sys.stdin = sys.stdin, StringIO(inp)
-        real_getpass, getpass.getpass = (getpass.getpass, mock_getpass)  # type: ignore[assignment]
+        real_getpass, getpass.getpass = (getpass.getpass, mock_getpass)
     try:
         loop = twill.shell.TwillCommandLoop(
             initial_url=initial_url,

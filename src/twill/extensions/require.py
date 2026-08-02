@@ -13,11 +13,13 @@ Commands:
                     (for links checking)
 """
 
+from typing import List
+
 from twill import browser, commands, log
 
 __all__ = ["flush_visited", "no_require", "require", "skip_require"]
 
-_requirements = []  # what requirements to satisfy
+_requirements: List[str] = []  # what requirements to satisfy
 
 
 class Ignore:
