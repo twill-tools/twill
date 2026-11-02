@@ -393,7 +393,10 @@ class ResultWrapper:
         ]
 
     def find_link(self, pattern: str) -> Link | None:
-        """Find a link with a given pattern on the result page."""
+        """Find a link matching the given regular expression pattern.
+
+        The pattern is searched in the URL and in the link text.
+        """
         regex = re.compile(pattern)
         for link in self.links:
             if regex.search(link.text) or regex.search(link.url):
@@ -401,7 +404,10 @@ class ResultWrapper:
         return None
 
     def find_links(self, pattern: str) -> list[Link]:
-        """Find all links with a given pattern on the result page."""
+        """Find all links matching the given regular expression pattern.
+
+        The pattern is searched in the URL and in the link text.
+        """
         regex = re.compile(pattern)
         return [
             link

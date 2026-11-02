@@ -16,7 +16,19 @@ Browsing
 
 **reload** -- reload the current URL.
 
-**follow** *<link name>* -- follow the given link.
+**follow** *<pattern>* -- follow the first link on the page that matches
+the given regular expression. The pattern is searched in the text of each link
+(including text inside nested markup such as ``<b>``) and in its URL, and the
+first link in the page where either matches is followed. The URL is matched as
+written in the ``href`` attribute, i.e. relative URLs are not made absolute and
+percent-escapes such as ``%20`` are kept, but HTML entities are already
+decoded: a link written as ``<a href="/list?page=2&amp;sort=name">`` must be
+matched with ``&`` instead of ``&amp;``, e.g. ::
+
+   follow "page=2&sort=name"
+
+Since the pattern is a regular expression, special characters such as ``?``
+or ``.`` must be escaped with a backslash if they shall be matched literally.
 
 Note: When used from Python, you get the new URL after executing
 these commands (after possible redirects) with ``browser.url``.
@@ -228,7 +240,15 @@ Other commands
 
 **tidy_ok** -- check to see if HTML Tidy runs on this page without any
 errors or warnings. This check is very stringent, but you can relax the
-default configuration by setting ``tidy_*`` configuration options.
+default configuration by setting ``tidy_*`` configuration options with the
+**config** command. For instance, empty elements such as icons written as
+``<i class="icon-home"></i>`` cause the warning "trimming empty <i>". You can
+allow them with ::
+
+    config tidy_drop_empty_elements no
+
+Any other option of HTML Tidy can be set in the same way, by prefixing its
+name with ``tidy_`` and replacing hyphens with underscores.
 
 **exit** *[<code>]* -- exit with the given integer code, if specified.
 'code' defaults to 0.

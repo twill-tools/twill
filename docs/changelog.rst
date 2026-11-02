@@ -57,6 +57,9 @@ ChangeLog
 * If the first group of a regular expression did not participate in the
   match, the commands 'find', 'url', 'title' and 'header' now set the
   variable '__match__' to an empty string instead of None.
+* The documentation of 'follow' now explains how the regular expression is
+  matched against the link text and URL, and the documentation of 'tidy_ok'
+  shows how to allow empty elements such as icons.
 
 3.3.1 (released 2025-09-07)
 ---------------------------

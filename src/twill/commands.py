@@ -238,7 +238,8 @@ def follow(what: str) -> str:
     """>> follow <pattern>
 
     Find the first link on the page matching the given regex pattern and
-    then visit it.
+    then visit it. The pattern is searched in the link text and in the URL
+    as written in the href attribute, with HTML entities already decoded.
     """
     link = browser.find_link(what)
     if link:

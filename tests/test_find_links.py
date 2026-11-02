@@ -54,3 +54,15 @@ def test(url: str):
     links = browser.find_links(".*")
     assert all(isinstance(link, Link) for link in links)
     assert len(links) == 5
+
+
+def test_link_with_query_string(url: str):
+    browser = twill.browser
+    commands.go(f"{url}query_links")
+    link = ("Next page", "echo?page=2&sort=name")
+    assert browser.find_link("Next page") == link
+    assert browser.find_link(r"page=2&sort=name") == link
+    assert browser.find_link("&amp;") is None
+    commands.follow("page=2&sort=name")
+    commands.url(r"/echo\?page=2&sort=name$")
+    commands.find("page=2, sort=name")

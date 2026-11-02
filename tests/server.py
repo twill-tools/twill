@@ -219,6 +219,16 @@ def view_echo() -> str:
     return f"<html><body>{show}</body></html>"
 
 
+@app.route("/query_links")
+def view_query_links() -> str:
+    """Show a link with a query string containing an HTML entity."""
+    return (
+        "<html><body>"
+        '<a href="echo?page=2&amp;sort=name">Next <b>page</b></a>'
+        "</body></html>"
+    )
+
+
 @app.route("/plaintext")
 def view_plaintext() -> Response:
     """Test plain text response."""
