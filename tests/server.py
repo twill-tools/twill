@@ -249,6 +249,15 @@ def view_download(name: str = "") -> Response:  # noqa: ARG001
     return response
 
 
+@app.route("/response_headers")
+def view_response_headers() -> Response:
+    """Send the query parameters as response headers."""
+    response = make_response("<html><body>Response headers</body></html>")
+    for key, value in request.args.items(multi=True):
+        response.headers.add(key, value)
+    return response
+
+
 @app.route("/restricted")
 def view_restricted() -> str:
     """Test restricted access."""

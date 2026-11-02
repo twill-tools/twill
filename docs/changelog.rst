@@ -46,6 +46,12 @@ ChangeLog
   truncated. 'save_html' now also respects the 'Content-Disposition'
   header, and percent-encoded characters in the URL are decoded when
   constructing a filename.
+* The new command 'header' asserts that the current page has been sent with
+  a response header whose value matches a regular expression, e.g.
+  'header content-type ^application/pdf'. The name of the header is
+  case-insensitive, and like with 'url' and 'title', the matching part is
+  stored in the variable '__match__'. The new command 'show_headers' shows
+  all response headers of the current page.
 
 3.3.1 (released 2025-09-07)
 ---------------------------

@@ -50,6 +50,7 @@ __all__ = [
     "getinput",
     "getpassword",
     "go",
+    "header",
     "info",
     "load_cookies",
     "not_find",
@@ -76,6 +77,7 @@ __all__ = [
     "show_cookies",
     "show_extra_headers",
     "show_forms",
+    "show_headers",
     "show_history",
     "show_html",
     "show_links",
@@ -190,6 +192,35 @@ def url(should_be: str) -> str:
         )
 
     match_str = m.group(1 if m.groups() else 0)
+    local_dict = get_twill_glocals()[1]
+    local_dict["__match__"] = match_str
+    return match_str
+
+
+def header(name: str, pattern: str = "") -> str:
+    """>> header <name> [<pattern>]
+
+    Check to make sure that the current page has been sent with a response
+    header of the given name (case-insensitive) whose value matches the regex
+    pattern. Values of headers sent multiple times are joined with ', '.
+    Without pattern, only check that the response header is present.
+    The local variable __match__ is set to the matching part of the value.
+    """
+    value = browser.response_headers.get(name)
+    if value is None:
+        raise TwillAssertionError(f"no response header '{name}'")
+
+    if pattern:
+        m = re.search(pattern, value)
+        if not m:
+            raise TwillAssertionError(
+                f"response header '{name}' is '{value}';\n"
+                f"does not match '{pattern}'\n"
+            )
+        match_str = m.group(1 if m.groups() else 0)
+    else:
+        match_str = value
+
     local_dict = get_twill_glocals()[1]
     local_dict["__match__"] = match_str
     return match_str
@@ -879,6 +910,22 @@ def reset_error() -> None:
     Reset twill error output to go to the screen.
     """
     set_err_out(None)
+
+
+def show_headers() -> None:
+    """>> show_headers
+
+    Show the response headers of the current page.
+
+    Note: Use browser.response_headers to get the headers programmatically.
+    """
+    info = log.info
+    headers = browser.response_headers
+    encoding = headers.encoding
+    info("")
+    for key, value in headers.raw:
+        info("%s: %s", key.decode(encoding), value.decode(encoding))
+    info("")
 
 
 def add_extra_header(header_key: str, header_value: str) -> None:

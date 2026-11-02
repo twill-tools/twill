@@ -13,3 +13,9 @@ go /display_environ
 notfind "HTTP_FOO"
 notfind 'bar'
 show_extra_headers
+go /response_headers?X-Version=twill-3.4.0
+show_headers
+header content-type ^text/html
+header x-version -(\d+)\.
+echo "major version: ${__match__}"
+header X-Version

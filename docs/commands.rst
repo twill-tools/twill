@@ -60,6 +60,17 @@ regular expression. The variable ``__match__`` is set to the first matching
 subgroup (or the entire matching string, if no subgroups are specified).
 When called from Python, the matching string is returned.
 
+**header** *<name>* [*<pattern>*] -- assert that the current page has been
+sent with the given *response* header (the name is case-insensitive) and that
+its value matches the given regex pattern, e.g. ``header content-type
+^application/pdf`` asserts that the page is a PDF document. If the header has
+been sent several times, its values are joined with ``, ``. Without pattern,
+only assert that the header is present. The variable ``__match__`` is set to
+the first matching subgroup (or the entire matching string, if no subgroups
+are specified, or the entire value, if no pattern is specified).
+When called from Python, the matching string is returned.
+Use **show_headers** to see all response headers.
+
 Display
 =======
 
@@ -106,9 +117,14 @@ Alternative spellings: "showhistory" or "show history"
 
 Alternative spellings: "showcookies" or "show cookies"
 
+**show_headers** -- show the response headers of the current page.
+
+Alternative spelling: "show headers"
+
 Note: When used from Python, you get these objects using the properties
 of the browser with the same names, e.g. ``browser.html``, ``browser.links``,
 ``browser.forms``, ``browser.history`` and ``browser.cookies``.
+The response headers are available as ``browser.response_headers``.
 
 Forms
 =====
@@ -276,6 +292,7 @@ documents with HTML Tidy. For example, ::
 each HTTP request.
 
 **show_extra_headers** -- show the headers being added to each HTTP request.
+Use **show_headers** to show the headers of the last response instead.
 
 **clear_extra_headers** -- clear the headers being added to each HTTP request.
 
@@ -284,7 +301,8 @@ Special variables
 
 **__input__** -- result of last **getinput**.
 
-**__match__** -- matched text from last **find**, **title**, or **url**.
+**__match__** -- matched text from last **find**, **title**, **url** or
+**header**.
 
 **__password__** -- result of last **getpassword**.
 
