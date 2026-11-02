@@ -68,6 +68,10 @@ ChangeLog
   'add_header'), the documentation of 'form_clear' now shows that it
   requires the name or number of the form, and the commands 'redirect_error'
   and 'reset_error' are now documented.
+* Support for AI coding agents has been added: The documentation now also
+  provides the files 'llms.txt' and 'llms-full.txt', and the repository
+  contains an agent skill for writing and running twill scripts that can
+  be installed as a Claude Code plugin or used with other coding agents.
 
 3.3.1 (released 2025-09-07)
 ---------------------------

@@ -58,6 +58,7 @@ test = [
 ]
 docs = [
   "sphinx >=8.1, <10",
+  "sphinx-llms-txt >=0.7.1, <0.8",
 ]
 lint = [
   "ruff >=0.17, <0.18",
@@ -94,7 +95,7 @@ Download = "https://pypi.org/project/twill/"
 "twill" = ["py.typed"]
 
 [tool.check-manifest]
-ignore = [".readthedocs.yaml"]
+ignore = [".readthedocs.yaml", ".claude-plugin/*"]
 
 [tool.pytest.ini_options]
 minversion = "9.0"

@@ -1,0 +1,13 @@
+{
+  "name": "twill",
+  "version": "3.4.0",
+  "description": "Write, run and debug twill scripts for testing web sites and forms",
+  "author": {
+    "name": "Christoph Zwerschke",
+    "url": "https://github.com/Cito"
+  },
+  "homepage": "https://twill-tools.github.io/twill/",
+  "repository": "https://github.com/twill-tools/twill",
+  "license": "MIT",
+  "keywords": ["twill", "web testing", "browsing", "forms", "automation"]
+}

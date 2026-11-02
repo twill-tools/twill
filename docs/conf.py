@@ -40,7 +40,16 @@ language = "en"
 # Add any Sphinx extension module names here, as strings. They can be
 # extensions coming with Sphinx (named 'sphinx.ext.*') or your custom
 # ones.
-extensions = []
+extensions = ["sphinx_llms_txt"]
+
+# Options for llms.txt and llms-full.txt (for LLMs and coding agents)
+# (links in llms.txt are made absolute using html_baseurl)
+llms_txt_summary = (
+    "twill is a simple scripting language and Python library for browsing"
+    " the web from the command line and for automated testing of web sites"
+    " with forms and cookies. It does not run JavaScript."
+)
+llms_txt_exclude = ["other"]
 
 # Add any paths that contain templates here, relative to this directory.
 # templates_path = ['_templates']
@@ -57,6 +66,9 @@ exclude_patterns = ["_build", "Thumbs.db", ".DS_Store"]
 # a list of builtin themes.
 #
 html_theme = "alabaster"
+
+# The canonical URL of the published documentation.
+html_baseurl = "https://twill-tools.github.io/twill/"
 
 # Add any paths that contain custom static files (such as style sheets) here,
 # relative to this directory. They are copied after the builtin static files,

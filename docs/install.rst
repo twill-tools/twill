@@ -41,6 +41,28 @@ stable) use::
 
    pip install -U https://github.com/twill-tools/twill/archive/main.zip
 
+Using twill with AI coding agents
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+This documentation is also available as `llms.txt`_ and `llms-full.txt`_,
+which are suitable for LLMs and AI coding agents. The second file contains
+the complete documentation in one plain text file.
+
+The `twill repository`_ also contains an agent skill in the directory
+``skills/twill`` that teaches coding agents how to write, run and debug
+twill scripts. In Claude Code, you can install it as a plugin with::
+
+   /plugin marketplace add twill-tools/twill
+   /plugin install twill@twill-tools
+
+For other coding agents, copy the directory ``skills/twill`` into the
+directory where the agent looks for skills, or use a skill installer that
+supports GitHub repositories.
+
+.. _llms.txt: https://twill-tools.github.io/twill/llms.txt
+.. _llms-full.txt: https://twill-tools.github.io/twill/llms-full.txt
+.. _twill repository: https://github.com/twill-tools/twill
+
 .. _pip: https://docs.python.org/3/installing/index.html
 .. _issue: https://github.com/twill-tools/twill/issues
 .. _GitHub project page: https://github.com/twill-tools/twill

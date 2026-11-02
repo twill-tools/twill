@@ -11,5 +11,6 @@ graft tests
 recursive-include docs *.rst conf.py Makefile make.bat
 prune docs/_build
 graft extras
+graft skills
 
 global-exclude *.py[co] __pycache__

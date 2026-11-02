@@ -1,0 +1,15 @@
+{
+  "name": "twill-tools",
+  "description": "Agent skill for twill, the web browsing and testing language",
+  "owner": {
+    "name": "Christoph Zwerschke",
+    "url": "https://github.com/Cito"
+  },
+  "plugins": [
+    {
+      "name": "twill",
+      "source": "./",
+      "description": "Write, run and debug twill scripts for testing web sites and forms"
+    }
+  ]
+}
