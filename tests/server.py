@@ -437,6 +437,31 @@ def view_test_radiobuttons() -> str:
 """
 
 
+@app.route("/test_empty_values", methods=["GET", "POST"])
+def view_test_empty_values() -> str:
+    """Test checkboxes and radio buttons with empty or missing values."""
+    s = ""
+    if request.method == "POST":
+        for name in ("radiotest", "checkboxtest", "defaulttest"):
+            if name in request.form:
+                value = ",".join(request.form.getlist(name))
+                s += par(f"{name.upper()}: =={value}==")
+
+    return f"""\
+{s}
+<form method="POST">
+<input type="radio" name="radiotest" value="" checked>
+<input type="radio" name="radiotest" value="one">
+<input type="radio" name="radiotest">
+<input type="checkbox" name="checkboxtest" value="" checked>
+<input type="checkbox" name="checkboxtest" value="one">
+<input type="checkbox" name="checkboxtest">
+<input type="checkbox" name="defaulttest" checked>
+<input type="submit" value="post">
+</form>
+"""
+
+
 @app.route("/testformaction", methods=["POST"])
 def view_testformaction() -> str:
     """Test form actions."""

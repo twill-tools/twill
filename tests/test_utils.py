@@ -2,11 +2,17 @@ from pathlib import Path
 
 import pytest
 from lxml.etree import fromstring
-from lxml.html import FormElement, SelectElement, xhtml_parser
+from lxml.html import FormElement, InputElement, SelectElement, xhtml_parser
+from lxml.html import fromstring as lxml_fromstring
 
 from twill import utils
 from twill.errors import TwillException
-from twill.utils import html_to_tree, set_form_control_value
+from twill.utils import (
+    CheckboxGroup,
+    RadioGroup,
+    html_to_tree,
+    set_form_control_value,
+)
 
 
 def test_is_hidden_filename():
@@ -59,11 +65,16 @@ def test_trunc():
     assert trunc("hello, world!", 13) == "hello, world!"
 
 
-def _select(html: str) -> SelectElement:
-    """Get the select element with the name "s" from the given form HTML."""
+def _form(html: str) -> FormElement:
+    """Get the form element created from the given form HTML."""
     form = html_to_tree(f"<form>{html}</form>")
     assert isinstance(form, FormElement)
-    control = form.inputs["s"]
+    return form
+
+
+def _select(html: str) -> SelectElement:
+    """Get the select element with the name "s" from the given form HTML."""
+    control = _form(html).inputs["s"]
     assert isinstance(control, SelectElement)
     return control
 
@@ -320,3 +331,135 @@ def test_set_select_value_with_xhtml_namespace():
     assert isinstance(control, SelectElement)
     set_form_control_value(control, "B")
     assert control.value == "b"
+
+
+def test_value_of_checkable_inputs():
+    form = _form(
+        '<input type="checkbox" name="a" value="x" checked>'
+        '<input type="checkbox" name="b" value="" checked>'
+        '<input type="checkbox" name="c" checked>'
+        '<input type="checkbox" name="d" value="x">'
+        '<input type="radio" name="e" value="" checked>'
+        '<input type="radio" name="f" checked>'
+        '<input type="radio" name="g" value="">'
+        '<input type="text" name="h" value="">'
+        '<input type="text" name="i">'
+    )
+    inputs = form.inputs
+    assert inputs["a"].value == "x"
+    assert inputs["b"].value == ""
+    assert inputs["c"].value == "on"
+    assert inputs["d"].value is None
+    assert inputs["e"].value == ""
+    assert inputs["f"].value == "on"
+    assert inputs["g"].value is None
+    assert inputs["h"].value == ""
+    assert inputs["i"].value is None
+
+
+def test_set_value_of_checkable_inputs():
+    form = _form(
+        '<input type="checkbox" name="a" value="" checked>'
+        '<input type="radio" name="b" value="">'
+        '<input type="text" name="c" value="x">'
+    )
+    inputs = form.inputs
+    a, b, c = inputs["a"], inputs["b"], inputs["c"]
+    assert isinstance(a, InputElement)
+    assert isinstance(b, InputElement)
+    assert isinstance(c, InputElement)
+    a.value = None
+    assert not a.checked
+    assert a.value is None
+    a.value = "y"
+    assert a.checked
+    assert a.value == "y"
+    del a.value
+    assert not a.checked
+    assert a.get("value") == "y"
+    b.value = True
+    assert b.checked
+    assert b.value == ""
+    c.value = "y"
+    assert c.value == "y"
+    del c.value
+    assert c.value is None
+    assert c.get("value") is None
+    with pytest.raises(TypeError):
+        c.value = None
+
+
+def test_values_of_checkable_groups():
+    form = _form(
+        '<input type="radio" name="r" value="" checked>'
+        '<input type="radio" name="r" value="one">'
+        '<input type="radio" name="r">'
+        '<input type="checkbox" name="c" value="" checked>'
+        '<input type="checkbox" name="c" value="one" checked>'
+        '<input type="checkbox" name="c">'
+    )
+    inputs = form.inputs
+    assert inputs["r"].value == ""
+    assert set(inputs["c"].value) == {"", "one"}
+    radios = RadioGroup(
+        el for el in inputs if isinstance(el, InputElement) and el.name == "r"
+    )
+    assert radios.value == ""
+    assert radios.value_options == ["", "one", "on"]
+    radios.value = "on"
+    assert radios.value == "on"
+    assert form.form_values() == [("r", "on"), ("c", ""), ("c", "one")]
+    radios.value = ""
+    assert radios.value == ""
+    with pytest.raises(ValueError, match="no radio input"):
+        radios.value = "two"
+    assert radios.value == ""
+    del radios.value
+    assert radios.value is None
+    checkboxes = CheckboxGroup(
+        el for el in inputs if isinstance(el, InputElement) and el.name == "c"
+    )
+    assert set(checkboxes.value) == {"", "one"}
+    assert checkboxes.value_options == ["", "one", "on"]
+    checkboxes.value.add("on")
+    checkboxes.value.remove("")
+    assert set(checkboxes.value) == {"one", "on"}
+    assert form.form_values() == [("c", "one"), ("c", "on")]
+    with pytest.raises(KeyError, match="already unchecked"):
+        checkboxes.value.remove("")
+    with pytest.raises(KeyError, match="No checkbox"):
+        checkboxes.value.add("two")
+    checkboxes.value = ["", "on"]
+    assert set(checkboxes.value) == {"", "on"}
+    del checkboxes.value
+    assert not set(checkboxes.value)
+
+
+def test_form_values_with_empty_checkable_values():
+    form = _form(
+        '<input type="radio" name="r" value="" checked>'
+        '<input type="radio" name="r" value="one">'
+        '<input type="checkbox" name="c" value="" checked>'
+        '<input type="checkbox" name="c" value="one" checked>'
+        '<input type="checkbox" name="d" checked>'
+        '<input type="checkbox" name="e" value="x">'
+    )
+    assert form.form_values() == [
+        ("r", ""),
+        ("c", ""),
+        ("c", "one"),
+        ("d", "on"),
+    ]
+
+
+@pytest.mark.xfail(
+    reason="lxml bug 1600773 is not fixed in the installed version",
+    strict=False,
+)
+def test_form_values_with_empty_checkable_values_in_lxml():
+    # when this test passes, the workaround in twill may be removed
+    form = lxml_fromstring(
+        '<form><input type="radio" name="r" value="" checked></form>'
+    )
+    assert isinstance(form, FormElement)
+    assert form.form_values() == [("r", "")]

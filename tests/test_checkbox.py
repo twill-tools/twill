@@ -56,3 +56,33 @@ def test_select_single(url: str):
     for x in ("1", "0", "True", "False"):
         with pytest.raises(KeyError):
             commands.fv("1", "checkboxtest", x)
+
+
+def test_empty_value(url: str):
+    namespaces.new_local_dict()
+    commands.reset_browser()
+
+    commands.go(url)
+    commands.go("/test_empty_values")
+
+    # a checked checkbox with an empty value sends an empty string,
+    # a checked checkbox without a value attribute sends "on"
+    commands.submit()
+    assert "CHECKBOXTEST: ====" in browser.html
+    assert "DEFAULTTEST: ==on==" in browser.html
+
+    commands.fv("1", "checkboxtest", "+one")
+    commands.fv("1", "defaulttest", "False")
+    commands.submit()
+    assert "CHECKBOXTEST: ==,one==" in browser.html
+    assert "DEFAULTTEST" not in browser.html
+
+    # the checkbox with the empty value can also be unchecked,
+    # the checkbox without a value attribute has the value "on"
+    commands.fv("1", "checkboxtest", "+one")
+    commands.fv("1", "checkboxtest", "-")
+    commands.fv("1", "checkboxtest", "+on")
+    commands.fv("1", "defaulttest", "True")
+    commands.submit()
+    assert "CHECKBOXTEST: ==one,on==" in browser.html
+    assert "DEFAULTTEST: ==on==" in browser.html

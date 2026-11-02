@@ -6,23 +6,26 @@ code is implemented in the ConfigurableParsingFactory class.
 
 import os
 import re
-from collections.abc import Sequence
+from collections.abc import Collection, Iterator, Sequence
 from contextlib import suppress
 from pathlib import Path
-from typing import Any, NamedTuple, TypeAlias, TypeVar
+from typing import Any, Literal, NamedTuple, TypeAlias, TypeVar
 
 from httpx import Headers, Response
 from lxml.html import (
     XHTML_NAMESPACE,
-    CheckboxGroup,
+    CheckboxValues,
     FormElement,
     HtmlElement,
+    HtmlElementClassLookup,
+    HTMLParser,
     InputElement,
-    RadioGroup,
     SelectElement,
     TextareaElement,
+    fromstring,
 )
-from lxml.html import fromstring as html_to_tree
+from lxml.html import CheckboxGroup as _CheckboxGroup
+from lxml.html import RadioGroup as _RadioGroup
 from lxml.html import tostring as tree_to_html
 
 try:
@@ -65,9 +68,213 @@ __all__ = [
 ]
 
 
+class _InputElement(InputElement):
+    """Input element with a fixed value property.
+
+    For a checked checkbox or radio button, lxml returns "on" not only when
+    the value attribute is missing, but also when it is empty, see
+    https://bugs.launchpad.net/lxml/+bug/1600773. According to the HTML
+    standard, browsers send an empty string in the latter case.
+
+    Apart from this fix, the value property behaves exactly as in lxml.
+    """
+
+    @property
+    def value(self) -> str | None:
+        """Get the value of this element, using the value attribute.
+
+        For a checkbox or radio button that is not checked, this is None.
+        If it is checked and has no value attribute, this defaults to "on".
+        """
+        value = self.get("value")
+        if self.checkable:
+            if not self.checked:
+                return None
+            if value is None:
+                return "on"
+        return value
+
+    @value.setter
+    def value(self, value: str | bytes | bytearray | bool | None) -> None:
+        """Set the value of this element.
+
+        A checkbox or radio button is checked if the value is truthy and
+        unchecked otherwise, and its value attribute is only changed if the
+        value is a string. For all other inputs, the value must be a string.
+        """
+        if self.checkable:
+            self.checked = bool(value)
+            if value and isinstance(value, str):
+                self.set("value", value)
+        elif isinstance(value, (str, bytes, bytearray)):
+            self.set("value", value)
+        else:
+            raise TypeError(f"Cannot set the value of an input to {value!r}")
+
+    @value.deleter
+    def value(self) -> None:
+        """Uncheck a checkbox or radio button or remove the value attribute."""
+        if self.checkable:
+            self.checked = False
+        elif "value" in self.attrib:
+            del self.attrib["value"]
+
+
+def _get_checkable_value(el: InputElement) -> str:
+    """Get the value attribute of a checkbox or radio button.
+
+    If the value attribute is missing, this is "on" like in a browser.
+    """
+    return el.get("value", "on")
+
+
+class RadioGroup(_RadioGroup):
+    """Group of radio buttons with the same name.
+
+    Unlike in lxml, a radio button without a value attribute has the value
+    "on" here, which is the default value used by browsers.
+    """
+
+    @property
+    def value(self) -> str | None:
+        """Get the value of the checked radio button, if any."""
+        for el in self:
+            if el.checked:
+                return _get_checkable_value(el)
+        return None
+
+    @value.setter
+    def value(self, value: str | None) -> None:
+        """Check the radio button with the given value, uncheck the others."""
+        checked_el = None
+        if value is not None:
+            for el in self:
+                if _get_checkable_value(el) == value:
+                    checked_el = el
+                    break
+            else:
+                raise ValueError(
+                    f"There is no radio input with the value {value!r}"
+                )
+        for el in self:
+            el.checked = el is checked_el
+
+    @value.deleter
+    def value(self) -> None:
+        """Uncheck all radio buttons."""
+        self.value = None
+
+    @property
+    def value_options(self) -> list[str]:
+        """Get the values of all radio buttons."""
+        return [_get_checkable_value(el) for el in self]
+
+
+class _CheckboxValues(CheckboxValues):
+    """Values of the checked checkboxes in a group.
+
+    Unlike in lxml, a checkbox without a value attribute has the value "on"
+    here, which is the default value used by browsers.
+    """
+
+    def __iter__(self) -> Iterator[str]:
+        """Iterate over the values of the checked checkboxes."""
+        return iter(
+            [_get_checkable_value(el) for el in self.group if el.checked]
+        )
+
+    def add(self, value: str) -> None:
+        """Check the checkbox with the given value."""
+        for el in self.group:
+            if _get_checkable_value(el) == value:
+                el.checked = True
+                break
+        else:
+            raise KeyError(f"No checkbox with value {value!r}")
+
+    def remove(self, value: str) -> None:
+        """Uncheck the checkbox with the given value."""
+        for el in self.group:
+            if _get_checkable_value(el) == value:
+                if not el.checked:
+                    raise KeyError(
+                        f"The checkbox with value {value!r}"
+                        " was already unchecked"
+                    )
+                el.checked = False
+                break
+        else:
+            raise KeyError(f"No checkbox with value {value!r}")
+
+
+class CheckboxGroup(_CheckboxGroup):
+    """Group of checkboxes with the same name.
+
+    Unlike in lxml, a checkbox without a value attribute has the value
+    "on" here, which is the default value used by browsers.
+    """
+
+    @property
+    def value(self) -> _CheckboxValues:
+        """Get a set-like object with the values of the checked checkboxes.
+
+        The object can be modified to check or uncheck individual checkboxes.
+        """
+        return _CheckboxValues(self)
+
+    @value.setter
+    def value(self, value: str | Collection[str]) -> None:
+        """Check the checkboxes with the given values, uncheck the others."""
+        values = self.value
+        values.clear()
+        for item in value:
+            values.add(item)
+
+    @value.deleter
+    def value(self) -> None:
+        """Uncheck all checkboxes."""
+        self.value.clear()
+
+    @property
+    def value_options(self) -> list[str]:
+        """Get the values of all checkboxes."""
+        return [_get_checkable_value(el) for el in self]
+
+
 FieldElement: TypeAlias = (
     CheckboxGroup | InputElement | RadioGroup | SelectElement | TextareaElement
 )
+
+
+class _HtmlElementClassLookup(HtmlElementClassLookup):
+    """Element class lookup that creates input elements with a fixed value."""
+
+    def lookup(
+        self,
+        node_type: Literal["element", "comment", "PI", "entity"] | None,
+        document: object,
+        namespace: object,
+        name: str,
+    ) -> type[HtmlElement] | None:
+        """Look up the element class for the given node."""
+        if node_type == "element" and name.lower() == "input":
+            return _InputElement
+        return super().lookup(node_type, document, namespace, name)
+
+
+_html_parser = HTMLParser()
+_html_parser.set_element_class_lookup(_HtmlElementClassLookup())
+
+
+def html_to_tree(
+    html: str | bytes, base_url: str | None = None
+) -> HtmlElement:
+    """Parse the given HTML into an element tree.
+
+    This works like lxml.html.fromstring(), but uses a parser that creates
+    input elements with a fixed value property, see _InputElement above.
+    """
+    return fromstring(html, base_url=base_url, parser=_html_parser)
 
 
 class Link(NamedTuple):

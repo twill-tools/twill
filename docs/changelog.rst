@@ -22,6 +22,15 @@ ChangeLog
   clears the selection if this option was selected, so that the first
   option is used like in a browser. Previously this always tried to set
   an empty value and failed if there was no such option.
+* Checked checkboxes and radio buttons with an empty 'value' attribute are
+  now submitted with an empty string like in a browser; 'on' is only sent
+  when the 'value' attribute is missing. Previously, 'on' was also sent for
+  empty values, due to an `lxml bug
+  <https://bugs.launchpad.net/lxml/+bug/1600773>`_. The same fix applies to
+  the values shown with 'showforms'. Twill now uses its own HTML parser that
+  creates input elements with the fixed behavior. Checkboxes and radio
+  buttons without a 'value' attribute can now also be selected with 'fv'
+  using the default value 'on' when they are part of a group.
 
 3.3.1 (released 2025-09-07)
 ---------------------------
