@@ -19,7 +19,7 @@ jobs:
     steps:
     - uses: actions/checkout@v7
     - name: Set up uv with Python 3.14
-      uses: astral-sh/setup-uv@v10
+      uses: astral-sh/setup-uv@v10.3.3
       with:
         python-version: '3.14'
     - name: Create docs with Sphinx

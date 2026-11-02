@@ -16,7 +16,7 @@ jobs:
     steps:
     - uses: actions/checkout@v7
     - name: Set up uv
-      uses: astral-sh/setup-uv@v10
+      uses: astral-sh/setup-uv@v10.3.3
     - name: Install test runner
       run: uv tool install --python 3.14 tox --with tox-uv
     - name: Run twill tests with Python ${{ matrix.python }}
