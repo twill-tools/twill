@@ -45,17 +45,36 @@ dependencies = [
 ]
 
 [project.optional-dependencies]
-docs = [
-  "sphinx >=8.2, <10",
-]
 tidy = [
   "pytidylib >=0.3, <0.4"
 ]
-tests = [
-  "tox >=4, <5",
+
+[dependency-groups]
+test = [
   "pytest >=9, <10",
   "pytidylib >=0.3, <0.4",
   "flask >=3.0, <4",
+]
+docs = [
+  "sphinx >=8.1, <10",
+]
+lint = [
+  "ruff >=0.17, <0.18",
+]
+typing = [
+  {include-group = "test"},
+  "mypy >=2.4, <2.5",
+  "dnspython >=2.7, <3",
+  "types-lxml",
+]
+manifest = [
+  "check-manifest >=0.51, <1",
+]
+dev = [
+  {include-group = "test"},
+  {include-group = "docs"},
+  {include-group = "lint"},
+  {include-group = "typing"},
 ]
 
 [project.scripts]
@@ -95,9 +114,6 @@ reportUnknownParameterType = false
 reportUnnecessaryIsInstance = false
 reportUnknownVariableType = false
 ignore = ["**/test_*"]  # test functions
-
-[tool.black]
-line-length = 79
 
 [tool.ruff]
 line-length = 79
@@ -211,14 +227,6 @@ max-statements = 75
   "ANN201",  # do not require return types
   "S101",  # allow assert statements
   "PLR2004",  # allow magic values
-]
-
-[tool.pylint.messages_control]
-disable = [
-    "method-hidden",
-    "missing-module-docstring",  # test modules
-    "redefined-outer-name",
-    "unused-variable",  # test functions
 ]
 
 [build-system]

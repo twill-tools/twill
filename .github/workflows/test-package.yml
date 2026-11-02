@@ -2,6 +2,9 @@ name: Test twill package using tox
 
 on: [push, pull_request]
 
+permissions:
+  contents: read
+
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -11,15 +14,15 @@ jobs:
         python: ['3.10', '3.11', '3.12', '3.13', '3.14']
 
     steps:
-    - uses: actions/checkout@v5
-    - name: Set up Python ${{ matrix.python }}
-      uses: actions/setup-python@v6
-      with:
-        python-version: ${{ matrix.python }}
+    - uses: actions/checkout@v7
+    - name: Set up uv
+      uses: astral-sh/setup-uv@v10
     - name: Install test runner
-      run: pip install tox
-    - name: Run twill tests
-      run: tox -e py
+      run: uv tool install --python 3.14 tox --with tox-uv
+    - name: Run twill tests with Python ${{ matrix.python }}
+      env:
+        PY: ${{ matrix.python }}
+      run: tox -e "py${PY/./}"
     - name: Run software quality checks
       if: matrix.python == '3.14'
-      run: TOXENV=ruff,mypy,docs,manifest tox
+      run: tox -e ruff,mypy,docs,manifest

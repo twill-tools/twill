@@ -11,12 +11,16 @@ Package tests
 ~~~~~~~~~~~~~
 
 twill comes with several unit tests. They depend on `pytest`_ and
-`Flask`_. To run them, type 'pytest' in the top level directory.
-To run an individual test, you can use the command
-``pytest tests/test_something.py``.
+`Flask`_. The development dependencies are defined as dependency groups
+in ``pyproject.toml``; install them all with ``pip install -e . --group dev``
+(requires pip 25.1 or newer). To run the tests, type 'pytest' in the top
+level directory. To run an individual test, you can use the command
+``pytest tests/test_something.py``. To run the tests with all supported
+Python versions and the code quality checks, run `tox`_.
 
 .. _pytest: https://pytest.org/
 .. _Flask: https://flask.palletsprojects.com/
+.. _tox: https://tox.wiki/
 
 Licensing
 ~~~~~~~~~

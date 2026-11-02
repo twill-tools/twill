@@ -20,6 +20,7 @@ __pycache__
 .vscode
 .tox
 .venv
+uv.lock
 
 _build
 

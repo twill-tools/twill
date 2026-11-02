@@ -1,6 +1,6 @@
 include MANIFEST.in
 
-include LICENSE
+include LICENSE.txt
 include README.md
 
 include tox.ini
@@ -10,7 +10,7 @@ include src/twill/py.typed
 exclude .readthedocs.yaml
 
 graft tests
-recursive-include docs *.rst conf.py Makefile make.bat requirements.txt
+recursive-include docs *.rst conf.py Makefile make.bat
 prune docs/_build
 graft extras
 recursive-include extras *.py *.java *.twill *.text
