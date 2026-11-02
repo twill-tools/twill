@@ -3,7 +3,7 @@
 # twill is an extensible scriptlet language for testing Web apps,
 # available at https://github.com/twill-tools/twill.
 #
-# Copyright (c) 2005-2025
+# Copyright (c) 2005-2026
 # by C. Titus Brown, Ben R. Taylor, Christoph Zwerschke et al.
 #
 # This program and all associated source code files are released under the
