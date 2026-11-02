@@ -6,7 +6,7 @@ ChangeLog
 
 3.4.0 (unreleased)
 ------------------
-* The supported Python versions are now 3.10 to 3.14.
+* The supported Python versions are now 3.10 to 3.15.
 * The development dependencies are now defined as dependency groups
   instead of the optional dependencies 'tests' and 'docs'.
 
