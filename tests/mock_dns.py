@@ -2,7 +2,7 @@
 
 import enum
 import sys
-from typing import Any, Dict, List, Optional
+from typing import Any
 
 
 class RdataType(enum.IntEnum):
@@ -14,7 +14,7 @@ class RdataType(enum.IntEnum):
     MX = 15
 
 
-mock_records: Dict[RdataType, Dict[str, str]] = {
+mock_records: dict[RdataType, dict[str, str]] = {
     RdataType.A: {
         "twill-test-1.ignore.idyll.org": "192.168.1.1",
         "twill-test-2.ignore.idyll.org": "192.168.1.2",
@@ -79,7 +79,7 @@ class Result:
         return str(self.value)
 
 
-Answer = List[Result]
+Answer = list[Result]
 
 
 class Resolver:
@@ -87,7 +87,7 @@ class Resolver:
 
     def __init__(self) -> None:
         """Initialize the resolver."""
-        self.nameservers: Optional[List] = None
+        self.nameservers: list | None = None
 
     def resolve(self, qname: str, qtype: RdataType = RdataType.A) -> Answer:
         """Query nameservers to find the answer to the question."""

@@ -1,7 +1,7 @@
 """Shared test configuration for pytest."""
 
+from collections.abc import Generator
 from io import StringIO
-from typing import Generator
 
 import pytest
 

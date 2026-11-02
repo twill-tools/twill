@@ -6,19 +6,10 @@ code is implemented in the ConfigurableParsingFactory class.
 
 import os
 import re
+from collections.abc import Sequence
 from contextlib import suppress
 from pathlib import Path
-from typing import (
-    Any,
-    List,
-    NamedTuple,
-    Optional,
-    Sequence,
-    Tuple,
-    Type,
-    TypeVar,
-    Union,
-)
+from typing import Any, NamedTuple, TypeAlias, TypeVar
 
 from httpx import Headers, Response
 from lxml.html import (
@@ -74,9 +65,9 @@ __all__ = [
 ]
 
 
-FieldElement = Union[
-    CheckboxGroup, InputElement, RadioGroup, SelectElement, TextareaElement
-]
+FieldElement: TypeAlias = (
+    CheckboxGroup | InputElement | RadioGroup | SelectElement | TextareaElement
+)
 
 
 class Link(NamedTuple):
@@ -87,7 +78,7 @@ class Link(NamedTuple):
 
 
 # Depending on the configuration, realms can be ignored
-UrlWithRealm = Union[str, Tuple[str, str]]
+UrlWithRealm: TypeAlias = str | tuple[str, str]
 
 
 # Stand-in for typing.Self, which needs Python 3.11.
@@ -98,7 +89,7 @@ SingletonType = TypeVar("SingletonType", bound="Singleton")
 class Singleton:
     """A mixin class to create singleton objects."""
 
-    def __new__(cls: Type[SingletonType], *_args, **_kw) -> SingletonType:
+    def __new__(cls: type[SingletonType], *_args, **_kw) -> SingletonType:
         """Create a new instance."""
         it = cls.__dict__.get("__it__")
         if it is not None:
@@ -156,7 +147,7 @@ class ResultWrapper:
         return self.response.headers
 
     @property
-    def title(self) -> Optional[str]:
+    def title(self) -> str | None:
         """Get the title of the result page."""
         try:
             return self.xpath("//title[1]/text()")[0]
@@ -164,14 +155,14 @@ class ResultWrapper:
             return None
 
     @property
-    def links(self) -> List[Link]:
+    def links(self) -> list[Link]:
         """Get all links in the result page."""
         return [
             Link(a.text_content(), a.get("href"))
             for a in self.xpath("//a[@href]")
         ]
 
-    def find_link(self, pattern: str) -> Optional[Link]:
+    def find_link(self, pattern: str) -> Link | None:
         """Find a link with a given pattern on the result page."""
         regex = re.compile(pattern)
         for link in self.links:
@@ -179,7 +170,7 @@ class ResultWrapper:
                 return link
         return None
 
-    def find_links(self, pattern: str) -> List[Link]:
+    def find_links(self, pattern: str) -> list[Link]:
         """Find all links with a given pattern on the result page."""
         regex = re.compile(pattern)
         return [
@@ -188,7 +179,7 @@ class ResultWrapper:
             if regex.search(link.text) or regex.search(link.url)
         ]
 
-    def form(self, name_or_num: Union[str, int] = 1) -> Optional[FormElement]:
+    def form(self, name_or_num: str | int = 1) -> FormElement | None:
         """Get the form with the given name or number on the result page.
 
         Returns None if no such form can be found on the result page.
@@ -240,7 +231,7 @@ class ResultWrapper:
                 button.tag = "input"
 
 
-def trunc(s: Optional[str], length: int) -> str:
+def trunc(s: str | None, length: int) -> str:
     """Truncate a string to a given length.
 
     The string is truncated by cutting off the last (length-4) characters
@@ -352,9 +343,7 @@ def set_form_control_value(control: FieldElement, value: str) -> None:
             with suppress(KeyError):
                 control.value.remove(value)
         else:
-            if value.startswith("+"):
-                value = value[1:]
-            control.value.add(value)
+            control.value.add(value.removeprefix("+"))
 
     elif isinstance(control, SelectElement):
         # for ListControls we need to find the right *value*,
@@ -364,14 +353,13 @@ def set_form_control_value(control: FieldElement, value: str) -> None:
             value = value[1:]
         else:
             add = True
-            if value.startswith("+"):
-                value = value[1:]
+            value = value.removeprefix("+")
 
         # now, select the value.
         option_values = [val.strip() for val in control.value_options]
         options = control.getchildren()
         option_names = [(c.text or "").strip() for c in options]
-        for name, opt in zip(option_names, option_values):
+        for name, opt in zip(option_names, option_values, strict=False):
             if value not in (name, opt):
                 continue
             if isinstance(control.value, MultipleSelectOptions):
@@ -438,7 +426,7 @@ def unique_match(matches: Sequence[FieldElement]) -> bool:
     )
 
 
-def run_tidy(html: str) -> Tuple[Optional[str], Optional[str]]:
+def run_tidy(html: str) -> tuple[str | None, str | None]:
     """Run HTML Tidy on the given HTML string.
 
     Return a 2-tuple (output, errors).  (None, None) will be returned if
@@ -464,7 +452,7 @@ def run_tidy(html: str) -> Tuple[Optional[str], Optional[str]]:
     return clean_html, errors
 
 
-def get_equiv_refresh_interval() -> Optional[int]:
+def get_equiv_refresh_interval() -> int | None:
     """Get the longest interval for which the browser should follow redirects.
 
     Redirection happens if the given interval is shorter than this.
@@ -498,9 +486,9 @@ def make_twill_filename(name: str) -> str:
     return name
 
 
-def gather_filenames(args: Sequence[str]) -> List[str]:
+def gather_filenames(args: Sequence[str]) -> list[str]:
     """Collect script files from within directories."""
-    collected_names: List[str] = []
+    collected_names: list[str] = []
     append, extend = collected_names.append, collected_names.extend
     is_dir, walk, sep = os.path.isdir, os.walk, os.sep
     for arg in args:

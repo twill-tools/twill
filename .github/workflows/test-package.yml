@@ -6,9 +6,9 @@ jobs:
   build:
     runs-on: ubuntu-latest
     strategy:
-      max-parallel: 7
+      max-parallel: 5
       matrix:
-        python: ['3.8', '3.9', '3.10', '3.11', '3.12', '3.13', '3.14']
+        python: ['3.10', '3.11', '3.12', '3.13', '3.14']
 
     steps:
     - uses: actions/checkout@v5

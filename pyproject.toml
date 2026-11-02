@@ -1,6 +1,6 @@
 [project]
 name = "twill"
-version = "3.3.1"
+version = "3.4.0"
 
 description = "A web browsing and testing language"
 keywords = ["web", "testing",  "browsing", "automation"]
@@ -27,8 +27,6 @@ classifiers = [
   'Operating System :: OS Independent',
   'Programming Language :: Python',
   'Programming Language :: Python :: 3',
-  'Programming Language :: Python :: 3.8',
-  'Programming Language :: Python :: 3.9',
   'Programming Language :: Python :: 3.10',
   'Programming Language :: Python :: 3.11',
   'Programming Language :: Python :: 3.12',
@@ -39,7 +37,7 @@ classifiers = [
   'Topic :: Software Development :: Testing'
 ]
 
-requires-python = ">=3.8"
+requires-python = ">=3.10"
 dependencies = [
   "lxml >=6, <7",
   "httpx >=0.28.1, <1",
@@ -104,9 +102,10 @@ line-length = 79
 
 [tool.ruff]
 line-length = 79
-target-version = "py38"
+target-version = "py310"
 
 [tool.ruff.lint]
+typing-extensions = false  # do not depend on typing_extensions
 select = [
   "A",      # flake8-builtins
   "ANN",    # flake8-annotations

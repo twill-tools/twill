@@ -16,7 +16,6 @@ together with their referring pages.
 
 import re
 from http import HTTPStatus
-from typing import Dict, List, Set
 
 from twill import browser, commands, log, utils
 from twill.errors import TwillAssertionError
@@ -27,8 +26,8 @@ __all__ = ["bad_urls", "check_links", "good_urls", "report_bad_links"]
 if commands.options.get("check_links.only_collection_bad_links") is None:
     commands.options["check_links.only_collect_bad_links"] = False
 
-good_urls: Set[str] = set()
-bad_urls: Dict[str, Set[str]] = {}
+good_urls: set[str] = set()
+bad_urls: dict[str, set[str]] = {}
 
 
 def check_links(pattern: str = "") -> None:
@@ -56,7 +55,7 @@ def check_links(pattern: str = "") -> None:
     # note that in the case of duplicate URLs, only one of the
     # links is actually followed!
 
-    collected_urls: Set[str] = set()
+    collected_urls: set[str] = set()
 
     links = browser.links
     if not links:
@@ -83,7 +82,7 @@ def check_links(pattern: str = "") -> None:
 
     # now, for each unique and unchecked URL, follow the link
 
-    failed: List[str] = []
+    failed: list[str] = []
     for url in sorted(collected_urls):
         debug("Checking %s", url)
         if url in good_urls:

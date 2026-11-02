@@ -2,18 +2,12 @@
 
 import pickle
 import re
+from collections.abc import Callable, Sequence
 from contextlib import suppress
 from http import HTTPStatus
 from typing import (
     IO,
     Any,
-    Callable,
-    Dict,
-    List,
-    Optional,
-    Sequence,
-    Tuple,
-    Union,
     cast,
 )
 from urllib.parse import urljoin
@@ -67,10 +61,10 @@ class TwillBrowser:
     def __init__(
         self,
         base_url: str = "",
-        app: Optional[Callable[..., Any]] = None,
+        app: Callable[..., Any] | None = None,
         follow_redirects: bool = True,  # noqa: FBT001, FBT002
-        verify: Union[bool, str] = False,  # noqa: FBT001, FBT002
-        timeout: Union[float, Timeout, None] = 10,
+        verify: bool | str = False,  # noqa: FBT001, FBT002
+        timeout: float | Timeout | None = 10,
     ) -> None:
         """Initialize the twill browser.
 
@@ -124,10 +118,10 @@ class TwillBrowser:
     def reset(
         self,
         base_url: str = "",
-        app: Optional[Callable[..., Any]] = None,
+        app: Callable[..., Any] | None = None,
         follow_redirects: bool = True,  # noqa: FBT001, FBT002
-        verify: Union[bool, str] = False,  # noqa: FBT001,FBT002
-        timeout: Union[float, Timeout, None] = 10,
+        verify: bool | str = False,  # noqa: FBT001,FBT002
+        timeout: float | Timeout | None = 10,
     ) -> None:
         """Reset the browser.
 
@@ -141,9 +135,9 @@ class TwillBrowser:
         """
         self.close()
 
-        self.result: Optional[ResultWrapper] = None
-        self.last_submit_button: Optional[InputElement] = None
-        self.first_error: Optional[str] = None
+        self.result: ResultWrapper | None = None
+        self.last_submit_button: InputElement | None = None
+        self.first_error: str | None = None
 
         # whether meta refresh will be displayed
         self.show_refresh = False
@@ -162,22 +156,22 @@ class TwillBrowser:
 
         # A lxml FormElement, None until a form is selected
         # replaces self._browser.form from mechanize
-        self._form: Optional[FormElement] = None
-        self._form_files: Dict[str, IO] = {}
+        self._form: FormElement | None = None
+        self._form_files: dict[str, IO] = {}
 
         # A dict of BasicAuth from httpx, keyed off URL
-        self._auth: Dict[UrlWithRealm, BasicAuth] = {}
+        self._auth: dict[UrlWithRealm, BasicAuth] = {}
 
         # callables to be called after each page load.
-        self._post_load_hooks: List[Callable] = []
+        self._post_load_hooks: list[Callable] = []
 
-        self._history: List[ResultWrapper] = []
+        self._history: list[ResultWrapper] = []
 
         # set default headers
         self.reset_headers()
 
     @property
-    def creds(self) -> Dict[UrlWithRealm, BasicAuth]:
+    def creds(self) -> dict[UrlWithRealm, BasicAuth]:
         """Get the credentials for basic authentication."""
         return self._auth
 
@@ -187,7 +181,7 @@ class TwillBrowser:
 
     def go(self, url: str) -> None:
         """Visit given URL."""
-        try_urls: List[str] = []
+        try_urls: list[str] = []
         if "://" in url:
             try_urls.append(url)
         else:  # URL does not have a schema
@@ -236,7 +230,7 @@ class TwillBrowser:
         return self._assert_result_for("status code").http_code
 
     @property
-    def encoding(self) -> Optional[str]:
+    def encoding(self) -> str | None:
         """Get the encoding used by the server for the current page."""
         return None if self.result is None else self.result.encoding
 
@@ -251,29 +245,29 @@ class TwillBrowser:
         return self._assert_result_for("content dump").content
 
     @property
-    def title(self) -> Optional[str]:
+    def title(self) -> str | None:
         return self._assert_result_for("title").title
 
     @property
-    def url(self) -> Optional[str]:
+    def url(self) -> str | None:
         """Get the URL of the current page."""
         return self.result.url if self.result else None
 
-    def find_link(self, pattern: str) -> Optional[Link]:
+    def find_link(self, pattern: str) -> Link | None:
         """Find the first link matching the given regular expression pattern.
 
         The pattern is searched in the URL and in the link text.
         """
         return self._assert_result_for("links").find_link(pattern)
 
-    def find_links(self, pattern: str) -> Optional[List[Link]]:
+    def find_links(self, pattern: str) -> list[Link] | None:
         """Find all links matching the given regular expression pattern.
 
         The pattern is searched in the URL and in the link text.
         """
         return self._assert_result_for("links").find_links(pattern)
 
-    def follow_link(self, link: Union[str, Link]) -> None:
+    def follow_link(self, link: str | Link) -> None:
         """Follow the given link."""
         self._journey("follow_link", link)
         log.info("==> at %s", self.url)
@@ -296,7 +290,7 @@ class TwillBrowser:
         return self._assert_result_for("headers").headers
 
     @property
-    def agent_string(self) -> Optional[str]:
+    def agent_string(self) -> str | None:
         """Get the user agent string."""
         agent = self.headers.get("User-Agent")
         if isinstance(agent, bytes):
@@ -309,7 +303,7 @@ class TwillBrowser:
         self.headers["User-Agent"] = agent
 
     @property
-    def timeout(self) -> Union[float, Timeout, None]:
+    def timeout(self) -> float | Timeout | None:
         """Get the request timeout in seconds."""
         timeout = self._client.timeout
         if timeout.connect == timeout.read == timeout.write == timeout.pool:
@@ -317,7 +311,7 @@ class TwillBrowser:
         return timeout
 
     @timeout.setter
-    def timeout(self, timeout: Union[float, Timeout, None]) -> None:
+    def timeout(self, timeout: float | Timeout | None) -> None:
         """Set the request timeout in seconds."""
         self._client.timeout = timeout
 
@@ -355,31 +349,31 @@ class TwillBrowser:
             info("\n** no history **\n")
 
     @property
-    def links(self) -> List[Link]:
+    def links(self) -> list[Link]:
         """Return a list of all links on the page."""
         return self._assert_result_for("links").links
 
     @property
-    def history(self) -> List[ResultWrapper]:
+    def history(self) -> list[ResultWrapper]:
         """Return a list of all pages visited by the browser."""
         return self._history
 
     @property
-    def forms(self) -> List[FormElement]:
+    def forms(self) -> list[FormElement]:
         """Return a list of forms on the page.
 
         This includes the global form at index 0 if present.
         """
         return self._assert_result_for("forms").forms
 
-    def form(self, name: Union[str, int] = 1) -> Optional[FormElement]:
+    def form(self, name: str | int = 1) -> FormElement | None:
         """Return the first form that matches the given form name."""
         return self._assert_result_for("form").form(name)
 
     def form_field(
         self,
-        form: Optional[FormElement] = None,
-        name_or_num: Union[str, int] = 1,
+        form: FormElement | None = None,
+        name_or_num: str | int = 1,
     ) -> FieldElement:
         """Return the control that matches the given field name.
 
@@ -406,13 +400,13 @@ class TwillBrowser:
                         for c in match_name
                     ):
                         return CheckboxGroup(
-                            cast("List[InputElement]", match_name)
+                            cast("list[InputElement]", match_name)
                         )
                     if all(
                         getattr(c, "type", None) == "radio" for c in match_name
                     ):
                         return RadioGroup(
-                            cast("List[InputElement]", match_name)
+                            cast("list[InputElement]", match_name)
                         )
             else:
                 match_name = None
@@ -477,15 +471,15 @@ class TwillBrowser:
 
     def submit(
         self,
-        field_name: Optional[Union[str, int]] = None,
-        form_name: Optional[Union[str, int]] = None,
+        field_name: str | int | None = None,
+        form_name: str | int | None = None,
     ) -> None:
         """Submit the last or specified form using the given field."""
         forms = self.forms
         if not forms:
             raise TwillException("There are no forms on this page.")
 
-        ctl: Optional[InputElement] = None
+        ctl: InputElement | None = None
 
         form = self._form if form_name is None else self.form(form_name)
         if form is None:
@@ -609,23 +603,23 @@ class TwillBrowser:
         else:
             log.info("\nThere are no cookies in the cookie jar.\n")
 
-    def decode(self, value: Union[bytes, str]) -> str:
+    def decode(self, value: bytes | str) -> str:
         """Decode a value using the current encoding."""
         if isinstance(value, bytes):
             value = value.decode(self.encoding or "utf-8")
         return value
 
-    def xpath(self, path: str) -> List[HtmlElement]:
+    def xpath(self, path: str) -> list[HtmlElement]:
         """Evaluate an xpath expression."""
         return self._assert_result_for("xpath").xpath(path)
 
     def _make_payload_dict(
         self,
-        payload: Sequence[Tuple[str, Union[str, bytes]]],
-    ) -> Dict[str, Union[str, List[Union[str]]]]:
+        payload: Sequence[tuple[str, str | bytes]],
+    ) -> dict[str, str | list[str]]:
         """Prepare a payload by decoding bytes and converting to a dict."""
         encoding = self.encoding or "utf-8"
-        data: Dict[str, Union[str, List[Union[str]]]] = {}
+        data: dict[str, str | list[str]] = {}
         for key, value in payload:
             new_value = (
                 value if isinstance(value, str) else value.decode(encoding)
@@ -644,7 +638,7 @@ class TwillBrowser:
     @staticmethod
     def _get_meta_refresh(
         response: Response,
-    ) -> Tuple[Optional[int], Optional[str]]:
+    ) -> tuple[int | None, str | None]:
         """Get meta refresh interval and url from a response."""
         try:
             tree = html_to_tree(response.text)
@@ -688,27 +682,29 @@ class TwillBrowser:
         self._form_files.clear()
         self.last_submit_button = None
 
-        if func_name == "open":
-            url = args[0]
+        match func_name:
+            case "open":
+                url = args[0]
 
-        elif func_name == "follow_link":
-            url = args[0]
-            with suppress(AttributeError):  # may be already a url
-                url = url.url
-            if "://" not in url and self.url:
-                url = urljoin(self.url, url)
+            case "follow_link":
+                url = args[0]
+                with suppress(AttributeError):  # may be already a url
+                    url = url.url
+                if "://" not in url and self.url:
+                    url = urljoin(self.url, url)
 
-        elif func_name == "reload":
-            url = self.url
+            case "reload":
+                url = self.url
 
-        elif func_name == "back":
-            try:
-                self.result = self._history.pop()
-            except IndexError as error:
-                raise TwillException("Cannot go further back") from error
-            return
-        else:
-            raise TwillException(f"Unknown function {func_name!r}")
+            case "back":
+                try:
+                    self.result = self._history.pop()
+                except IndexError as error:
+                    raise TwillException("Cannot go further back") from error
+                return
+
+            case _:
+                raise TwillException(f"Unknown function {func_name!r}")
 
         result = self._client.get(url)
         if result.status_code == HTTPStatus.UNAUTHORIZED:

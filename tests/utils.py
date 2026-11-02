@@ -7,7 +7,7 @@ import sys
 import time
 from io import StringIO
 from pathlib import Path
-from typing import Optional, TextIO
+from typing import TextIO
 
 import twill
 
@@ -44,14 +44,14 @@ def pop_test_dir() -> None:
 
 def mock_getpass(
     prompt: str = "Password: ",  # noqa: ARG001
-    stream: Optional[TextIO] = None,  # noqa: ARG001
+    stream: TextIO | None = None,  # noqa: ARG001
 ) -> str:
     """Mock getpass function."""
     return "pass"
 
 
 def execute_script(
-    filename: str, inp: Optional[str] = None, initial_url: Optional[str] = None
+    filename: str, inp: str | None = None, initial_url: str | None = None
 ) -> None:
     """Execute twill script with the given filename."""
     if filename != "-":
@@ -71,8 +71,8 @@ def execute_script(
 
 def execute_shell(
     filename: str,
-    inp: Optional[str] = None,
-    initial_url: Optional[str] = None,
+    inp: str | None = None,
+    initial_url: str | None = None,
     *,
     fail_on_unknown: bool = False,
 ) -> None:
@@ -106,7 +106,7 @@ def execute_shell(
         loop.reset()  # reset the singleton
 
 
-def start_server(port: Optional[int] = None) -> None:
+def start_server(port: int | None = None) -> None:
     """Start a simple test web server.
 
     Run a Flask development server on HOST:PORT with subprocess.

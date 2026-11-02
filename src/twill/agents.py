@@ -1,8 +1,6 @@
 """Map of various User-Agent string shortcuts that can be used for testing."""
 
-from typing import Dict
-
-agents: Dict[str, str] = {
+agents: dict[str, str] = {
     # Desktop
     "chrome_40": "Mozilla/5.0 (Windows NT 10.0) AppleWebKit/537.36"
     " (KHTML, like Gecko) Chrome/40.0.2214.93 Safari/537.36",

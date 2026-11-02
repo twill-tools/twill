@@ -2,9 +2,10 @@
 
 import sys
 import time
+from collections.abc import Callable
 from io import StringIO
 from multiprocessing import Process
-from typing import Callable, Optional, TextIO
+from typing import TextIO
 
 from .parse import execute_file
 
@@ -37,8 +38,8 @@ class TestInfo:
         self.server_fn = server_fn
         self.host = host
         self.port = port
-        self.stdout: Optional[TextIO] = None
-        self.stderr: Optional[TextIO] = None
+        self.stdout: TextIO | None = None
+        self.stderr: TextIO | None = None
         self.sleep = sleep
 
     def start_server(self) -> None:

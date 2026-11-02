@@ -14,8 +14,7 @@ def showvar(which: str) -> None:
     """
     global_dict, local_dict = get_twill_glocals()
 
-    d = global_dict.copy()
-    d.update(local_dict)
+    d = global_dict | local_dict
 
     log.info(d.get(str(which)))
 

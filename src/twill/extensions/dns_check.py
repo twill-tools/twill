@@ -9,8 +9,6 @@ Functions:
   * dns_ns -- assert that a given hostname is a name server for the given name.
 """
 
-from typing import Optional
-
 from twill.errors import TwillAssertionError
 
 try:
@@ -24,7 +22,7 @@ except ImportError as error:
     raise ImportError(msg) from error
 
 
-def dns_a(host: str, ipaddress: str, server: Optional[str] = None) -> None:
+def dns_a(host: str, ipaddress: str, server: str | None = None) -> None:
     """>> dns_a <name> <ipaddress> [<name server>]
 
     Assert that <name> resolves to <ipaddress> (and is an A record).
@@ -42,7 +40,7 @@ def dns_a(host: str, ipaddress: str, server: Optional[str] = None) -> None:
     raise TwillAssertionError
 
 
-def dns_cname(host: str, cname: str, server: Optional[str] = None) -> None:
+def dns_cname(host: str, cname: str, server: str | None = None) -> None:
     """>> dns_cname <name> <alias_for> [<name server>]
 
     Assert that <name> is a CNAME alias for <alias_for>.
@@ -62,9 +60,7 @@ def dns_cname(host: str, cname: str, server: Optional[str] = None) -> None:
     raise TwillAssertionError
 
 
-def dns_resolves(
-    host: str, ipaddress: str, server: Optional[str] = None
-) -> None:
+def dns_resolves(host: str, ipaddress: str, server: str | None = None) -> None:
     """>> dns_resolves <name> <name2/ipaddress> [<name server>]
 
     Assert that <name> ultimately resolves to the given IP address (or
@@ -81,7 +77,7 @@ def dns_resolves(
     raise TwillAssertionError
 
 
-def dns_mx(host: str, mailserver: str, server: Optional[str] = None) -> None:
+def dns_mx(host: str, mailserver: str, server: str | None = None) -> None:
     """>> dns_mx <name> <mailserver> [<name server>]
 
     Assert that <mailserver> is a mailserver for <name>.
@@ -95,7 +91,7 @@ def dns_mx(host: str, mailserver: str, server: Optional[str] = None) -> None:
     raise TwillAssertionError
 
 
-def dns_ns(host: str, query_ns: str, server: Optional[str] = None) -> None:
+def dns_ns(host: str, query_ns: str, server: str | None = None) -> None:
     """>> dns_ns <domain> <nameserver> [<name server to use>]
 
     Assert that <nameserver> is a mailserver for <domain>.
@@ -118,7 +114,7 @@ def is_ip_addr(text: str) -> bool:
     return True
 
 
-def _resolve_name(name: str, server: Optional[str] = None) -> str:
+def _resolve_name(name: str, server: str | None = None) -> str:
     """Resolve the given name to an IP address."""
     if is_ip_addr(name):
         return name
@@ -133,7 +129,7 @@ def _resolve_name(name: str, server: Optional[str] = None) -> str:
 
 
 def _resolve(
-    query: str, query_type: RdataType, server: Optional[str] = None
+    query: str, query_type: RdataType, server: str | None = None
 ) -> Answer:
     """Resolve, perhaps via the given name server."""
     resolver = Resolver()

@@ -1,6 +1,6 @@
 """Test the WSGI support."""
 
-from typing import Callable, Dict, Generator, List, Sequence, Set, Tuple
+from collections.abc import Callable, Generator, Sequence
 
 from twill import browser, commands
 
@@ -8,11 +8,11 @@ from twill import browser, commands
 `requests <http://docs.python-requests.org/en/latest/>`_.
 """
 
-app_was_hit: Set[str] = set()
+app_was_hit: set[str] = set()
 
-Environ = Dict[str, str]
+Environ = dict[str, str]
 WriteCallable = Callable[[bytes], None]
-Headers = List[Tuple[str, str]]
+Headers = list[tuple[str, str]]
 StartResponse = Callable[[str, Headers], WriteCallable]
 
 

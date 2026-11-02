@@ -9,10 +9,11 @@ import sys
 import traceback
 from argparse import ArgumentParser
 from cmd import Cmd
+from collections.abc import Callable
 from contextlib import suppress
 from pathlib import Path
 from textwrap import dedent
-from typing import IO, Any, Callable, List, Optional
+from typing import IO, Any
 
 from . import (
     __url__,
@@ -131,8 +132,8 @@ class TwillCommandLoop(Singleton, Cmd):
 
     def __init__(
         self,
-        stdin: Optional[IO[str]] = None,
-        initial_url: Optional[str] = None,
+        stdin: IO[str] | None = None,
+        initial_url: str | None = None,
         *,
         fail_on_unknown: bool = False,
     ) -> None:
@@ -157,7 +158,7 @@ class TwillCommandLoop(Singleton, Cmd):
 
         self._set_prompt()
 
-        self.names: List[str] = []
+        self.names: list[str] = []
 
         global_dict, _local_dict = namespaces.get_twill_glocals()
 
@@ -179,13 +180,13 @@ class TwillCommandLoop(Singleton, Cmd):
 
         self.names.append(do_name)
 
-    def get_names(self) -> List[str]:
+    def get_names(self) -> list[str]:
         """Return the list of commands."""
         return self.names
 
     def complete_form_value(
         self, text: str, line: str, _begin: int, _end: int
-    ) -> List[str]:
+    ) -> list[str]:
         """Command arg completion for the form_value command.
 
         The twill command has the following syntax:
@@ -205,7 +206,7 @@ class TwillCommandLoop(Singleton, Cmd):
     complete_fv = complete_form_value  # alias
 
     @staticmethod
-    def provide_form_name(prefix: str) -> List[str]:
+    def provide_form_name(prefix: str) -> list[str]:
         """Provide the list of form names on the given page."""
         names = []
         forms = browser.forms
@@ -220,7 +221,7 @@ class TwillCommandLoop(Singleton, Cmd):
         return names
 
     @staticmethod
-    def provide_field_name(form_name: str, prefix: str) -> List[str]:
+    def provide_field_name(form_name: str, prefix: str) -> list[str]:
         """Provide the list of fields for the given form_name or number."""
         names = []
         form = browser.form(form_name)
@@ -315,17 +316,17 @@ class TwillCommandLoop(Singleton, Cmd):
     help_quit = help_exit
 
 
-def get_command_shell() -> Optional[TwillCommandLoop]:
+def get_command_shell() -> TwillCommandLoop | None:
     """Get the command shell."""
     return getattr(TwillCommandLoop, "__it__", None)
 
 
-twill_args: List[str] = []  # contains sys.argv *after* last '--'
+twill_args: list[str] = []  # contains sys.argv *after* last '--'
 interactive = False  # 'True' if interacting with user
 
 
 def main(  # noqa: C901, PLR0912, PLR0915
-    argv: Optional[List[str]] = None,
+    argv: list[str] | None = None,
 ) -> None:
     """Run as shell script."""
     global interactive

@@ -4,6 +4,10 @@
 ChangeLog
 =========
 
+3.4.0 (unreleased)
+------------------
+* The supported Python versions are now 3.10 to 3.14.
+
 3.3.1 (released 2025-09-07)
 ---------------------------
 * The supported Python versions are now 3.8 to 3.14.

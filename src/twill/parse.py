@@ -2,9 +2,10 @@
 
 import re
 import sys
+from collections.abc import Callable, Sequence
 from contextlib import nullcontext
 from io import StringIO
-from typing import Any, Callable, Dict, List, Optional, Sequence, TextIO, Tuple
+from typing import Any, TextIO
 
 from pyparsing import (
     CharsNotIn,
@@ -86,14 +87,14 @@ full_command = comment | (command + arguments + Opt(comment))
 full_command.set_name("full_command")
 
 
-command_list: List[str] = []  # filled in by namespaces.init_global_dict().
+command_list: list[str] = []  # filled in by namespaces.init_global_dict().
 
 
 def process_args(
     args: Sequence[str],
-    globals_dict: Dict[str, Any],
-    locals_dict: Dict[str, Any],
-) -> List[str]:
+    globals_dict: dict[str, Any],
+    locals_dict: dict[str, Any],
+) -> list[str]:
     """Process string arguments.
 
     Take a list of string arguments parsed via pyparsing and evaluate
@@ -101,7 +102,7 @@ def process_args(
 
     Return a new list.
     """
-    new_args: List[str] = []
+    new_args: list[str] = []
     for arg in args:
         # __variable substitution
         if arg.startswith("__"):
@@ -135,8 +136,8 @@ def process_args(
 def execute_command(
     cmd: str,
     args: Sequence[str],
-    globals_dict: Dict[str, Any],
-    locals_dict: Dict[str, Any],
+    globals_dict: dict[str, Any],
+    locals_dict: dict[str, Any],
     cmd_info: str,
 ) -> None:
     """Actually execute the command.
@@ -172,15 +173,15 @@ _log_commands: Callable = log.debug  # type: ignore[has-type]
 
 def parse_command(
     line: str,
-    globals_dict: Dict[str, Any],
-    locals_dict: Dict[str, Any],
-) -> Tuple[Optional[str], Optional[List[str]]]:
+    globals_dict: dict[str, Any],
+    locals_dict: dict[str, Any],
+) -> tuple[str | None, list[str] | None]:
     """Parse command.
 
     Returns a tuple with the command and its arguments.
     """
     try:
-        results: Optional[ParseResults] = full_command.parse_string(line)
+        results: ParseResults | None = full_command.parse_string(line)
     except ParseException as e:
         log.error("PARSE ERROR: %s", e)
         results = None
@@ -306,10 +307,10 @@ _re_variable = re.compile(r"\${(.*?)}")
 
 
 def variable_substitution(
-    raw_str: str, globals_dict: Dict[str, Any], locals_dict: Dict[str, Any]
+    raw_str: str, globals_dict: dict[str, Any], locals_dict: dict[str, Any]
 ) -> str:
     """Substitute the variables in the given string."""
-    parts: List[str] = []
+    parts: list[str] = []
     append = parts.append
     position = 0
     for match in _re_variable.finditer(raw_str):

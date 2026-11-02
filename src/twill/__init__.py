@@ -20,7 +20,7 @@ import importlib.metadata
 import logging
 import sys
 from pathlib import Path
-from typing import Optional, TextIO, Union
+from typing import TextIO
 
 metadata = importlib.metadata.metadata(__package__)
 
@@ -66,7 +66,7 @@ handler = None
 stdout, stderr = sys.stdout, sys.stderr
 
 
-def set_log_level(level: Optional[Union[int, str]] = None) -> None:
+def set_log_level(level: int | str | None = None) -> None:
     """Set the logging level.
 
     If no level is passed, use INFO as logging level.
@@ -78,7 +78,7 @@ def set_log_level(level: Optional[Union[int, str]] = None) -> None:
     log.setLevel(level)
 
 
-def set_output(stream: Optional[TextIO] = None) -> None:
+def set_output(stream: TextIO | None = None) -> None:
     """Set the standard output.
 
     If no stream is passed, use standard output.
@@ -93,7 +93,7 @@ def set_output(stream: Optional[TextIO] = None) -> None:
     sys.stdout = stream
 
 
-def set_err_out(stream: Optional[TextIO] = None) -> None:
+def set_err_out(stream: TextIO | None = None) -> None:
     """Set the error output.
 
     If no stream is passed, use standard error.

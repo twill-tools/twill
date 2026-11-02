@@ -9,7 +9,7 @@ import re
 import sys
 import time
 from os.path import sep
-from typing import Any, Dict, Optional
+from typing import Any
 
 from . import log, set_err_out, set_output, utils
 from .agents import agents
@@ -281,7 +281,7 @@ def back() -> None:
     browser.back()
 
 
-def show(what: Optional[str] = None) -> None:
+def show(what: str | None = None) -> None:
     """>> show [<objects>]
 
     Show the specified objects (html, cookies, forms, links, history).
@@ -323,7 +323,7 @@ def echo(*strs: str) -> None:
     log.info(" ".join(map(str, strs)))
 
 
-def save_html(filename: Optional[str] = None) -> None:
+def save_html(filename: str | None = None) -> None:
     """>> save_html [<filename>]
 
     Save the HTML for the current page into <filename>.
@@ -379,7 +379,7 @@ def agent(what: str) -> None:
 
 
 def submit(
-    submit_button: Optional[str] = None, form_name: Optional[str] = None
+    submit_button: str | None = None, form_name: str | None = None
 ) -> None:
     """>> submit [<submit_button> [<form_name>]]
 
@@ -534,7 +534,7 @@ def form_file(
     form_name: str,
     field_name: str,
     filename: str,
-    content_type: Optional[str] = None,
+    content_type: str | None = None,
 ) -> None:
     """>> form_file <form_name> <field_name> <filename> [<content_type>]
 
@@ -709,14 +709,15 @@ def debug(what: str, level: str) -> None:
 
     log.info("DEBUG: Setting %s debugging to level %d.", what, num_level)
 
-    if what == "http":
-        browser.debug_level = num_level
-    elif what == "equiv-refresh":
-        browser.show_refresh = num_level > 0
-    elif what == "commands":
-        parse.log_commands(num_level > 0)
-    else:
-        raise TwillException(f'Unknown debugging type: "{what}"')
+    match what:
+        case "http":
+            browser.debug_level = num_level
+        case "equiv-refresh":
+            browser.show_refresh = num_level > 0
+        case "commands":
+            parse.log_commands(num_level > 0)
+        case _:
+            raise TwillException(f'Unknown debugging type: "{what}"')
 
 
 def run(cmd: str) -> None:
@@ -881,7 +882,7 @@ def clear_extra_headers() -> None:
     browser.reset_headers()
 
 
-default_options: Dict[str, Any] = {
+default_options: dict[str, Any] = {
     "equiv_refresh_interval": 2,
     "readonly_controls_writeable": False,
     "require_tidy": False,
@@ -891,7 +892,7 @@ default_options: Dict[str, Any] = {
 options = default_options.copy()  # the global options dictionary
 
 
-def config(key: Optional[str] = None, value: Any = None) -> None:
+def config(key: str | None = None, value: Any = None) -> None:
     """>> config [<key> [<int value>]]
 
     Configure/report various options.  If no <value> is given, report

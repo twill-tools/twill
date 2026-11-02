@@ -4,8 +4,9 @@
 
 import os
 from base64 import decodebytes
+from collections.abc import MutableMapping
 from time import sleep
-from typing import Any, MutableMapping, NoReturn, Optional
+from typing import Any, NoReturn
 
 from flask import (
     Flask,
@@ -62,7 +63,7 @@ class SessionManager:
 """
 
     @classmethod
-    def session_id(cls, session: MutableMapping) -> Optional[int]:
+    def session_id(cls, session: MutableMapping) -> int | None:
         """Get the session ID or set it if it does not exist."""
         sid = session.get("sid")
         if sid is None:
