@@ -7,6 +7,7 @@ import sys
 import time
 from io import StringIO
 from pathlib import Path
+from tempfile import TemporaryDirectory
 from typing import TextIO
 
 import twill
@@ -104,6 +105,37 @@ def execute_shell(
             sys.stdin = stdin
             getpass.getpass = real_getpass
         loop.reset()  # reset the singleton
+
+
+def execute_main(argv: list[str], *scripts: str) -> tuple[int, str]:
+    """Run the twill main function with the given arguments and scripts.
+
+    The scripts are passed as strings and written to temporary files.
+    Return the exit code and the output, and restore the global namespace.
+    """
+    global_dict = twill.namespaces.global_dict
+    saved_global_dict = global_dict.copy()
+    output = StringIO()
+    real_stdout, twill.stdout = twill.stdout, output
+    try:
+        with TemporaryDirectory() as tmp_dir:
+            script_files = []
+            for n, script in enumerate(scripts, 1):
+                script_file = Path(tmp_dir, f"script{n}.twill")
+                script_file.write_text(script, encoding="utf-8")
+                script_files.append(str(script_file))
+            try:
+                twill.shell.main(["twill", *argv, *script_files])
+            except SystemExit as error:
+                code = error.code
+            else:
+                code = None
+    finally:
+        twill.stdout = real_stdout
+        twill.set_output()
+        global_dict.clear()
+        global_dict.update(saved_global_dict)
+    return int(code or 0), output.getvalue()
 
 
 def start_server(port: int | None = None) -> None:

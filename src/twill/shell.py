@@ -7,10 +7,11 @@ This is an implementation of a command-line interpreter based on the
 import os
 import sys
 import traceback
-from argparse import ArgumentParser
+from argparse import ArgumentParser, ArgumentTypeError
 from cmd import Cmd
 from collections.abc import Callable
 from contextlib import suppress
+from keyword import iskeyword
 from pathlib import Path
 from textwrap import dedent
 from typing import IO, Any
@@ -325,6 +326,22 @@ twill_args: list[str] = []  # contains sys.argv *after* last '--'
 interactive = False  # 'True' if interacting with user
 
 
+def parse_variable(arg: str) -> tuple[str, str]:
+    """Parse a variable assignment of the form NAME=VALUE.
+
+    The name must be a valid identifier that does not shadow a twill command.
+    The value may be empty and may contain equal signs.
+    """
+    name, sep, value = arg.partition("=")
+    if not sep:
+        raise ArgumentTypeError(f"missing '=' in '{arg}'")
+    if not name.isidentifier() or iskeyword(name):
+        raise ArgumentTypeError(f"invalid variable name '{name}'")
+    if name in parse.command_list:
+        raise ArgumentTypeError(f"'{name}' is the name of a twill command")
+    return name, value
+
+
 def main(  # noqa: C901, PLR0912, PLR0915
     argv: list[str] | None = None,
 ) -> None:
@@ -392,6 +409,15 @@ def main(  # noqa: C901, PLR0912, PLR0915
         action="store_true",
         dest="quiet",
         help="do not show normal output",
+    )
+    add(
+        "-s",
+        "--set",
+        action="append",
+        dest="variables",
+        metavar="NAME=VALUE",
+        type=parse_variable,
+        help="set a global variable (can be repeated)",
     )
     add(
         "-u",
@@ -473,6 +499,12 @@ def main(  # noqa: C901, PLR0912, PLR0915
         output = None
 
     set_output(output)
+
+    # set global variables before running any scripts or the shell
+
+    if args.variables:
+        global_dict = namespaces.get_twill_glocals()[0]
+        global_dict.update(args.variables)
 
     # first find and run any scripts put on the command line
 

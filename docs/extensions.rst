@@ -128,7 +128,7 @@ loads all of the post-scriptfile command-line arguments into variables, e.g. ::
    ...
    >> extend_with argparse
    >> get_args
-   >> echo "args are ${arg1} ${args} ${arg3}"
+   >> echo "args are ${arg1} ${arg2} ${arg3}"
    args are val1 val2 val3
 
 dns_check -- make assertions about domain name service records

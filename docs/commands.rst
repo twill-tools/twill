@@ -185,7 +185,8 @@ Alternative spelling: "setlocal"
 
 The local dictionary is file-specific, while the global module is general
 to all the commands. Local variables will override global variables if
-they exist.
+they exist. Global variables can also be set on the command line with the
+option ``-s NAME=VALUE``.
 
 Note that you can do variable interpolation in strings with ${var}, e.g. ::
 
