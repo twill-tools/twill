@@ -18,6 +18,10 @@ level directory. To run an individual test, you can use the command
 ``pytest tests/test_something.py``. To run the tests with all supported
 Python versions and the code quality checks, run `tox`_.
 
+If you use an AI coding agent, it should read the file ``AGENTS.md`` in
+the top level directory, which describes the project layout, the checks
+and the conventions for developing twill.
+
 .. _pytest: https://pytest.org/
 .. _Flask: https://flask.palletsprojects.com/
 .. _tox: https://tox.wiki/

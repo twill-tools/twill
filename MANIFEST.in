@@ -2,6 +2,7 @@ include MANIFEST.in
 
 include LICENSE.txt
 include README.md
+include AGENTS.md
 
 include tox.ini
 
