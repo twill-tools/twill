@@ -80,7 +80,7 @@ There are two alternatives:
    expressions in ``${...}`` are evaluated as Python code::
 
       run "import os"
-      save_html ${os.environ['D']}/page.html
+      save_html "${os.environ['D']}/page.html"
 
 Proxy servers
 ~~~~~~~~~~~~~

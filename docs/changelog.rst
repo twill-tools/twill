@@ -63,6 +63,11 @@ ChangeLog
 * The documentation of 'follow' now explains how the regular expression is
   matched against the link text and URL, and the documentation of 'tidy_ok'
   shows how to allow empty elements such as icons.
+* The documentation and the help text of 'add_extra_header' now use the
+  correct name of the command (previously given as 'add_extra_headers' or
+  'add_header'), the documentation of 'form_clear' now shows that it
+  requires the name or number of the form, and the commands 'redirect_error'
+  and 'reset_error' are now documented.
 
 3.3.1 (released 2025-09-07)
 ---------------------------

@@ -860,7 +860,7 @@ def add_cleanup(*args: str) -> None:
 
 
 def set_global(name: str, value: str) -> None:
-    """set_global <name> <value>
+    """>> set_global <name> <value>
 
     Sets the variable <name> to the value <value> in the global namespace.
     """
@@ -872,7 +872,7 @@ setglobal = set_global  # backward compatibility and convenience
 
 
 def set_local(name: str, value: str) -> None:
-    """set_local <name> <value>
+    """>> set_local <name> <value>
 
     Sets the variable <name> to the value <value> in the local namespace.
     """
@@ -958,7 +958,7 @@ def show_headers() -> None:
 
 
 def add_extra_header(header_key: str, header_value: str) -> None:
-    """>> add_header <name> <value>
+    """>> add_extra_header <name> <value>
 
     Add an HTTP header to each HTTP request.  See 'show_extra_headers' and
     'clear_extra_headers'.

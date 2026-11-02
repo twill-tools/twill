@@ -44,7 +44,7 @@ specified regular expression pattern. The variable ``__match__`` is set to
 the first matching subgroup (or the entire matching string, if no subgroups
 are specified). When called from Python, the matching string is also returned.
 
-Fhe command also accepts some flags: **i**, for case-insensitive matching,
+The command also accepts some flags: **i**, for case-insensitive matching,
 **m** for multi-line mode and **s** for dotall matching. The flag **x** uses
 XPath expressions instead of regular expressions (see below).
 
@@ -91,8 +91,17 @@ Display
 **info** -- display information about the current page.
 
 **redirect_output** *<filename>* -- append all twill output to the given file.
+This includes the messages about failed commands.
 
 **reset_output** -- display all output to the screen.
+
+**redirect_error** *<filename>* -- append everything written to the standard
+error stream to the given file, such as Python warnings or output of
+**run** commands and extensions. Note that twill's own messages, including
+the ones about failed commands, are part of the normal output and can be
+redirected with **redirect_output**.
+
+**reset_error** -- write the standard error stream to the screen again.
 
 **save_html** *[<filename>]* -- save the current page's HTML into a file.
 If no filename is given, derive the filename like *save_content* does.
@@ -176,7 +185,7 @@ Alternative spellings: "formaction" or "fa"
 
 **fa** -- abbreviation for 'form_action'.
 
-**form_clear** -- clear all values in the form.
+**form_clear** *<form_name>* -- clear all values in the given form.
 
 Alternative spelling: "formclear"
 
@@ -309,7 +318,7 @@ documents with HTML Tidy. For example, ::
 
     config tidy_drop_empty_elements no
 
-**add_extra_headers** *<name>* *<value>* -- add an extra HTTP header to
+**add_extra_header** *<name>* *<value>* -- add an extra HTTP header to
 each HTTP request.
 
 **show_extra_headers** -- show the headers being added to each HTTP request.
