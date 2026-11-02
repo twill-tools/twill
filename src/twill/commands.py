@@ -1020,10 +1020,8 @@ def info() -> None:
         log.warning("We're not on a page!")
         return
 
-    content_type = browser.response_headers["content-type"]
-    if isinstance(content_type, bytes):
-        content_type = content_type.decode()
-    is_html = content_type and content_type.split(";", 1)[0] == "text/html"
+    content_type = browser.response_headers.get("content-type")
+    is_html = _get_mime_type() == "text/html"
     code = browser.code
 
     info = log.info

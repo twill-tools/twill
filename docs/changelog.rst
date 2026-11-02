@@ -52,6 +52,8 @@ ChangeLog
   case-insensitive, and like with 'url' and 'title', the matching part is
   stored in the variable '__match__'. The new command 'show_headers' shows
   all response headers of the current page.
+* The 'info' command does not fail any more when the current page has been
+  sent without a 'Content-Type' header.
 
 3.3.1 (released 2025-09-07)
 ---------------------------

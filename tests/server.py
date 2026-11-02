@@ -227,6 +227,14 @@ def view_plaintext() -> Response:
     return response
 
 
+@app.route("/no_content_type")
+def view_no_content_type() -> Response:
+    """Test response without content type."""
+    response = make_response("hello, world")
+    del response.headers["Content-Type"]
+    return response
+
+
 @app.route("/xml")
 def view_xml() -> Response:
     """Test XML response."""
