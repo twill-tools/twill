@@ -6,7 +6,8 @@ description = "A web browsing and testing language"
 keywords = ["web", "testing",  "browsing", "automation"]
 
 readme = "README.md"
-license = {file = "LICENSE.txt"}
+license = "MIT"
+license-files = ["LICENSE.txt"]
 
 authors = [
   {name = "C. Titus Brown"},
@@ -22,7 +23,6 @@ classifiers = [
   'Environment :: Console',
   'Intended Audience :: Developers',
   'Intended Audience :: System Administrators',
-  'License :: OSI Approved :: MIT License',
   'Natural Language :: English',
   'Operating System :: OS Independent',
   'Programming Language :: Python',
@@ -46,15 +46,14 @@ dependencies = [
 
 [project.optional-dependencies]
 docs = [
-  "sphinx >=8.2, <9",
-  "sphinx_rtd_theme >=3, <4"
+  "sphinx >=8.2, <10",
 ]
 tidy = [
   "pytidylib >=0.3, <0.4"
 ]
 tests = [
   "tox >=4, <5",
-  "pytest >=8, <9",
+  "pytest >=9, <10",
   "pytidylib >=0.3, <0.4",
   "flask >=3.0, <4",
 ]
@@ -75,7 +74,7 @@ Download = "https://pypi.org/project/twill/"
 "twill" = ["py.typed"]
 
 [tool.pytest.ini_options]
-minversion = "8.0"
+minversion = "9.0"
 testpaths = [ "tests" ]
 
 [tool.mypy]
@@ -146,7 +145,7 @@ select = [
   "SIM",    # flake8-simplify
   "T10",    # flake8-debugger
   "T20",    # flake8-print
-  "TCH",    # flake8-type-checking
+  "TC",     # flake8-type-checking
   "TID",    # flake8-tidy-imports
   "TRY",    # tryceratops
   "UP",     # pyupgrade
@@ -190,7 +189,7 @@ max-statements = 75
   "T201"  # allow using print()
 ]
 "src/twill/parse.py" = [
-  "PGH001", "S307"  # allow evaluation of expressions
+  "S307"  # allow evaluation of expressions
 ]
 "src/twill/extensions/*" = [
   "D400", "D401", "D415",  # allow more flexible docstrings
@@ -223,5 +222,5 @@ disable = [
 ]
 
 [build-system]
-requires = ["setuptools >=69"]
+requires = ["setuptools >=77"]
 build-backend = "setuptools.build_meta"

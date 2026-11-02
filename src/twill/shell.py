@@ -64,7 +64,7 @@ def make_cmd_fn(cmd: str) -> Callable[[str], None]:
         args = []
         if rest_of_line.strip():
             try:
-                args = parse.arguments.parseString(rest_of_line)[0]
+                args = parse.arguments.parse_string(rest_of_line)[0]
                 args = parse.process_args(args, global_dict, local_dict)
             except Exception as error:  # noqa: BLE001
                 log.error("\nINPUT ERROR: %s\n", error)
