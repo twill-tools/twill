@@ -5,6 +5,7 @@ through the twill command line script.
 """
 
 import getpass
+import mimetypes
 import re
 import sys
 import time
@@ -64,6 +65,7 @@ __all__ = [
     "run",
     "run_file",
     "runfile",
+    "save_content",
     "save_cookies",
     "save_html",
     "set_global",
@@ -323,11 +325,31 @@ def echo(*strs: str) -> None:
     log.info(" ".join(map(str, strs)))
 
 
+def _get_mime_type() -> str:
+    """Get the lowercase MIME type of the current page without parameters."""
+    content_type = browser.response_headers.get("Content-Type", "")
+    return content_type.split(";", 1)[0].strip().lower()
+
+
+def _get_filename(default: str) -> str:
+    """Get a filename for saving the current page.
+
+    The filename is taken from the Content-Disposition header or the URL.
+    If none can be found there, the given default filename is used.
+    """
+    filename = browser.result.filename if browser.result else None
+    if not filename:
+        filename = default
+    log.info("Using filename '%s'.", filename)
+    return filename
+
+
 def save_html(filename: str | None = None) -> None:
     """>> save_html [<filename>]
 
     Save the HTML for the current page into <filename>.
-    If no filename given, construct the filename from the URL.
+    If no filename given, take it from the Content-Disposition header
+    or construct it from the URL.
     """
     html = browser.html
     if html is None:
@@ -335,13 +357,7 @@ def save_html(filename: str | None = None) -> None:
         return
 
     if filename is None:
-        url = browser.url
-        if url:
-            url = url.split("?", 1)[0]
-            filename = url.rsplit("/", 1)[-1]
-        if not filename:
-            filename = "index.html"
-        log.info("Using filename '%s'.", filename)
+        filename = _get_filename("index.html")
 
     encoding = browser.encoding or "utf-8"
     try:
@@ -352,6 +368,23 @@ def save_html(filename: str | None = None) -> None:
             raise
         with open(filename, "w", encoding="utf-8") as f:
             f.write(html)
+
+
+def save_content(filename: str | None = None) -> None:
+    """>> save_content [<filename>]
+
+    Save the binary content of the current page into <filename>.
+    If no filename given, take it from the Content-Disposition header
+    or construct it from the URL.
+    """
+    content = browser.dump
+
+    if filename is None:
+        extension = mimetypes.guess_extension(_get_mime_type()) or ""
+        filename = _get_filename(f"download{extension}")
+
+    with open(filename, "wb") as f:
+        f.write(content)
 
 
 def sleep(interval: str = "1") -> None:

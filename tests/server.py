@@ -23,6 +23,8 @@ PORT = 8080
 DEBUG = False
 RELOAD = False
 
+BINARY_CONTENT = b"%PDF-1.4\n%\xe2\xe3\xcf\xd3\n\x00\x80\xff\r\n%%EOF\n"
+
 app = Flask(__name__)
 
 app.secret_key = "not-a-secret-since-this-is-a-test-app-only"  # noqa: S105
@@ -232,6 +234,18 @@ def view_xml() -> Response:
         '<?xml version="1.0" encoding="utf-8" ?><foo>bår</foo>'
     )
     response.headers["Content-Type"] = "text/xml"
+    return response
+
+
+@app.route("/download/")
+@app.route("/download/<name>")
+def view_download(name: str = "") -> Response:  # noqa: ARG001
+    """Test binary download with an optional Content-Disposition header."""
+    response = make_response(BINARY_CONTENT)
+    response.headers["Content-Type"] = "application/pdf"
+    disposition = request.args.get("disposition")
+    if disposition:
+        response.headers["Content-Disposition"] = disposition
     return response
 
 

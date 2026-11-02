@@ -35,6 +35,17 @@ ChangeLog
   a global variable before the scripts are run, like the 'setglobal'
   command. This makes it easy to pass values such as an output directory
   to twill scripts. The command-line options are now also documented.
+* The new command 'save_content' saves the binary content of the current
+  page, so that downloads such as PDF files can be stored unaltered, which
+  was not possible with 'save_html'. If no filename is given, it is taken
+  from the 'Content-Disposition' header (including RFC 5987 encoded names)
+  or from the URL. Filenames suggested by the server are reduced to their
+  final path component, so that they can never be written outside the
+  current directory, hidden names are ignored, reserved device names on
+  Windows are prefixed with an underscore, and overlong names are
+  truncated. 'save_html' now also respects the 'Content-Disposition'
+  header, and percent-encoded characters in the URL are decoded when
+  constructing a filename.
 
 3.3.1 (released 2025-09-07)
 ---------------------------

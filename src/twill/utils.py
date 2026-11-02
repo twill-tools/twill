@@ -4,12 +4,16 @@ Apart from various simple utility functions, twill's robust parsing
 code is implemented in the ConfigurableParsingFactory class.
 """
 
+import codecs
 import os
 import re
 from collections.abc import Collection, Iterator, Sequence
 from contextlib import suppress
+from email.message import Message
+from email.utils import collapse_rfc2231_value
 from pathlib import Path
 from typing import Any, Literal, NamedTuple, TypeAlias, TypeVar
+from urllib.parse import unquote, urlsplit
 
 from httpx import Headers, Response
 from lxml.html import (
@@ -52,6 +56,7 @@ __all__ = [
     "Singleton",
     "TextareaElement",
     "UrlWithRealm",
+    "filename_from_content_disposition",
     "gather_filenames",
     "get_equiv_refresh_interval",
     "html_to_tree",
@@ -62,6 +67,7 @@ __all__ = [
     "make_twill_filename",
     "print_form",
     "run_tidy",
+    "safe_filename",
     "tree_to_html",
     "trunc",
     "unique_match",
@@ -352,6 +358,23 @@ class ResultWrapper:
     def headers(self) -> Headers:
         """Get the headers of the result page."""
         return self.response.headers
+
+    @property
+    def filename(self) -> str | None:
+        """Get a safe filename for the result page suggested by the server.
+
+        The filename is taken from the Content-Disposition header if present,
+        otherwise from the last segment of the URL path. Only the final path
+        component is used, and hidden or empty names are rejected.
+        """
+        disposition = self.headers.get("Content-Disposition")
+        if disposition:
+            filename = safe_filename(
+                filename_from_content_disposition(disposition)
+            )
+            if filename:
+                return filename
+        return safe_filename(unquote(urlsplit(self.url).path))
 
     @property
     def title(self) -> str | None:
@@ -763,6 +786,73 @@ def is_hidden_filename(filename: str) -> bool:
     return filename not in (os.curdir, os.pardir) and Path(
         filename
     ).name.startswith(".")
+
+
+def filename_from_content_disposition(value: str) -> str | None:
+    """Get the filename from the value of a Content-Disposition header.
+
+    An extended filename parameter with RFC 5987 encoding takes precedence
+    over a plain filename parameter as demanded by RFC 6266.
+    """
+    message = Message()
+    message["Content-Disposition"] = value
+    params = message.get_params(header="Content-Disposition") or []
+    filenames = [value for key, value in params if key == "filename"]
+    # the extended parameter is returned as a tuple (charset, language, value)
+    filenames.sort(key=lambda value: not isinstance(value, tuple))
+    for filename in filenames:
+        if isinstance(filename, tuple):
+            try:  # fall back to the plain parameter if charset is unknown
+                codecs.lookup(filename[0] or "us-ascii")
+            except LookupError:
+                continue
+        collapsed = collapse_rfc2231_value(filename)
+        if collapsed:
+            return collapsed
+    return None
+
+
+_reserved_filenames = {
+    "CON",
+    "PRN",
+    "AUX",
+    "NUL",
+    *(f"COM{i}" for i in range(1, 10)),
+    *(f"LPT{i}" for i in range(1, 10)),
+}
+
+
+_max_filename_bytes = 255  # limit of most file systems
+_max_extension_bytes = 16
+
+
+def safe_filename(filename: str | None) -> str | None:
+    """Make a filename suggested by a server safe for saving a local file.
+
+    Only the final path component is used, characters not allowed in
+    filenames on common platforms are replaced with underscores, reserved
+    device names on Windows are prefixed with an underscore, and empty or
+    hidden filenames (starting with a dot) are rejected. Overlong filenames
+    are truncated to 255 bytes, keeping the extension if possible.
+    """
+    if not filename:
+        return None
+    filename = re.split(r"[/\\]", filename)[-1]
+    filename = re.sub(r'[\x00-\x1f\x7f<>:"|?*]', "_", filename)
+    filename = filename.strip().rstrip(". ")
+    if not filename or filename.startswith("."):
+        return None
+    if filename.split(".", 1)[0].rstrip().upper() in _reserved_filenames:
+        filename = f"_{filename}"  # reserved device names on Windows
+    if len(filename.encode()) > _max_filename_bytes:
+        ext = Path(filename).suffix
+        if len(ext.encode()) > _max_extension_bytes:
+            ext = ""
+        stem = filename.removesuffix(ext)
+        max_stem_bytes = _max_filename_bytes - len(ext.encode())
+        stem = stem.encode()[:max_stem_bytes].decode(errors="ignore")
+        filename = stem.rstrip(". ") + ext
+    return filename
 
 
 def is_twill_filename(filename: str) -> bool:

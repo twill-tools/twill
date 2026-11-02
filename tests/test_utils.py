@@ -463,3 +463,67 @@ def test_form_values_with_empty_checkable_values_in_lxml():
     )
     assert isinstance(form, FormElement)
     assert form.form_values() == [("r", "")]
+
+
+@pytest.mark.parametrize(
+    ("value", "filename"),
+    [
+        ("attachment", None),
+        ("inline; foo=bar", None),
+        ('attachment; filename="x.pdf"', "x.pdf"),
+        ("attachment; filename=x.pdf", "x.pdf"),
+        ('attachment; filename=""', None),
+        ("attachment; filename*=UTF-8''%C3%A4.pdf", "ä.pdf"),
+        ("attachment; filename*=iso-8859-1'de'%E4.pdf", "ä.pdf"),
+        (
+            "attachment; filename=\"a.pdf\"; filename*=UTF-8''%C3%A4.pdf",
+            "ä.pdf",
+        ),
+        (
+            "attachment; filename*=UTF-8''%C3%A4.pdf; filename=\"a.pdf\"",
+            "ä.pdf",
+        ),
+        ('attachment; filename="../../evil.txt"', "../../evil.txt"),
+        ('filename="x.pdf"', "x.pdf"),
+        ("attachment; filename=x.pdf; filename*=UTF-8''", "x.pdf"),
+        ("attachment; filename=x.pdf; filename*=bogus''%C3%A4.pdf", "x.pdf"),
+    ],
+)
+def test_filename_from_content_disposition(value: str, filename: str | None):
+    assert utils.filename_from_content_disposition(value) == filename
+
+
+@pytest.mark.parametrize(
+    ("filename", "safe_filename"),
+    [
+        (None, None),
+        ("", None),
+        ("x.pdf", "x.pdf"),
+        ("Ärger €.pdf", "Ärger €.pdf"),
+        ("../../evil.txt", "evil.txt"),
+        ("..\\..\\evil.txt", "evil.txt"),
+        ("/etc/passwd", "passwd"),
+        ("C:\\Windows\\evil.exe", "evil.exe"),
+        ("C:evil.exe", "C_evil.exe"),
+        ('a<b>c|d?e*f"g.txt', "a_b_c_d_e_f_g.txt"),
+        ("tab\tand\nnewline\x00.txt", "tab_and_newline_.txt"),
+        ("  spaces.txt  ", "spaces.txt"),
+        ("trailing.txt. ", "trailing.txt"),
+        ("foo/", None),
+        ("..", None),
+        (".", None),
+        (".hidden", None),
+        ("foo/.hidden", None),
+        ("CON", "_CON"),
+        ("nul.txt", "_nul.txt"),
+        ("com1.tar.gz", "_com1.tar.gz"),
+        ("console.txt", "console.txt"),
+        ("x" * 255 + ".pdf", "x" * 251 + ".pdf"),
+        ("x" * 300, "x" * 255),
+        ("x." + "y" * 300, "x." + "y" * 253),
+        ("€" * 100 + ".pdf", "€" * 83 + ".pdf"),
+        ("x" * 250 + " . " + "y" * 10 + ".pdf", "x" * 250 + ".pdf"),
+    ],
+)
+def test_safe_filename(filename: str | None, safe_filename: str | None):
+    assert utils.safe_filename(filename) == safe_filename

@@ -72,7 +72,19 @@ Display
 **reset_output** -- display all output to the screen.
 
 **save_html** *[<filename>]* -- save the current page's HTML into a file.
-If no filename is given, derive the filename from the URL.
+If no filename is given, derive the filename like *save_content* does.
+
+**save_content** *[<filename>]* -- save the binary content of the current page
+into a file. Use this instead of *save_html* for downloads such as PDF files
+or spreadsheets, which would be corrupted when saved as text.
+
+If no filename is given, it is taken from the ``Content-Disposition`` header
+sent by the server, or derived from the URL. Filenames suggested by the server
+or derived from the URL are always reduced to their final path component and
+saved in the current directory; hidden filenames (starting with a dot) are
+ignored. If no usable filename can be found, ``download`` with an extension
+matching the content type is used. *save_html* determines its default filename
+in the same way, but falls back to ``index.html``.
 
 **show** -- show the current page's HTML.
 
