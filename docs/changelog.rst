@@ -4,8 +4,8 @@
 ChangeLog
 =========
 
-3.4.0 (unreleased)
-------------------
+3.4.0 (released 2026-11-02)
+---------------------------
 * The supported Python versions are now 3.10 to 3.15.
 * The development dependencies are now defined as dependency groups
   instead of the optional dependencies 'tests' and 'docs'.
@@ -60,6 +60,12 @@ ChangeLog
 * If the first group of a regular expression did not participate in the
   match, the commands 'find', 'url', 'title' and 'header' now set the
   variable '__match__' to an empty string instead of None.
+* The command 'find' with the flag 'x' now also works with XPath expressions
+  that return strings, numbers or booleans instead of elements.
+* The 'Accept' header sent by default was malformed ('text/html; */*'
+  instead of 'text/html, */*'); this has been fixed.
+* The command 'extend_with' now warns when an extension command replaces
+  an existing variable.
 * The documentation of 'follow' now explains how the regular expression is
   matched against the link text and URL, and the documentation of 'tidy_ok'
   shows how to allow empty elements such as icons.
