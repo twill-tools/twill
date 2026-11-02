@@ -7,12 +7,9 @@ include tox.ini
 
 include src/twill/py.typed
 
-exclude .readthedocs.yaml
-
 graft tests
 recursive-include docs *.rst conf.py Makefile make.bat
 prune docs/_build
 graft extras
-recursive-include extras *.py *.java *.twill *.text
 
 global-exclude *.py[co] __pycache__

@@ -92,6 +92,9 @@ Download = "https://pypi.org/project/twill/"
 [tool.setuptools.package-data]
 "twill" = ["py.typed"]
 
+[tool.check-manifest]
+ignore = [".readthedocs.yaml"]
+
 [tool.pytest.ini_options]
 minversion = "9.0"
 testpaths = [ "tests" ]
