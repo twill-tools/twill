@@ -13,11 +13,11 @@ from typing import Any, NamedTuple, TypeAlias, TypeVar
 
 from httpx import Headers, Response
 from lxml.html import (
+    XHTML_NAMESPACE,
     CheckboxGroup,
     FormElement,
     HtmlElement,
     InputElement,
-    MultipleSelectOptions,
     RadioGroup,
     SelectElement,
     TextareaElement,
@@ -346,35 +346,124 @@ def set_form_control_value(control: FieldElement, value: str) -> None:
             control.value.add(value.removeprefix("+"))
 
     elif isinstance(control, SelectElement):
-        # for ListControls we need to find the right *value*,
-        # and figure out if we want to *select* or *deselect*
-        if value.startswith("-"):
-            add = False
-            value = value[1:]
-        else:
-            add = True
-            value = value.removeprefix("+")
-
-        # now, select the value.
-        option_values = [val.strip() for val in control.value_options]
-        options = control.getchildren()
-        option_names = [(c.text or "").strip() for c in options]
-        for name, opt in zip(option_names, option_values, strict=False):
-            if value not in (name, opt):
-                continue
-            if isinstance(control.value, MultipleSelectOptions):
-                if add:
-                    control.value.add(opt)
-                elif opt in control.value:
-                    control.value.remove(opt)
-            else:
-                control.value = opt if add else ""
-            break
-        else:
+        # a value with a leading "+" or "-" selects or deselects an option,
+        # unless the value matches an option as it is (such as "-1")
+        options = _get_options(control)
+        add = True
+        option = _find_option(options, value)
+        if option is None and value.startswith(("+", "-")):
+            add = value.startswith("+")
+            option = _find_option(options, value[1:], selected=not add)
+        if option is None:
             raise TwillException("Attempt to set an invalid value")
+        _select_option(control, options, option, add=add)
 
     else:
         raise TwillException("Attempt to set value on invalid control")
+
+
+_xhtml_option_tag = f"{{{XHTML_NAMESPACE}}}option"
+
+
+def _get_options(control: SelectElement) -> list[HtmlElement]:
+    """Get all option elements of a select element.
+
+    The options may be nested in optgroups and may have a namespace.
+    """
+    return [
+        option
+        for option in control.iter("option", _xhtml_option_tag)
+        if isinstance(option, HtmlElement)
+    ]
+
+
+def _option_value(option: HtmlElement) -> str:
+    """Get the value of an option element in the same way as lxml."""
+    value = option.get("value")
+    if value is None:
+        value = (option.text or "").strip()
+    return value
+
+
+def _option_disabled(option: HtmlElement) -> bool:
+    """Check whether the option element or its optgroup is disabled."""
+    if option.get("disabled") is not None:
+        return True
+    parent = option.getparent()
+    return (
+        parent is not None
+        and not isinstance(parent, SelectElement)
+        and parent.get("disabled") is not None
+    )
+
+
+def _match_option(option: HtmlElement, value: str) -> int | None:
+    """Check how well an option element matches the given value.
+
+    Return 0 for an exact match of the option value, 1 for a match of the
+    stripped option value, 2 for a match of the label or the visible text
+    of the option, and None if the option does not match at all.
+    """
+    option_value = _option_value(option)
+    if option_value == value:
+        return 0
+    if option_value.strip() == value:
+        return 1
+    if value:
+        text = " ".join(option.text_content().split())
+        if value in (option.get("label"), text):
+            return 2
+    return None
+
+
+def _find_option(
+    options: list[HtmlElement], value: str, *, selected: bool = False
+) -> HtmlElement | None:
+    """Find the option matching the given value.
+
+    Disabled options are ignored, like in a browser. A match of the exact
+    option value takes precedence over a match of the stripped option value,
+    and this over a match of the label or the visible text of the option.
+    Among equally good matches, the first one is used, unless selected
+    options shall be preferred and one of them is selected.
+    """
+    matches: list[tuple[tuple[int, bool, int], HtmlElement]] = []
+    for index, option in enumerate(options):
+        if _option_disabled(option):
+            continue
+        rank = _match_option(option, value)
+        if rank is not None:
+            unselected = selected and option.get("selected") is None
+            matches.append(((rank, unselected, index), option))
+    if not matches:
+        return None
+    return min(matches, key=lambda match: match[0])[1]
+
+
+def _select_option(
+    control: SelectElement,
+    options: list[HtmlElement],
+    option: HtmlElement,
+    *,
+    add: bool,
+) -> None:
+    """Select or deselect the given option of a select element.
+
+    When the selected option of a single select is deselected,
+    the first option will be used, like in a browser.
+    """
+    if control.multiple:
+        if add:
+            option.set("selected", "")
+        else:
+            option.attrib.pop("selected", None)
+        return
+    selected = [opt for opt in options if opt.get("selected") is not None]
+    if add or (selected and selected[-1] is option):
+        for opt in selected:
+            del opt.attrib["selected"]
+        if add:
+            option.set("selected", "")
 
 
 def _all_the_same_submit(matches: Sequence[FieldElement]) -> bool:

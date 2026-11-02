@@ -9,6 +9,19 @@ ChangeLog
 * The supported Python versions are now 3.10 to 3.15.
 * The development dependencies are now defined as dependency groups
   instead of the optional dependencies 'tests' and 'docs'.
+* Setting select fields with 'formvalue' has been improved: Options inside
+  optgroups are now found correctly (previously option texts and values could
+  be mismatched), values with whitespace work, exact value matches take
+  precedence, values with a leading '+' or '-' (such as '-1') are first
+  tried as they are, options can be chosen by their label or visible text
+  even if it contains markup, disabled options are ignored like in a
+  browser, and options with duplicate values are handled properly.
+  Note that trying to select a disabled option now raises an error,
+  while previously such an option was silently selected.
+* Deselecting an option of a single select field with 'formvalue' now
+  clears the selection if this option was selected, so that the first
+  option is used like in a browser. Previously this always tried to set
+  an empty value and failed if there was no such option.
 
 3.3.1 (released 2025-09-07)
 ---------------------------
