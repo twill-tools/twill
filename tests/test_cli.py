@@ -72,6 +72,7 @@ def test_set_variable_can_be_overridden_by_script():
         ("a-b=foo", "invalid variable name 'a-b'"),
         ("=foo", "invalid variable name ''"),
         ("class=foo", "invalid variable name 'class'"),
+        ("__builtins__=foo", "invalid variable name '__builtins__'"),
         ("url=foo", "'url' is the name of a twill command"),
         ("a", "missing '=' in 'a'"),
     ],

@@ -329,13 +329,19 @@ interactive = False  # 'True' if interacting with user
 def parse_variable(arg: str) -> tuple[str, str]:
     """Parse a variable assignment of the form NAME=VALUE.
 
-    The name must be a valid identifier that does not shadow a twill command.
+    The name must be a valid identifier that is not a dunder name such as
+    __builtins__ and does not shadow a twill command. Note that commands of
+    extension modules loaded later will replace variables with the same name.
     The value may be empty and may contain equal signs.
     """
     name, sep, value = arg.partition("=")
     if not sep:
         raise ArgumentTypeError(f"missing '=' in '{arg}'")
-    if not name.isidentifier() or iskeyword(name):
+    if (
+        not name.isidentifier()
+        or iskeyword(name)
+        or (name.startswith("__") and name.endswith("__"))
+    ):
         raise ArgumentTypeError(f"invalid variable name '{name}'")
     if name in parse.command_list:
         raise ArgumentTypeError(f"'{name}' is the name of a twill command")

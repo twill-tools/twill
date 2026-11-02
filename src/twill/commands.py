@@ -12,6 +12,8 @@ import time
 from os.path import sep
 from typing import Any
 
+from lxml import etree
+
 from . import log, set_err_out, set_output, utils
 from .agents import agents
 from .browser import browser
@@ -267,6 +269,21 @@ def _parse_find_flags(flags: str) -> int:
     return re_flags
 
 
+def _xpath_str(result: Any) -> str:
+    """Get the text of the result of an XPath expression.
+
+    The result can be a list of elements or strings, a string, a number,
+    or a boolean. For a list, only the first item is used.
+    """
+    if isinstance(result, list):
+        result = result[0]
+    if isinstance(result, etree._Element):  # noqa: SLF001
+        return result.text or ""
+    if isinstance(result, float) and result.is_integer():
+        result = int(result)
+    return str(result)
+
+
 def find(what: str, flags: str = "") -> str:
     """>> find <pattern> [<flags>]
 
@@ -286,10 +303,10 @@ def find(what: str, flags: str = "") -> str:
     page = browser.html
     local_dict = get_twill_glocals()[1]
     if "x" in flags:
-        elements = browser.xpath(what)
-        if not elements:
+        result = browser.xpath(what)
+        if not result:
             raise TwillAssertionError(f"no element to path '{what}'")
-        match_str = elements[0].text or ""
+        match_str = _xpath_str(result)
     else:
         match = re.search(what, page, flags=_parse_find_flags(flags))
         if not match:
@@ -642,6 +659,7 @@ def extend_with(module_name: str) -> None:
     Import contents of given module.
     """
     global_dict = get_twill_glocals()[0]
+    old_globals = global_dict.copy()
 
     exec(f"from {module_name} import *", global_dict)
 
@@ -657,6 +675,8 @@ def extend_with(module_name: str) -> None:
         fn_list = [fn for fn in dir(mod) if callable(getattr(mod, fn))]
 
     for command in fn_list:
+        if command in old_globals and command not in parse.command_list:
+            log.warning("Extension command '%s' replaces a variable.", command)
         fn = getattr(mod, command)
         shell.add_command(command, fn.__doc__)
         parse.command_list.append(command)

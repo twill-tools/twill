@@ -85,7 +85,7 @@ class _InputElement(InputElement):
     Apart from this fix, the value property behaves exactly as in lxml.
     """
 
-    @property
+    @InputElement.value.getter  # type: ignore[attr-defined]
     def value(self) -> str | None:
         """Get the value of this element, using the value attribute.
 
@@ -99,31 +99,6 @@ class _InputElement(InputElement):
             if value is None:
                 return "on"
         return value
-
-    @value.setter
-    def value(self, value: str | bytes | bytearray | bool | None) -> None:
-        """Set the value of this element.
-
-        A checkbox or radio button is checked if the value is truthy and
-        unchecked otherwise, and its value attribute is only changed if the
-        value is a string. For all other inputs, the value must be a string.
-        """
-        if self.checkable:
-            self.checked = bool(value)
-            if value and isinstance(value, str):
-                self.set("value", value)
-        elif isinstance(value, (str, bytes, bytearray)):
-            self.set("value", value)
-        else:
-            raise TypeError(f"Cannot set the value of an input to {value!r}")
-
-    @value.deleter
-    def value(self) -> None:
-        """Uncheck a checkbox or radio button or remove the value attribute."""
-        if self.checkable:
-            self.checked = False
-        elif "value" in self.attrib:
-            del self.attrib["value"]
 
 
 def _get_checkable_value(el: InputElement) -> str:
@@ -190,27 +165,36 @@ class _CheckboxValues(CheckboxValues):
         )
 
     def add(self, value: str) -> None:
-        """Check the checkbox with the given value."""
-        for el in self.group:
-            if _get_checkable_value(el) == value:
-                el.checked = True
-                break
-        else:
+        """Check a checkbox with the given value.
+
+        Nothing happens if a checkbox with this value is already checked.
+        """
+        matches = [
+            el for el in self.group if _get_checkable_value(el) == value
+        ]
+        if not matches:
             raise KeyError(f"No checkbox with value {value!r}")
+        if not any(el.checked for el in matches):
+            matches[0].checked = True
 
     def remove(self, value: str) -> None:
-        """Uncheck the checkbox with the given value."""
-        for el in self.group:
-            if _get_checkable_value(el) == value:
-                if not el.checked:
-                    raise KeyError(
-                        f"The checkbox with value {value!r}"
-                        " was already unchecked"
-                    )
-                el.checked = False
-                break
-        else:
+        """Uncheck all checkboxes with the given value."""
+        matches = [
+            el for el in self.group if _get_checkable_value(el) == value
+        ]
+        if not matches:
             raise KeyError(f"No checkbox with value {value!r}")
+        if not any(el.checked for el in matches):
+            raise KeyError(
+                f"The checkbox with value {value!r} was already unchecked"
+            )
+        for el in matches:
+            el.checked = False
+
+    def clear(self) -> None:
+        """Uncheck all checkboxes."""
+        for el in self.group:
+            el.checked = False
 
 
 class CheckboxGroup(_CheckboxGroup):
@@ -231,6 +215,12 @@ class CheckboxGroup(_CheckboxGroup):
     @value.setter
     def value(self, value: str | Collection[str]) -> None:
         """Check the checkboxes with the given values, uncheck the others."""
+        if isinstance(value, str):
+            value = [value]
+        options = self.value_options
+        for item in value:
+            if item not in options:
+                raise KeyError(f"No checkbox with value {item!r}")
         values = self.value
         values.clear()
         for item in value:
@@ -248,7 +238,11 @@ class CheckboxGroup(_CheckboxGroup):
 
 
 FieldElement: TypeAlias = (
-    CheckboxGroup | InputElement | RadioGroup | SelectElement | TextareaElement
+    _CheckboxGroup
+    | InputElement
+    | _RadioGroup
+    | SelectElement
+    | TextareaElement
 )
 
 
@@ -570,16 +564,19 @@ def set_form_control_value(control: FieldElement, value: str) -> None:
         elif control.type not in ("submit", "image"):
             control.value = value
 
-    elif isinstance(control, (TextareaElement, RadioGroup)):
+    elif isinstance(control, (TextareaElement, _RadioGroup)):
         control.value = value
 
-    elif isinstance(control, CheckboxGroup):
-        if value.startswith("-"):
-            value = value[1:]
-            with suppress(KeyError):
-                control.value.remove(value)
+    elif isinstance(control, _CheckboxGroup):
+        # a value with a leading "+" or "-" checks or unchecks a checkbox,
+        # unless the value matches a checkbox as it is (such as "-1")
+        if value in control.value_options or not value.startswith(("+", "-")):
+            control.value.add(value)
+        elif value.startswith("+"):
+            control.value.add(value[1:])
         else:
-            control.value.add(value.removeprefix("+"))
+            with suppress(KeyError):
+                control.value.remove(value[1:])
 
     elif isinstance(control, SelectElement):
         # a value with a leading "+" or "-" selects or deselects an option,
@@ -823,8 +820,11 @@ _reserved_filenames = {
     "PRN",
     "AUX",
     "NUL",
-    *(f"COM{i}" for i in range(1, 10)),
-    *(f"LPT{i}" for i in range(1, 10)),
+    "CONIN$",
+    "CONOUT$",
+    # Windows also treats superscript digits 1 to 3 like normal digits
+    *(f"COM{i}" for i in [*range(1, 10), *"\u00b9\u00b2\u00b3"]),
+    *(f"LPT{i}" for i in [*range(1, 10), *"\u00b9\u00b2\u00b3"]),
 }
 
 
@@ -848,8 +848,15 @@ def safe_filename(filename: str | None) -> str | None:
     filename = filename.strip().rstrip(". ")
     if not filename or filename.startswith("."):
         return None
+    filename = _truncate_filename(filename)
     if filename.split(".", 1)[0].rstrip().upper() in _reserved_filenames:
-        filename = f"_{filename}"  # reserved device names on Windows
+        # reserved device names on Windows
+        filename = _truncate_filename(f"_{filename}")
+    return filename
+
+
+def _truncate_filename(filename: str) -> str:
+    """Truncate an overlong filename, keeping the extension if possible."""
     if len(filename.encode()) > _max_filename_bytes:
         ext = Path(filename).suffix
         if len(ext.encode()) > _max_extension_bytes:

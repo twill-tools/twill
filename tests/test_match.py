@@ -39,3 +39,17 @@ def test_match_with_optional_group_not_participating():
     assert get_match() == ""
     assert commands.header("Content-Type", "(foo)?html") == ""
     assert get_match() == ""
+
+
+@pytest.mark.usefixtures("root_page")
+def test_match_with_xpath_results_that_are_not_elements():
+    assert commands.find("//title", "x") == "Hello, world!"
+    assert get_match() == "Hello, world!"
+    assert commands.find("//title/text()", "x") == "Hello, world!"
+    assert get_match() == "Hello, world!"
+    assert commands.find("string(//title)", "x") == "Hello, world!"
+    assert get_match() == "Hello, world!"
+    assert commands.find("count(//title)", "x") == "1"
+    assert get_match() == "1"
+    with pytest.raises(commands.TwillAssertionError):
+        commands.find("count(//nothing)", "x")

@@ -30,7 +30,10 @@ ChangeLog
   the values shown with 'showforms'. Twill now uses its own HTML parser that
   creates input elements with the fixed behavior. Checkboxes and radio
   buttons without a 'value' attribute can now also be selected with 'fv'
-  using the default value 'on' when they are part of a group.
+  using the default value 'on' when they are part of a group. As with
+  select fields, checkbox values with a leading '+' or '-' are now first
+  tried as they are, and checkboxes with duplicate values are handled
+  properly.
 * The new command-line option '-s NAME=VALUE' or '--set NAME=VALUE' sets
   a global variable before the scripts are run, like the 'setglobal'
   command. This makes it easy to pass values such as an output directory

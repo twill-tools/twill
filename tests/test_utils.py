@@ -385,8 +385,8 @@ def test_set_value_of_checkable_inputs():
     del c.value
     assert c.value is None
     assert c.get("value") is None
-    with pytest.raises(TypeError):
-        c.value = None
+    c.value = None
+    assert c.value == ""
 
 
 def test_values_of_checkable_groups():
@@ -433,6 +433,84 @@ def test_values_of_checkable_groups():
     assert set(checkboxes.value) == {"", "on"}
     del checkboxes.value
     assert not set(checkboxes.value)
+
+
+def _checkbox_group(form: FormElement, name: str) -> CheckboxGroup:
+    """Get the twill checkbox group with the given name from the form."""
+    return CheckboxGroup(
+        el
+        for el in form.inputs
+        if isinstance(el, InputElement) and el.name == name
+    )
+
+
+def test_checkbox_group_with_duplicate_values():
+    form = _form(
+        '<input type="checkbox" name="c">'
+        '<input type="checkbox" name="c" checked>'
+        '<input type="checkbox" name="c" value="x">'
+    )
+    checkboxes = _checkbox_group(form, "c")
+    assert list(checkboxes.value) == ["on"]
+    checkboxes.value.add("on")
+    assert [el.checked for el in checkboxes] == [False, True, False]
+    checkboxes.value = ["on", "x"]
+    assert [el.checked for el in checkboxes] == [True, False, True]
+    checkboxes.value = "on"
+    assert [el.checked for el in checkboxes] == [True, False, False]
+    utils.set_form_control_value(checkboxes, "-on")
+    assert [el.checked for el in checkboxes] == [False, False, False]
+    utils.set_form_control_value(checkboxes, "on")
+    checkboxes[1].checked = True
+    checkboxes.value.remove("on")
+    assert [el.checked for el in checkboxes] == [False, False, False]
+    checkboxes[1].checked = True
+    del checkboxes.value
+    assert [el.checked for el in checkboxes] == [False, False, False]
+
+
+def test_set_checkbox_group_to_invalid_value():
+    form = _form(
+        '<input type="checkbox" name="c" value="x" checked>'
+        '<input type="checkbox" name="c" value="y">'
+    )
+    checkboxes = _checkbox_group(form, "c")
+    with pytest.raises(KeyError, match="No checkbox with value 'z'"):
+        checkboxes.value = ["y", "z"]
+    assert [el.checked for el in checkboxes] == [True, False]
+
+
+def test_set_checkbox_group_value_with_leading_minus():
+    form = _form(
+        '<input type="checkbox" name="c" value="-1">'
+        '<input type="checkbox" name="c" value="1" checked>'
+        '<input type="checkbox" name="c" value="2">'
+    )
+    checkboxes = _checkbox_group(form, "c")
+    utils.set_form_control_value(checkboxes, "-1")
+    assert [el.checked for el in checkboxes] == [True, True, False]
+    utils.set_form_control_value(checkboxes, "+2")
+    assert [el.checked for el in checkboxes] == [True, True, True]
+    utils.set_form_control_value(checkboxes, "-2")
+    assert [el.checked for el in checkboxes] == [True, True, False]
+
+
+def test_set_value_of_lxml_groups():
+    form = lxml_fromstring(
+        "<form>"
+        '<input type="checkbox" name="c" value="x">'
+        '<input type="checkbox" name="c" value="y">'
+        '<input type="radio" name="r" value="x">'
+        '<input type="radio" name="r" value="y">'
+        "</form>"
+    )
+    assert isinstance(form, FormElement)
+    checkboxes, radios = form.inputs["c"], form.inputs["r"]
+    assert not isinstance(checkboxes, CheckboxGroup)
+    assert not isinstance(radios, RadioGroup)
+    utils.set_form_control_value(checkboxes, "y")
+    utils.set_form_control_value(radios, "y")
+    assert form.form_values() == [("c", "y"), ("r", "y")]
 
 
 def test_form_values_with_empty_checkable_values():
@@ -518,6 +596,12 @@ def test_filename_from_content_disposition(value: str, filename: str | None):
         ("nul.txt", "_nul.txt"),
         ("com1.tar.gz", "_com1.tar.gz"),
         ("console.txt", "console.txt"),
+        ("CONIN$", "_CONIN$"),
+        ("conout$.txt", "_conout$.txt"),
+        ("COM\u00b9.txt", "_COM\u00b9.txt"),
+        ("lpt\u00b3", "_lpt\u00b3"),
+        ("AUX" + " " * 300 + "x.txt", "_AUX.txt"),
+        ("NUL." + "x" * 251, "_NUL." + "x" * 250),
         ("x" * 255 + ".pdf", "x" * 251 + ".pdf"),
         ("x" * 300, "x" * 255),
         ("x." + "y" * 300, "x." + "y" * 253),

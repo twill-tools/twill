@@ -160,9 +160,10 @@ the 'form_value' command.
 For list controls, you can use 'form_value <form_name> <field_name> +value'
 or 'form_value <form_name> <field_name> -value' to select or deselect a
 particular value. Options of select fields can be given by their value,
-label or visible text. If the given value matches an option as it is,
-this takes precedence over the meaning of a leading '+' or '-' as a prefix,
-so that an option with the value '-1' can still be selected.
+label or visible text. If the given value matches an option or a checkbox
+as it is, this takes precedence over the meaning of a leading '+' or '-' as
+a prefix, so that an option or checkbox with the value '-1' can still be
+selected.
 
 Alternative spellings: "formvalue" or "fv"
 
