@@ -54,6 +54,9 @@ ChangeLog
   all response headers of the current page.
 * The 'info' command does not fail any more when the current page has been
   sent without a 'Content-Type' header.
+* If the first group of a regular expression did not participate in the
+  match, the commands 'find', 'url', 'title' and 'header' now set the
+  variable '__match__' to an empty string instead of None.
 
 3.3.1 (released 2025-09-07)
 ---------------------------

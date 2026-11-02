@@ -171,6 +171,14 @@ def tidy_ok() -> None:
         raise TwillAssertionError(f"tidy errors:\n====\n{errors}\n====\n")
 
 
+def _match_str(m: re.Match[str]) -> str:
+    """Get the first group or the whole match if there are no groups.
+
+    An empty string is returned if the first group did not participate.
+    """
+    return m.group(1 if m.groups() else 0) or ""
+
+
 def url(should_be: str) -> str:
     """>> url <pattern>
 
@@ -191,7 +199,7 @@ def url(should_be: str) -> str:
             f"current url is '{current_url}';\ndoes not match '{should_be}'\n"
         )
 
-    match_str = m.group(1 if m.groups() else 0)
+    match_str = _match_str(m)
     local_dict = get_twill_glocals()[1]
     local_dict["__match__"] = match_str
     return match_str
@@ -217,7 +225,7 @@ def header(name: str, pattern: str = "") -> str:
                 f"response header '{name}' is '{value}';\n"
                 f"does not match '{pattern}'\n"
             )
-        match_str = m.group(1 if m.groups() else 0)
+        match_str = _match_str(m)
     else:
         match_str = value
 
@@ -285,7 +293,7 @@ def find(what: str, flags: str = "") -> str:
         match = re.search(what, page, flags=_parse_find_flags(flags))
         if not match:
             raise TwillAssertionError(f"no match to '{what}'")
-        match_str = match.group(1 if match.groups() else 0)
+        match_str = _match_str(match)
     local_dict["__match__"] = match_str
     return match_str
 
@@ -871,7 +879,7 @@ def title(what: str) -> str:
     if m is None:
         raise TwillAssertionError(f"The title does not contain '{what}'.")
 
-    match_str = m.group(1 if m.groups() else 0)
+    match_str = _match_str(m)
 
     local_dict = get_twill_glocals()[1]
     local_dict["__match__"] = match_str
